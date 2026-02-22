@@ -1,5 +1,7 @@
 package com.manara.backend.config;
 
+import com.manara.backend.repository.RoleRepository;
+import com.manara.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 
