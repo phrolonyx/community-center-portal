@@ -26,7 +26,7 @@ Chaque issue respectera un format homogène dans le but d'améliorer la clarté.
 
 | Élément | Format / Valeurs |
 | :--- | :--- |
-| **Titre** | [CATÉGORIE] suivi d'une brève description |
+| **Titre** | `[CATÉGORIE]` suivi d'une brève description |
 | **Catégories** | `[SETUP]`, `[ENTITÉ]`, `[REPO]`, `[SERVICE]`, `[CONTROLLER + VUE]`, `[TEST]`, `[INTÉGRATION]`, `[LIVRAISON]` |
 | **Colonnes du kanban** | `À faire` → `En développement` → `Complété` |
 | **Labels** | `setup`, `backend`, `frontend`, `test`, `db` |
