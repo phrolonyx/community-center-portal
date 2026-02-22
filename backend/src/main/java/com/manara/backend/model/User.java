@@ -3,13 +3,14 @@ package com.manara.backend.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -30,9 +31,9 @@ public class User {
     private String user_image_path;
 
     @Column(nullable = false)
-    private LocalDate created_at;
+    private LocalDateTime created_at;
 
-    private LocalDate last_login;
+    private LocalDateTime last_login;
 
     @Column(nullable = false)
     private Boolean enabled;
@@ -43,7 +44,7 @@ public class User {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -95,19 +96,19 @@ public class User {
         this.user_image_path = user_image_path;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return created_at;
     }
 
-    public void setCreatedAt(LocalDate created_at) {
+    public void setCreatedAt(LocalDateTime created_at) {
         this.created_at = created_at;
     }
 
-    public LocalDate getLastLogin() {
+    public LocalDateTime getLastLogin() {
         return last_login;
     }
 
-    public void setLastLogin(LocalDate last_login) {
+    public void setLastLogin(LocalDateTime last_login) {
         this.last_login = last_login;
     }
 

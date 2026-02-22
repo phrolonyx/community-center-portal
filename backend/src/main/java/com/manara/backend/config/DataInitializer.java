@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class DataInitializer implements CommandLineRunner {
     @Autowired
@@ -29,6 +31,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setPasswordHash("admin123");
             admin.setFirstName("Admin");
             admin.setLastName("Manara");
+            admin.setCreatedAt(LocalDateTime.now());
             admin.setRole(adminRole);
             admin.setEnabled(true);
             userRepository.save(admin);
