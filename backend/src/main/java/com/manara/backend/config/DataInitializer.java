@@ -2,9 +2,13 @@ package com.manara.backend.config;
 
 import com.manara.backend.repository.RoleRepository;
 import com.manara.backend.repository.UserRepository;
+import com.manara.backend.model.Role;
+import com.manara.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DataInitializer implements CommandLineRunner {
     @Autowired
     private RoleRepository roleRepository;
