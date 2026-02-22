@@ -1,0 +1,47 @@
+# --- Personal ---
+notes/
+
+# --- Spring Boot / Java ---
+**/target/
+**/build/
+**/*.class
+**/*.war
+**/*.ear
+**/*.jar
+!**/gradle-wrapper.jar
+!**/maven-wrapper.jar
+
+# --- Node / Angular (Future Proofing) ---
+**/node_modules/
+**/dist/
+**/.angular/
+**/out/
+**/.next/
+**/coverage/
+
+# --- IDE & OS Noise ---
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.factorypath
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.log
+*.tmp
+
+# Docker & Database
+**/db-data/
+**/mysql-data/
+.docker/
+docker-compose.yml
+
+# --- Build Tools ---
+.gradle/
+.m2/
+
+# Keep wrapper configs but ignore the binaries if preferred
+.mvn/wrapper/maven-wrapper.jar
