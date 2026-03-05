@@ -2,7 +2,6 @@ package com.manara.backend.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,25 +19,36 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String password_hash;
+    private String passwordHash;
 
     @Column(length = 100, nullable = false)
-    private String first_name;
+    private String firstName;
 
     @Column(length = 100, nullable = false)
-    private String last_name;
+    private String lastName;
 
-    private String user_image_path;
+    private String userImagePath;
 
     @Column(nullable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime last_login;
+    private LocalDateTime lastLogin;
 
     @Column(nullable = false)
     private Boolean enabled;
 
     public User() {}
+
+    public User(Role role, String email, String passwordHash, String firstName, String lastName, String userImagePath, Boolean enabled) {
+        this.role = role;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userImagePath = userImagePath;
+        createdAt = LocalDateTime.now();
+        this.enabled = enabled;
+    }
 
     public int getId() {
         return id;
@@ -57,11 +67,11 @@ public class User {
     }
 
     public String getPasswordHash() {
-        return password_hash;
+        return passwordHash;
     }
 
-    public void setPasswordHash(String password_hash) {
-        this.password_hash = password_hash;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public String getEmail() {
@@ -73,43 +83,43 @@ public class User {
     }
 
     public String getFirstName() {
-        return first_name;
+        return firstName;
     }
 
-    public void setFirstName(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
-        return last_name;
+        return lastName;
     }
 
-    public void setLastName(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getUserImagePath() {
-        return user_image_path;
+        return userImagePath;
     }
 
-    public void setUserImagePath(String user_image_path) {
-        this.user_image_path = user_image_path;
+    public void setUserImagePath(String userImagePath) {
+        this.userImagePath = userImagePath;
     }
 
     public LocalDateTime getCreatedAt() {
-        return created_at;
+        return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getLastLogin() {
-        return last_login;
+        return lastLogin;
     }
 
-    public void setLastLogin(LocalDateTime last_login) {
-        this.last_login = last_login;
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
     }
 
     public Boolean getEnabled() {
@@ -121,6 +131,6 @@ public class User {
     }
 
     public String getFullName() {
-        return first_name + " " + last_name;
+        return firstName + " " + lastName;
     }
 }
