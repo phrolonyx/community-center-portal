@@ -52,6 +52,11 @@ public class ParentProfile {
 
     public ParentProfile() {}
 
+    public ParentProfile(User user) {
+        this.user = user;
+        updatedAt = LocalDateTime.now();
+    }
+
     public Integer getId() {
         return id;
     }
