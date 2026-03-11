@@ -37,9 +37,6 @@ public class ActivityRegistration {
     @OneToMany(mappedBy = "registration")
     private List<ActivityRegistrationLog> logs;
 
-    @ManyToOne
-    private ActivityAttendance attendance;
-
     public Child getChild() {
         return child;
     }
@@ -110,14 +107,6 @@ public class ActivityRegistration {
 
     public void setLogs(List<ActivityRegistrationLog> logs) {
         this.logs = logs;
-    }
-
-    public ActivityAttendance getAttendance() {
-        return attendance;
-    }
-
-    public void setAttendance(ActivityAttendance attendance) {
-        this.attendance = attendance;
     }
 
     public Boolean isConfirmed() {
