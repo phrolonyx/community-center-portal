@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<div th:replace="fragments/header :: header"></div>
+
+<section class="hero">
+    <img src="images/cartoon-style childr.png" alt="Illustration" class="hero-img">
+
+    <div class="hero-overlay">
+        <p class="hero-text">
+            Votre centre, vos enfants,<br>
+            un seul portail!<br>
+        </p>
+        <button class="btn-yellow">Inscrivez-vous</button>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+<!-- NOTRE MISSION -->
+<section class="mission">
+    <div class="mission-title">Notre Mission</div>
+    <p class="mission-textf"
+    >
+        Le Centre communautaire Manara connecte les familles et simplifie la gestion des activités
+        grâce à Manara CRM, notre plateforme moderne pour inscriptions et plannings.
+    </p>
+</section>
+
+<!-- TITRE ACTIVITÉS -->
+<div class="activities-title">
+    Nos Activités
+</div>
+
+<!-- ACTIVITÉS -->
+<section class="activities">
+
+    <div class="activity">
+        <img src="images/child1.png" alt="">
+        <div class="tag green">Accompagner</div>
+    </div>
+
+    <div class="activity">
+        <img src="images/child2.png" alt="">
+        <div class="tag pink">Encadrer</div>
+    </div>
+
+    <div class="activity">
+        <img src="images/child3.png" alt="">
+        <div class="tag blue">Participer</div>
+    </div>
+
+</section>
+
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>
