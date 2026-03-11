@@ -5,7 +5,7 @@ body {
 
 /* HEADER */
 header {
-    background: #043C5C; /* provisoire */
+    background: #043C5C;
     color: white;
 }
 
@@ -47,7 +47,7 @@ header {
 }
 
 .logo img {
-    height: 60px;   /* même hauteur que ton ancien LOGO */
+    height: 60px;
     width: auto;
     object-fit: contain;
 }
