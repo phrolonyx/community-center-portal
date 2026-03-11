@@ -62,7 +62,6 @@ header {
     background: #FFF3D6;
     display: flex;
     align-items: center;
-    padding-left: 60px;
 }
 
 .hero-img {
@@ -74,8 +73,6 @@ header {
 .hero-overlay {
     position: absolute;
     top: 40px;
-
-
     right: 120px;
 
     /* PLUS TRANSPARENT */
@@ -117,8 +114,7 @@ header {
     padding: 35px 50px;
     display: flex;
     align-items: flex-start;
-    gap: 0;
-    min-height: 160px;
+    gap: 80px;
 }
 
 .mission-title {
@@ -128,7 +124,7 @@ header {
     font-size: 22px;
     font-weight: 700;
     margin-top: 5px;
-    margin-left: 60px;
+    margin-left: 100px;
 }
 
 .mission-text {
