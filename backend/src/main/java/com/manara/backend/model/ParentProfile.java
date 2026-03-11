@@ -2,6 +2,7 @@ package com.manara.backend.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class ParentProfile {
@@ -49,6 +50,9 @@ public class ParentProfile {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "parentProfile")
+    private List<ChildParent> childLinks;
 
     public ParentProfile() {}
 
@@ -187,5 +191,13 @@ public class ParentProfile {
 
     public Boolean hasAcceptedTerms() {
         return termsAcceptAt != null;
+    }
+
+    public List<ChildParent> getChildLinks() {
+        return childLinks;
+    }
+
+    public void setChildLinks(List<ChildParent> childLinks) {
+        this.childLinks = childLinks;
     }
 }
