@@ -1,0 +1,79 @@
+/* EN-TÊTE */
+.activites-header { margin-bottom: 8px; }
+.activites-title { font-size: 30px; font-weight: 900; color: #043C5C; margin: 0 0 6px; }
+.activites-subtitle { font-size: 15px; color: #6B7280; margin: 0; }
+
+/* BARRE DE RECHERCHE */
+.search-bar { display: flex; align-items: center; gap: 12px; background: #FFF; border: 2px solid #C8CDD3; border-radius: 8px; padding: 14px 18px; transition: border-color .2s, box-shadow .2s; }
+.search-bar:focus-within { border-color: #043C5C; box-shadow: 0 0 0 3px rgba(4,60,92,.12); }
+.search-bar svg { color: #6B7280; flex-shrink: 0; }
+.search-bar input { flex: 1; border: none; outline: none; font-size: 15px; font-family: Arial, sans-serif; color: #043C5C; background: transparent; }
+.search-bar input::placeholder { color: #9CA3AF; }
+
+/* GRILLE */
+.activites-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+
+/* CARTE */
+.activite-card { background: #FFF; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); transition: transform .2s, box-shadow .2s; }
+.activite-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.1); }
+
+.card-image { width: 100%; height: 180px; overflow: hidden; }
+.card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.activite-card:hover .card-image img { transform: scale(1.05); }
+
+.card-body { padding: 20px; }
+.card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.card-name { font-size: 18px; font-weight: 800; color: #043C5C; margin: 0; }
+.card-badges { display: flex; gap: 6px; flex-shrink: 0; }
+
+.badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.badge.age { background: #043C5C; color: #FFF; }
+.badge.date { background: transparent; color: #6B7280; border: 1px solid #C8CDD3; }
+
+.card-desc { font-size: 13px; color: #6B7280; line-height: 1.5; margin: 0 0 16px; }
+
+.btn-inscrire { display: inline-block; padding: 10px 20px; background: #E8BB08; color: #043C5C; font-size: 13px; font-weight: 700; text-decoration: none; border-radius: 6px; transition: background .2s, transform .15s; }
+.btn-inscrire:hover { background: #D4A907; transform: translateY(-1px); }
+
+/* AUCUN RÉSULTAT */
+.no-results { display: none; text-align: center; padding: 40px; font-size: 16px; color: #6B7280; font-weight: 600; }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 300; justify-content: center; align-items: flex-start; padding: 80px 20px; }
+.modal-overlay.open { display: flex; }
+.modal-inscrire { background: #FFF3D6; border-radius: 14px; padding: 28px; width: 100%; max-width: 440px; }
+
+.modal-inscrire-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.modal-inscrire-header h2 { font-size: 20px; font-weight: 800; color: #043C5C; margin: 0; }
+.modal-close { width: 34px; height: 34px; background: none; border: 2px solid #C8CDD3; border-radius: 50%; font-size: 18px; color: #6B7280; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .2s, color .2s; }
+.modal-close:hover { border-color: #043C5C; color: #043C5C; }
+.modal-inscrire-subtitle { font-size: 14px; color: #6B7280; margin: 0 0 20px; }
+
+/* CHOIX D'ENFANT */
+.enfants-choices { display: flex; flex-direction: column; gap: 12px; }
+.enfant-choice { display: flex; align-items: center; gap: 14px; background: #FFF; border-radius: 10px; padding: 16px; transition: box-shadow .2s; }
+.enfant-choice:not(.disabled):hover { box-shadow: 0 2px 10px rgba(0,0,0,.08); }
+.enfant-choice.disabled { opacity: .5; cursor: not-allowed; }
+
+.choice-avatar { width: 42px; height: 42px; background: #043C5C; color: #FFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; flex-shrink: 0; }
+.choice-info { flex: 1; }
+.choice-info strong { display: block; font-size: 15px; color: #043C5C; margin-bottom: 2px; }
+.choice-info span { font-size: 13px; color: #6B7280; }
+
+.btn-choice-inscrire { padding: 8px 18px; background: #15A63B; color: #FFF; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s; }
+.btn-choice-inscrire:hover { background: #128A32; }
+
+.choice-ineligible { font-size: 11px; color: #DC2626; font-weight: 600; text-align: right; }
+.no-enfants-msg { font-size: 14px; color: #6B7280; text-align: center; padding: 16px; }
+.no-enfants-msg a { color: #E8BB08; font-weight: 700; text-decoration: none; }
+.no-enfants-msg a:hover { text-decoration: underline; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) { .activites-grid { grid-template-columns: 1fr; } }
+@media (max-width: 768px) {
+    .activites-title { font-size: 24px; }
+    .card-top { flex-direction: column; gap: 8px; }
+    .card-image { height: 150px; }
+    .modal-inscrire { padding: 20px; }
+    .enfant-choice { flex-wrap: wrap; gap: 10px; }
+}

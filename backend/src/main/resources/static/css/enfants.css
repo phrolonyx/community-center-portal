@@ -1,0 +1,92 @@
+/* === ENFANTS.CSS — Page Mes Enfants Manara === */
+
+/* EN-TÊTE */
+.enfants-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.enfants-title { font-size: 30px; font-weight: 900; color: #043C5C; margin: 0; }
+.btn-ajouter { padding: 12px 22px; background: #E8BB08; color: #043C5C; font-size: 14px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; transition: background .2s, transform .15s; }
+.btn-ajouter:hover { background: #D4A907; transform: translateY(-1px); }
+
+/* CARTE ENFANT */
+.enfant-card { background: #FFF; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.enfant-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.enfant-nom { font-size: 24px; font-weight: 900; color: #043C5C; margin: 0 0 4px; }
+.enfant-details { font-size: 14px; color: #6B7280; }
+.enfant-buttons { display: flex; gap: 8px; }
+
+.btn-modifier, .btn-supprimer { padding: 10px 20px; color: #FFF; font-size: 13px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; transition: background .2s; }
+.btn-modifier { background: #043C5C; }
+.btn-modifier:hover { background: #065A85; }
+.btn-supprimer { background: #DC2626; }
+.btn-supprimer:hover { background: #B91C1C; }
+
+/* CONDITIONS MÉDICALES */
+.enfant-medical { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #F0F0F0; }
+.medical-label { font-size: 14px; font-weight: 700; color: #E65C00; }
+.medical-tag { padding: 6px 16px; background: #FEF2F2; border: 1px solid #E65C00; border-radius: 20px; font-size: 12px; font-weight: 700; color: #E65C00; }
+
+/* ACTIVITÉS INSCRITES */
+.enfant-activites { margin-top: 8px; }
+.activites-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; color: #043C5C; }
+.lien-inscrire { font-size: 13px; font-weight: 600; color: #E8BB08; text-decoration: none; transition: color .2s; }
+.lien-inscrire:hover { color: #D4A907; }
+.activites-list { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.activite-mini { background: #FFF3D6; border-radius: 10px; padding: 16px; min-width: 200px; flex: 1; }
+.activite-mini strong { display: block; font-size: 14px; color: #043C5C; margin-bottom: 4px; }
+.activite-mini span:not(.statut) { display: block; font-size: 12px; color: #6B7280; margin-bottom: 8px; }
+
+.statut { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; }
+.statut.confirmed { background: #15A63B; color: #FFF; }
+.statut.pending { background: #E8BB08; color: #043C5C; }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 300; justify-content: center; align-items: flex-start; padding: 40px 20px; overflow-y: auto; }
+.modal-overlay.open { display: flex; }
+.modal { background: #FFF3D6; border-radius: 14px; padding: 32px; width: 100%; max-width: 520px; position: relative; }
+
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.modal-header h2 { font-size: 24px; font-weight: 900; color: #043C5C; margin: 0; }
+.modal-close { width: 36px; height: 36px; background: none; border: 2px solid #C8CDD3; border-radius: 50%; font-size: 20px; color: #6B7280; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color .2s, color .2s; }
+.modal-close:hover { border-color: #043C5C; color: #043C5C; }
+.modal-subtitle { font-size: 14px; color: #6B7280; margin: 0 0 24px; }
+
+/* FORMULAIRE */
+.modal-form { display: flex; flex-direction: column; gap: 16px; }
+.form-section { border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.section-legend { font-size: 15px; font-weight: 700; color: #E8BB08; padding-right: 12px; margin-bottom: 2px; display: flex; align-items: center; gap: 12px; width: 100%; }
+.section-legend::after { content: ""; flex: 1; height: 1px; background: #C8CDD3; }
+
+.form-row { display: flex; gap: 16px; }
+.form-row .form-group { flex: 1; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 14px; font-weight: 700; color: #043C5C; }
+.form-label .required { color: #E65C00; margin-left: 2px; }
+
+.form-input { width: 100%; padding: 14px 16px; font-size: 15px; font-family: Arial, sans-serif; color: #043C5C; background: #FFF; border: 2px solid #C8CDD3; border-radius: 4px; outline: none; box-sizing: border-box; transition: border-color .2s, box-shadow .2s; }
+.form-input:focus { border-color: #043C5C; box-shadow: 0 0 0 3px rgba(4,60,92,.12); }
+select.form-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; }
+
+.checkbox-wrapper { display: flex; align-items: flex-start; gap: 12px; background: #FFF; border-radius: 8px; padding: 14px 16px; cursor: pointer; }
+.checkbox-wrapper input[type="checkbox"] { width: 20px; height: 20px; margin-top: 2px; accent-color: #043C5C; cursor: pointer; }
+.checkbox-text strong { display: block; font-size: 14px; color: #043C5C; }
+.checkbox-text span { font-size: 12px; color: #6B7280; }
+
+.medical-note { font-size: 13px; color: #6B7280; line-height: 1.5; margin: 0; background: #FFF8E1; padding: 12px 14px; border-radius: 6px; }
+
+.modal-buttons { display: flex; gap: 12px; margin-top: 8px; }
+.btn-annuler { padding: 14px 24px; background: none; border: 2px solid #E65C00; color: #E65C00; font-size: 14px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: background .2s; }
+.btn-annuler:hover { background: #FEF2F2; }
+.btn-creer { flex: 1; padding: 14px 24px; background: #043C5C; color: #FFF; font-size: 14px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; transition: background .2s, transform .15s; }
+.btn-creer:hover { background: #065A85; transform: translateY(-1px); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .enfants-title { font-size: 24px; }
+    .enfant-nom { font-size: 20px; }
+    .enfant-top { flex-direction: column; gap: 12px; }
+    .enfant-buttons { flex-wrap: wrap; }
+    .activites-list { flex-direction: column; }
+    .form-row { flex-direction: column; }
+    .modal { padding: 24px; }
+    .modal-buttons { flex-direction: column; }
+}

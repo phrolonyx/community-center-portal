@@ -1,0 +1,11 @@
+<aside class="sidebar" th:fragment="sidebar(activePage)">
+    <div class="sidebar-title">Mon espace</div>
+    <nav class="sidebar-nav">
+        <a th:href="@{/dashboardParent}" class="nav-item" th:classappend="${activePage == 'apercu'} ? ' active'">Aperçu</a>
+        <a th:href="@{/dashboardParent/activites}" class="nav-item" th:classappend="${activePage == 'activites'} ? ' active'">Activités</a>
+        <a th:href="@{/dashboardParent/enfants}" class="nav-item" th:classappend="${activePage == 'enfants'} ? ' active'">Mes enfants</a>
+        <a th:href="@{/dashboardParent/inscriptions}" class="nav-item" th:classappend="${activePage == 'inscriptions'} ? ' active'">Inscriptions</a>
+        <a th:href="@{/dashboardParent/messages}" class="nav-item" th:classappend="${activePage == 'messages'} ? ' active'">Messages</a>
+        <a th:href="@{/dashboardParent/profil}" class="nav-item" th:classappend="${activePage == 'profil'} ? ' active'">Mon profil</a>
+    </nav>
+</aside>
