@@ -1,6 +1,7 @@
 package com.manara.backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,15 +14,16 @@ public class Child {
     private Integer id;
 
     @Column(length = 100, nullable = false)
+    @NotBlank(message = "Le prénom de l'enfant est obligatoire")
     private String firstName;
 
     @Column(length = 100, nullable = false)
+    @NotBlank(message = "Le nom de l'enfant est obligatoire")
     private String lastName;
 
     @Column(nullable = false)
+    @NotBlank(message = "L'année de naissance de l'enfant est obligatoire")
     private LocalDateTime dateOfBirth;
-
-    private String childImagePath;
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
@@ -66,14 +68,6 @@ public class Child {
 
     public void setDateOfBirth(LocalDateTime dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getChildImagePath() {
-        return childImagePath;
-    }
-
-    public void setChildImagePath(String childImagePath) {
-        this.childImagePath = childImagePath;
     }
 
     public LocalDateTime getUpdatedAt() {
