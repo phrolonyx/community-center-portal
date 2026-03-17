@@ -67,4 +67,29 @@ public class ChildService {
     public void deleteMedicalCondition(Integer conditionId) {
         childMedicalRepository.deleteById(conditionId);
     }
+
+
+    public List<Child> searchByName(String keyword) {
+
+        // Si la recherche est vide = on retourne tous les enfants
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return childRepository.findAll();
+        }
+
+        keyword = keyword.trim();
+
+        // recherche par prenom ou nom
+        return childRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+                keyword, keyword
+        );
+    }
+
+    public List<Child> findAll() {
+        return childRepository.findAll();
+    }
+
+
+
 }
+
+

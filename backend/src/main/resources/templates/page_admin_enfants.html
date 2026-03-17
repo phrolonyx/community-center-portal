@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin - Gestion des enfants</title>
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+</head>
+
+<body>
+
+<div class="admin-gestion-des">
+
+    <!-- SIDEBAR -->
+    <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <header th:replace="fragments/admin_header :: adminHeader('Gestion des enfants')"></header>
+
+        <div class="content-main">
+
+            <!-- BARRE DE RECHERCHE -->
+            <form method="get" th:action="@{/admin/enfants}" class="content-searchbar">
+
+                <img class="filter"
+                     th:src="@{/images/icons8-filter-96.png}"
+                     alt="Filtrer" />
+
+                <input type="text"
+                       name="search"
+                       class="search-input"
+                       th:value="${search}"
+                       placeholder="Rechercher un enfant..." />
+
+                <button type="submit" class="search-btn">
+                    <img class="search"
+                         th:src="@{/images/icons8-search-150.png}"
+                         alt="Rechercher" />
+                </button>
+
+            </form>
+
+            <!-- TABLEAU ENFANTS -->
+            <section class="users-table">
+                <table class="users-table-grid">
+                    <thead>
+                    <tr>
+                        <th>Actions</th>
+                        <th>Nom complet</th>
+                        <th>Parent(s)</th>
+                        <th>Date de naissance</th>
+                        <th>Âge</th>
+                        <th>Conditions médicales</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="children-body">
+                    <tr th:each="child : ${children}">
+
+                        <!-- ACTIONS -->
+                        <td>
+                            <button class="user-action">Supprimer</button>
+                        </td>
+
+                        <!-- NOM COMPLET -->
+                        <td th:text="${child.fullName}">Nom complet</td>
+
+                        <!-- PARENTS -->
+                        <td>
+                            <span th:each="link : ${child.parentLinks}"
+                                  th:text="${link.parentProfile.user.firstName + ' ' + link.parentProfile.user.lastName}"
+                                  style="display:block;">
+                                Parent
+                            </span>
+                        </td>
+
+                        <!-- DATE DE NAISSANCE -->
+                        <td th:text="${#temporals.format(child.dateOfBirth, 'dd/MM/yyyy')}">
+                            01/01/2020
+                        </td>
+
+                        <!-- ÂGE -->
+                        <td th:text="${child.getAge()}">0</td>
+
+                        <!-- CONDITIONS MÉDICALES -->
+                        <td>
+                            <span th:if="${child.medicalConditions.size() == 0}">Aucune</span>
+
+                            <span th:each="cond : ${child.medicalConditions}"
+                                  th:text="${cond.condition}"
+                                  style="display:block;">
+                                Condition
+                            </span>
+                        </td>
+
+                    </tr>
+                    </tbody>
+
+                </table>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/admin_children.js}"></script>
+
+</body>
+</html>
+

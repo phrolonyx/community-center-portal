@@ -57,4 +57,46 @@ public class UserService {
         User user = userRepository.findByEmailAndPasswordHash(email, password).orElse(null);
         return user != null;
     }
+
+    public List<User> search(String keyword) {
+
+        // Recherche simple dans prénom, nom, email
+        List<User> results = userRepository
+                .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                        keyword, keyword, keyword
+                );
+
+        // On ajoute les utilisateurs dont le rôle correspond au mot recherche
+        for (User user : userRepository.findAll()) {
+            if (user.getRole().getName().toLowerCase().contains(keyword.toLowerCase())) {
+                if (!results.contains(user)) {
+                    results.add(user);
+                }
+            }
+        }
+
+        return results;
+    }
+
+
+    public long countAllUsers() {
+        return userRepository.count();
+    }
+
+    public long countUsersByRole(String roleName) {
+        return userRepository.countByRoleName(roleName);
+    }
+
+    public long countDisabledUsers() {
+        return userRepository.countByEnabledFalse();
+    }
+
+    public List<User> findPendingUsers() {  // les users a approuver dans le dashboard
+        return userRepository.findByEnabledFalse();
+    }
+
+
+
+
+
 }

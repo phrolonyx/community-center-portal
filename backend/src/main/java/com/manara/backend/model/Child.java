@@ -1,5 +1,6 @@
 package com.manara.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -29,12 +30,15 @@ public class Child {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "child")
+    @JsonIgnore
     private List<ChildMedical> medicalConditions;
 
     @OneToMany(mappedBy = "child")
+    @JsonIgnore
     private List<ChildParent> parentLinks;
 
     @OneToMany(mappedBy = "child")
+    @JsonIgnore
     private List<ActivityRegistration> registrations;
 
 

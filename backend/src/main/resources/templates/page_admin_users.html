@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin - Gestion des utilisateurs</title>
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+</head>
+
+<body>
+
+<div class="admin-gestion-des">
+
+    <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
+
+    <main class="main-content">
+
+        <header th:replace="fragments/admin_header :: adminHeader('Gestion des utilisateurs')"></header>
+
+        <div class="content-main">
+
+            <!-- FORMULAIRE DE RECHERCHE -->
+            <form method="get" th:action="@{/admin/users}" class="content-searchbar">
+
+                <img class="filter"
+                     th:src="@{/images/icons8-filter-96.png}"
+                     alt="Filtrer" />
+
+                <input type="text"
+                       name="search"
+                       class="search-input"
+                       th:value="${search}"
+                       placeholder="Rechercher un utilisateur..." />
+
+                <button type="submit" class="search-btn">
+                    <img class="search"
+                         th:src="@{/images/icons8-search-150.png}"
+                         alt="Rechercher" />
+                </button>
+
+            </form>
+
+
+
+            <section class="users-table">
+                <table class="users-table-grid">
+                    <thead>
+                    <tr>
+                        <th>Actions</th>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Rôle</th>
+                        <th>Email</th>
+                        <th>Actif</th>
+                        <th>Dernière connexion</th>
+                        <th>Création</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="users-body">
+                    <tr th:each="user : ${users}">
+                        <td>
+                            <button class="user-action">Supprimer</button>
+                        </td>
+
+                        <td th:text="${user.firstName}">Prénom</td>
+                        <td th:text="${user.lastName}">Nom</td>
+                        <td th:text="${user.role.name}">Rôle</td>
+                        <td th:text="${user.email}">Email</td>
+                        <td th:text="${user.enabled ? 'oui' : 'non'}">Actif</td>
+
+                        <td th:text="${user.lastLogin != null ? #temporals.format(user.lastLogin, 'dd/MM/yyyy') : '-'}">
+                            Dernière connexion
+                        </td>
+
+                        <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">
+                            Création
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
+
+</body>
+</html>
+

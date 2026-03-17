@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin - Dashboard</title>
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+</head>
+
+<body>
+
+<div class="admin-gestion-des">
+
+    <!-- SIDEBAR -->
+    <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <header th:replace="fragments/admin_header :: adminHeader('Tableau de bord')"></header>
+
+        <!-- CONTENU SPÉCIFIQUE DASHBOARD -->
+        <div class="content-main">
+
+            <div class="dashboard-content">
+
+                <!-- CARTES STATISTIQUES -->
+                <div class="stats-grid">
+
+                    <div class="stat-card stat-blue">
+                        <div class="stat-overlay">
+                            <img src="/images/courbe_bleu.png" alt="">
+                        </div>
+                        <h3 th:text="${totalUsers}">0</h3>
+                        <p>Total utilisateurs</p>
+                    </div>
+
+                    <div class="stat-card stat-green">
+                        <div class="stat-overlay">
+                            <img src="/images/courbe_verte.png" alt="">
+                        </div>
+                        <h3 th:text="${totalParents}">0</h3>
+                        <p>Parents</p>
+                    </div>
+
+                    <div class="stat-card stat-orange">
+                        <div class="stat-overlay">
+                            <img src="/images/courbe_jaune.png" alt="">
+                        </div>
+                        <h3 th:text="${totalAdmins}">0</h3>
+                        <p>Admins</p>
+                    </div>
+
+                    <div class="stat-card stat-red">
+                        <div class="stat-overlay">
+                            <img src="/images/courbe_rouge.png" alt="">
+                        </div>
+                        <h3 th:text="${totalDisabled}">0</h3>
+                        <p>Comptes désactivés</p>
+                    </div>
+
+                </div>
+
+                <!-- NOUVELLES INSCRIPTIONS À APPROUVER -->
+                <section class="pending-users-section">
+                    <h2>Nouvelles inscriptions à approuver</h2>
+
+                    <table class="pending-users-table">
+                        <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Rôle</th>
+                            <th>Inscrit le</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="user : ${pendingUsers}">
+                            <td th:text="${user.firstName + ' ' + user.lastName}">Nom</td>
+                            <td th:text="${user.email}">email@example.com</td>
+                            <td th:text="${user.role.name}">Rôle</td>
+                            <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">01/01/2026</td>
+                            <td>
+                                <button class="approve-btn">Accepter</button>
+                                <button class="reject-btn">Refuser</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
+
+</body>
+</html>
+
