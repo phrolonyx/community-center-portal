@@ -33,6 +33,16 @@ public class ChildParent {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    public ChildParent() {}
+
+    public ChildParent(Child child, ParentProfile parentProfile) {
+        this.child = child;
+        this.parentProfile = parentProfile;
+        isPrimary = true;
+        validatedBy = null;
+        createdAt = LocalDateTime.now();
+    }
+
     public Integer getId() {
         return id;
     }

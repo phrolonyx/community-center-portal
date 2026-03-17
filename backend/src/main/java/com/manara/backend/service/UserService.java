@@ -18,11 +18,14 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public void createUser(Role role, String email, String password_hash, String first_name, String last_name, String user_image_path, Boolean enabled) {
-        if (role == null) {
-            role = roleRepository.findByIsDefaultTrue().orElseThrow();
+    public void createUser(User user) {
+        if (user.getRole() == null) {
+            user.setRole(roleRepository.findByIsDefaultTrue().orElseThrow());
+        } else {
+            Role role = roleRepository.findById(user.getRole().getId()).orElseThrow();
+            user.setRole(role);
         }
-        userRepository.save(new User(role, email, password_hash, first_name, last_name, user_image_path, enabled));
+        userRepository.save(user);
     }
 
     public User findById(Integer id) {
