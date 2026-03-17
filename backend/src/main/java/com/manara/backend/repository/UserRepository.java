@@ -12,4 +12,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findByRole_Name(String roleName);
     List<User> findByEnabled(Boolean enabled);
     Optional<User> findByEmailAndPasswordHash(String email, String passwordHash);
+
+    List<User> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String firstName, String lastName, String email);
+
+
+    long countByRoleName(String roleName);
+
+    long countByEnabledFalse();
+
+    List<User> findByEnabledFalse();
+
 }

@@ -1,6 +1,7 @@
 package com.manara.backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class Activity {
     private Integer id;
 
     @Column(nullable = false, length = 200)
+    @NotBlank(message = "Le nom de l'activité est requis")
     private String name;
 
     private String description;

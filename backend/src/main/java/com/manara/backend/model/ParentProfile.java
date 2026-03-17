@@ -1,7 +1,10 @@
 package com.manara.backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class ParentProfile {
@@ -15,22 +18,28 @@ public class ParentProfile {
     private User user;
 
     @Column(length = 20)
+    @NotBlank(message = "Le numéro de téléphone ne peut pas être vide")
     private String phoneNumber;
 
+    @NotBlank(message = "Votre adresse est requise")
     private String addressLine1;
 
     private String addressLine2;
 
     @Column(length = 100)
+    @NotBlank(message = "Ce champ est obligatoire")
     private String city;
 
     @Column(length = 100)
+    @NotBlank(message = "Ce champ est obligatoire")
     private String province;
 
     @Column(length = 100)
+    @NotBlank(message = "Ce champ est obligatoire")
     private String country;
 
     @Column(length = 20)
+    @NotBlank(message = "Ce champ est obligatoire")
     private String postalCode;
 
     @Column(length = 200)
@@ -49,6 +58,9 @@ public class ParentProfile {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "parentProfile")
+    private List<ChildParent> childLinks;
 
     public ParentProfile() {}
 
@@ -187,5 +199,13 @@ public class ParentProfile {
 
     public Boolean hasAcceptedTerms() {
         return termsAcceptAt != null;
+    }
+
+    public List<ChildParent> getChildLinks() {
+        return childLinks;
+    }
+
+    public void setChildLinks(List<ChildParent> childLinks) {
+        this.childLinks = childLinks;
     }
 }

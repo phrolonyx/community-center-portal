@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin - Activités</title>
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+</head>
+
+<body>
+
+<div class="admin-gestion-des">
+
+    <!-- SIDEBAR -->
+    <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <header th:replace="fragments/admin_header :: adminHeader('Activités')"></header>
+
+        <!-- CONTENU SPÉCIFIQUE -->
+    </main>
+</div>
+<script th:src="@{/js/admin.js}"></script>
+
+</body>
+</html>

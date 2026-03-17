@@ -23,6 +23,10 @@ public class ActivityRegistration {
     @Column(nullable = false)
     private String status;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Child child;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
@@ -33,8 +37,13 @@ public class ActivityRegistration {
     @OneToMany(mappedBy = "registration")
     private List<ActivityRegistrationLog> logs;
 
-    @ManyToOne
-    private ActivityAttendance attendance;
+    public Child getChild() {
+        return child;
+    }
+
+    public void setChild(Child child) {
+        this.child = child;
+    }
 
     public Integer getId() {
         return id;
@@ -98,14 +107,6 @@ public class ActivityRegistration {
 
     public void setLogs(List<ActivityRegistrationLog> logs) {
         this.logs = logs;
-    }
-
-    public ActivityAttendance getAttendance() {
-        return attendance;
-    }
-
-    public void setAttendance(ActivityAttendance attendance) {
-        this.attendance = attendance;
     }
 
     public Boolean isConfirmed() {

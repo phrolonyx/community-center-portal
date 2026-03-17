@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav th:fragment="adminSidebar" class="sidebar-container" aria-label="Navigation principale">
+
+    <h1 class="text-wrapper">Compte Administrateur</h1>
+
+    <ul class="nav-menu">
+        <li class="sidebar-location">
+            <a th:href="@{/admin/dashboard}">Tableau de bord</a>
+        </li>
+        <li class="sidebar-users">
+            <a th:href="@{/admin/users}">Utilisateurs</a>
+        </li>
+        <li class="sidebar-activities">
+            <a th:href="@{/admin/activities}">Activités</a>
+        </li>
+        <li class="sidebar-children">
+            <a th:href="@{/admin/children}">Enfants</a>
+        </li>
+        <li class="sidebar-sessions">
+            <a th:href="@{/admin/sessions}">Séances</a>
+        </li>
+    </ul>
+
+    <div class="settings-footer">
+        <img class="settings"
+             id="admin-icon"
+             th:src="@{/images/icons8-admin-settings-male-64.png}"
+             alt="Admin" />
+        <span class="text-wrapper-6">Admin Manara</span>
+    </div>
+
+    <div id="logout-popup" class="logout-popup">
+        <button class="logout-btn">Déconnexion</button>
+    </div>
+
+</nav>
+
+</body>
+</html>
+

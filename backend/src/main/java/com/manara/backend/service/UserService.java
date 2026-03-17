@@ -18,11 +18,14 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public void createUser(Role role, String email, String password_hash, String first_name, String last_name, String user_image_path, Boolean enabled) {
-        if (role == null) {
-            role = roleRepository.findByIsDefaultTrue().orElseThrow();
+    public void createUser(User user) {
+        if (user.getRole() == null) {
+            user.setRole(roleRepository.findByIsDefaultTrue().orElseThrow());
+        } else {
+            Role role = roleRepository.findById(user.getRole().getId()).orElseThrow();
+            user.setRole(role);
         }
-        userRepository.save(new User(role, email, password_hash, first_name, last_name, user_image_path, enabled));
+        userRepository.save(user);
     }
 
     public User findById(Integer id) {
@@ -54,4 +57,46 @@ public class UserService {
         User user = userRepository.findByEmailAndPasswordHash(email, password).orElse(null);
         return user != null;
     }
+
+    public List<User> search(String keyword) {
+
+        // Recherche simple dans prénom, nom, email
+        List<User> results = userRepository
+                .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                        keyword, keyword, keyword
+                );
+
+        // On ajoute les utilisateurs dont le rôle correspond au mot recherche
+        for (User user : userRepository.findAll()) {
+            if (user.getRole().getName().toLowerCase().contains(keyword.toLowerCase())) {
+                if (!results.contains(user)) {
+                    results.add(user);
+                }
+            }
+        }
+
+        return results;
+    }
+
+
+    public long countAllUsers() {
+        return userRepository.count();
+    }
+
+    public long countUsersByRole(String roleName) {
+        return userRepository.countByRoleName(roleName);
+    }
+
+    public long countDisabledUsers() {
+        return userRepository.countByEnabledFalse();
+    }
+
+    public List<User> findPendingUsers() {  // les users a approuver dans le dashboard
+        return userRepository.findByEnabledFalse();
+    }
+
+
+
+
+
 }
