@@ -3,11 +3,13 @@ package com.manara.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Data
 public class Child {
 
     @Id
@@ -40,71 +42,6 @@ public class Child {
     @OneToMany(mappedBy = "child")
     @JsonIgnore
     private List<ActivityRegistration> registrations;
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public LocalDateTime getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDateTime dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public List<ChildMedical> getMedicalConditions() {
-        return medicalConditions;
-    }
-
-    public void setMedicalConditions(List<ChildMedical> medicalConditions) {
-        this.medicalConditions = medicalConditions;
-    }
-
-    public List<ChildParent> getParentLinks() {
-        return parentLinks;
-    }
-
-    public void setParentLinks(List<ChildParent> parentLinks) {
-        this.parentLinks = parentLinks;
-    }
-
-    public List<ActivityRegistration> getRegistrations() {
-        return registrations;
-    }
-
-    public void setRegistrations(List<ActivityRegistration> registrations) {
-        this.registrations = registrations;
-    }
 
     public String getFullName() {
         return firstName + " " + lastName;
