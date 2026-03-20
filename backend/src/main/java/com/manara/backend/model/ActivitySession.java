@@ -2,6 +2,7 @@ package com.manara.backend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
@@ -16,11 +17,11 @@ public class ActivitySession {
     private Integer id;
 
     @Column(nullable = false)
-    @NotBlank(message = "L'activité doit avoir un début")
+    @NotNull(message = "L'activité doit avoir un début")
     private LocalDateTime dateTimeStart;
 
     @Column(nullable = false)
-    @NotBlank(message = "L'activité doit avoir un fin")
+    @NotNull(message = "L'activité doit avoir un fin")
     private LocalDateTime dateTimeEnd;
 
     @Positive(message = "L'activité ne peut avoir une capacité négative")
