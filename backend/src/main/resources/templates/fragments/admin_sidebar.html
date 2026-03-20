@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 
 <nav th:fragment="adminSidebar" class="sidebar-container" aria-label="Navigation principale">
@@ -29,11 +29,11 @@
              id="admin-icon"
              th:src="@{/images/icons8-admin-settings-male-64.png}"
              alt="Admin" />
-        <span class="text-wrapper-6">Admin Manara</span>
+        <span class="text-wrapper-6" th:text="${#authentication.principal.fullName}"></span>
     </div>
 
     <div id="logout-popup" class="logout-popup">
-        <button class="logout-btn">Déconnexion</button>
+        <button class="logout-btn" th:onclick="|location.href='@{/logout}'|">Déconnexion</button>
     </div>
 
 </nav>

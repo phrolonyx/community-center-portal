@@ -16,4 +16,9 @@ public class ConnexionInscriptionController {
         return "inscription";
     }
 
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "access_denied";
+    }
+
 }

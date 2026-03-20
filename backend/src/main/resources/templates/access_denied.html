@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<section class="mission" style="background-color: #f8d7da; flex-direction: column; align-items: center; text-align: center; min-height: 50vh; justify-content: center; gap: 20px;">
+
+    <div class="mission-title" style="background-color: #dc3545; margin-left: 0;">
+        Accès Refusé
+    </div>
+
+    <div class="mission-text" style="margin-left: 0; max-width: 700px;">
+        <p style="font-weight: bold; font-size: 1.5em; color: #721c24;">
+            Désolé, vous n'avez pas la permission d'accéder à cette page.
+        </p>
+        <p style="font-size: 1.1em; color: #555;">
+            Il semble que votre compte ne dispose pas des droits nécessaires pour consulter cette ressource du Centre communautaire Manara.
+        </p>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a th:href="@{/}" class="btn-yellow" style="display: inline-block;">
+            Retour à l'accueil
+        </a>
+    </div>
+
+</section>
+
+<!-- Optionnel : Un rappel visuel des activités pour adoucir la page -->
+<div class="activities-title" style="background-color: #043C5C; width: 30%; font-size: 18px;">
+    Besoin d'aide ?
+</div>
+<section class="activities" style="padding: 20px;">
+    <p style="text-align: center; width: 100%;">
+        Si vous pensez qu'il s'agit d'une erreur, veuillez contacter l'administration de Manara CRM.
+    </p>
+</section>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

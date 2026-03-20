@@ -6,6 +6,7 @@ import com.manara.backend.model.Role;
 import com.manara.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,8 @@ public class DataInitializer implements CommandLineRunner {
     private RoleRepository roleRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
@@ -28,7 +31,7 @@ public class DataInitializer implements CommandLineRunner {
             Role adminRole = roleRepository.findByName("ADMIN").orElseThrow();
             User admin = new User();
             admin.setEmail("admin@admin.com");
-            admin.setPasswordHash("admin123");
+            admin.setPasswordHash(passwordEncoder.encode("admin123"));
             admin.setFirstName("Admin");
             admin.setLastName("Manara");
             admin.setCreatedAt(LocalDateTime.now());
