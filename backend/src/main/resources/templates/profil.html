@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Profil — Manara</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/dashboardParent.css}">
+  <link rel="stylesheet" th:href="@{/css/profil.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="dashboard-layout">
+
+  <div th:replace="fragments/sidebar :: sidebar('profil')"></div>
+
+  <main class="dashboard-main">
+    <h1 class="profil-title">Mon Profil</h1>
+
+    <div class="profil-grid">
+      <div class="profil-card">
+        <div class="profil-card-header">
+          <h2 class="profil-card-title">Informations personnelles</h2>
+          <button class="btn-modifier-profil" onclick="toggleEdit()">Modifier</button>
+        </div>
+        <div class="profil-fields" id="profilFields">
+          <div class="profil-field">
+            <span class="field-label">Prénom</span>
+            <span class="field-value" id="displayPrenom">Guillaume</span>
+            <input type="text" class="field-input hidden" id="editPrenom" value="Guillaume">
+          </div>
+          <div class="profil-field">
+            <span class="field-label">Nom</span>
+            <span class="field-value" id="displayNom">Bernatchez</span>
+            <input type="text" class="field-input hidden" id="editNom" value="Bernatchez">
+          </div>
+          <div class="profil-field">
+            <span class="field-label">Courriel</span>
+            <span class="field-value" id="displayEmail">guillaume.bernatchez@email.com</span>
+            <input type="email" class="field-input hidden" id="editEmail" value="guillaume.bernatchez@email.com">
+          </div>
+          <div class="profil-field">
+            <span class="field-label">Téléphone</span>
+            <span class="field-value" id="displayTel">514-555-1234</span>
+            <input type="tel" class="field-input hidden" id="editTel" value="514-555-1234">
+          </div>
+        </div>
+        <div class="profil-edit-buttons hidden" id="editButtons">
+          <button class="btn-save" onclick="saveProfile()">Enregistrer</button>
+          <button class="btn-cancel" onclick="cancelEdit()">Annuler</button>
+        </div>
+      </div>
+
+      <div class="profil-card">
+        <div class="profil-card-header">
+          <h2 class="profil-card-title">Coordonnées</h2>
+        </div>
+        <div class="profil-fields" id="coordFields">
+          <div class="profil-field">
+            <span class="field-label">Adresse</span>
+            <span class="field-value" id="displayAdresse">1234 Rue Principale</span>
+            <input type="text" class="field-input hidden" id="editAdresse" value="1234 Rue Principale">
+          </div>
+          <div class="profil-field">
+            <span class="field-label">Ville</span>
+            <span class="field-value" id="displayVille">Montréal</span>
+            <input type="text" class="field-input hidden" id="editVille" value="Montréal">
+          </div>
+          <div class="profil-field">
+            <span class="field-label">Province</span>
+            <span class="field-value" id="displayProvince">QC</span>
+            <input type="text" class="field-input hidden" id="editProvince" value="QC">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profil-card full-width">
+      <div class="profil-card-header">
+        <h2 class="profil-card-title">Contact d'urgence</h2>
+      </div>
+      <div class="urgence-grid" id="urgenceFields">
+        <div class="profil-field">
+          <span class="field-label">Nom complet</span>
+          <span class="field-value" id="displayUrgNom">Elodie Bernatchez</span>
+          <input type="text" class="field-input hidden" id="editUrgNom" value="Elodie Bernatchez">
+        </div>
+        <div class="profil-field">
+          <span class="field-label">Relation</span>
+          <span class="field-value" id="displayUrgRelation">Conjointe</span>
+          <input type="text" class="field-input hidden" id="editUrgRelation" value="Conjointe">
+        </div>
+        <div class="profil-field">
+          <span class="field-label">Téléphone</span>
+          <span class="field-value" id="displayUrgTel">514-555-5678</span>
+          <input type="tel" class="field-input hidden" id="editUrgTel" value="514-555-5678">
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<script>
+  let isEditing = false;
+  const $$ = sel => document.querySelectorAll(sel);
+  const $ = id => document.getElementById(id);
+
+  function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.querySelector('.sidebar-overlay').classList.toggle('open');
+  }
+
+  function setEditMode(editing) {
+    isEditing = editing;
+    $$('.field-value').forEach(el => el.classList.toggle('hidden', editing));
+    $$('.field-input').forEach(el => el.classList.toggle('hidden', !editing));
+    $('editButtons').classList.toggle('hidden', !editing);
+    document.querySelector('.btn-modifier-profil').classList.toggle('hidden', editing);
+  }
+
+  function toggleEdit() { setEditMode(true); }
+
+  function cancelEdit() {
+    $$('.field-input').forEach(input => input.value = input.previousElementSibling.textContent);
+    setEditMode(false);
+  }
+
+  function saveProfile() {
+    $$('.field-input').forEach(input => input.previousElementSibling.textContent = input.value);
+
+    const sidebarUser = document.querySelector('.sidebar-user');
+    if (sidebarUser && sidebarUser.lastChild) {
+      sidebarUser.lastChild.textContent = ' ' + $('editPrenom').value + ' ' + $('editNom').value;
+    }
+
+    setEditMode(false);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+/* TITRE */
+.profil-title { font-size: 30px; font-weight: 900; color: #043C5C; margin: 0 0 24px; }
+
+/* GRILLE */
+.profil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+
+/* CARTE */
+.profil-card { background: #FFF; border-radius: 12px; padding: 28px; box-shadow: 0 1px 4px rgba(0,0,0,.06); box-sizing: border-box; }
+.profil-card.full-width { width: 100%; max-width: 100%; }
+.profil-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+.profil-card-title { font-size: 18px; font-weight: 800; color: #E8BB08; margin: 0; }
+
+/* BOUTON MODIFIER */
+.btn-modifier-profil { padding: 8px 18px; background: #043C5C; color: #FFF; font-size: 12px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; transition: background .2s; }
+.btn-modifier-profil:hover { background: #065A85; }
+
+/* CHAMPS */
+.profil-fields { display: flex; flex-direction: column; gap: 18px; }
+.profil-field { display: flex; flex-direction: column; gap: 4px; }
+.field-label { font-size: 13px; font-weight: 600; color: #E8BB08; text-decoration: underline; text-underline-offset: 3px; }
+.field-value { font-size: 15px; font-weight: 600; color: #043C5C; }
+
+/* INPUT ÉDITION */
+.field-input { padding: 10px 14px; font-size: 15px; font-family: Arial, sans-serif; color: #043C5C; background: #FFF; border: 2px solid #C8CDD3; border-radius: 4px; outline: none; box-sizing: border-box; width: 100%; max-width: 100%; transition: border-color .2s, box-shadow .2s; }
+.field-input:focus { border-color: #043C5C; box-shadow: 0 0 0 3px rgba(4,60,92,.12); }
+
+/* BOUTONS ENREGISTRER / ANNULER */
+.profil-edit-buttons { display: flex; gap: 10px; margin-top: 20px; }
+.btn-save, .btn-cancel { padding: 10px 22px; font-size: 13px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: background .2s; }
+.btn-save { background: #15A63B; color: #FFF; border: none; }
+.btn-save:hover { background: #128A32; }
+.btn-cancel { background: none; border: 2px solid #DC2626; color: #DC2626; }
+.btn-cancel:hover { background: #FEF2F2; }
+
+/* CONTACT D'URGENCE */
+.urgence-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+/* FIX OVERFLOW HORIZONTAL */
+.dashboard-main { overflow-x: hidden; }
+
+/* HIDDEN */
+.hidden { display: none; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .profil-grid { grid-template-columns: 1fr; }
+    .urgence-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+    .profil-title { font-size: 24px; }
+    .urgence-grid { grid-template-columns: 1fr; }
+    .profil-card { padding: 22px; }
+    .profil-edit-buttons { flex-direction: column; }
+}

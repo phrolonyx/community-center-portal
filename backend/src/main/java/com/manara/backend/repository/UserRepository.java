@@ -22,4 +22,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     List<User> findByEnabledFalse();
 
+    User getUserByEmail(String email);
 }

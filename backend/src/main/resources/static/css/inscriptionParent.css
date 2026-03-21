@@ -1,0 +1,43 @@
+/* EN-TÊTE */
+.inscriptions-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.inscriptions-title { font-size: 30px; font-weight: 900; color: #043C5C; margin: 0; }
+.btn-inscrire-activite { padding: 12px 22px; background: #E8BB08; color: #043C5C; font-size: 14px; font-weight: 700; text-decoration: none; border-radius: 6px; transition: background .2s, transform .15s; }
+.btn-inscrire-activite:hover { background: #D4A907; transform: translateY(-1px); }
+
+/* SECTION PAR ENFANT */
+.enfant-section { margin-bottom: 32px; }
+.enfant-section-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
+.enfant-section-nom { font-size: 22px; font-weight: 900; color: #043C5C; margin: 0; }
+.enfant-section-count { font-size: 14px; color: #6B7280; font-weight: 600; }
+
+/* GRILLE */
+.inscriptions-grid { display: flex; gap: 20px; flex-wrap: wrap; }
+
+/* CARTE */
+.inscription-card { background: #FFF; border-radius: 12px; padding: 20px; min-width: 220px; flex: 1; max-width: 300px; box-shadow: 0 1px 4px rgba(0,0,0,.06); display: flex; flex-direction: column; gap: 8px; }
+
+/* STATUT */
+.inscription-statut { display: inline-block; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 700; width: fit-content; }
+.inscription-statut.confirmed { background: #15A63B; color: #FFF; }
+.inscription-statut.pending { background: #E8BB08; color: #043C5C; }
+.inscription-statut.cancelled { background: #DC2626; color: #FFF; }
+
+/* NOM + DÉTAILS */
+.inscription-nom { font-size: 17px; font-weight: 800; color: #043C5C; margin: 4px 0 0; }
+.inscription-details { font-size: 13px; color: #6B7280; line-height: 1.5; margin: 0; }
+
+/* ACTIONS */
+.inscription-actions { display: flex; gap: 8px; margin-top: 8px; }
+.btn-annuler-inscription { padding: 7px 16px; background: #DC2626; border: none; color: #FFF; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: background .2s; }
+.btn-annuler-inscription:hover { background: #B91C1C; }
+
+/* VIDE */
+.no-inscription { font-size: 14px; color: #6B7280; font-weight: 600; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .inscriptions-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+    .inscriptions-title { font-size: 24px; }
+    .inscriptions-grid { flex-direction: column; }
+    .inscription-card { max-width: 100%; }
+}

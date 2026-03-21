@@ -1,10 +1,12 @@
 package com.manara.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Data
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"child_id", "parent_profile_id"}))
 public class ChildParent {
 
@@ -41,62 +43,6 @@ public class ChildParent {
         isPrimary = true;
         validatedBy = null;
         createdAt = LocalDateTime.now();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Child getChild() {
-        return child;
-    }
-
-    public void setChild(Child child) {
-        this.child = child;
-    }
-
-    public ParentProfile getParentProfile() {
-        return parentProfile;
-    }
-
-    public void setParentProfile(ParentProfile parentProfile) {
-        this.parentProfile = parentProfile;
-    }
-
-    public String getRelationship() {
-        return relationship;
-    }
-
-    public void setRelationship(String relationship) {
-        this.relationship = relationship;
-    }
-
-    public Boolean getPrimary() {
-        return isPrimary;
-    }
-
-    public void setPrimary(Boolean primary) {
-        isPrimary = primary;
-    }
-
-    public User getValidatedBy() {
-        return validatedBy;
-    }
-
-    public void setValidatedBy(User validatedBy) {
-        this.validatedBy = validatedBy;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public Boolean isValidated() {

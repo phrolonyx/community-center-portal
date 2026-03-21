@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes Enfants — Manara</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/dashboardParent.css}">
+  <link rel="stylesheet" th:href="@{/css/enfants.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="dashboard-layout">
+  <div th:replace="fragments/sidebar :: sidebar('enfants')"></div>
+  <main class="dashboard-main">
+    <div class="enfants-header">
+      <h1 class="enfants-title">Mes Enfants</h1>
+      <button class="btn-ajouter" onclick="openModal()">+ Ajouter un enfant</button>
+    </div>
+
+    <div id="enfantsList">
+      <div class="enfant-card">
+        <div class="enfant-top">
+          <div class="enfant-info">
+            <h2 class="enfant-nom">Arthur Bernatchez</h2>
+            <span class="enfant-details">Né(e) le 2018-05-11 · 7 ans</span>
+          </div>
+          <div class="enfant-buttons">
+            <button class="btn-modifier" onclick="openModal(this.closest('.enfant-card'))">Modifier</button>
+            <button class="btn-supprimer" onclick="supprimerEnfant(this)">Supprimer</button>
+          </div>
+        </div>
+        <div class="enfant-medical">
+          <span class="medical-label">Conditions médicales :</span>
+          <span class="medical-tag">Allergie aux arachides</span>
+        </div>
+        <div class="enfant-activites">
+          <div class="activites-label"><strong>Activités inscrites :</strong></div>
+          <div class="activites-list">
+            <div class="activite-mini">
+              <strong>Soccer extérieur</strong>
+              <span>Mar 25 fév à 10h00 · Parc Laurier</span>
+              <span class="statut confirmed">Confirmé</span>
+            </div>
+            <div class="activite-mini">
+              <strong>Arts plastiques</strong>
+              <span>Jeu 27 fév à 14h00 · Salle B</span>
+              <span class="statut confirmed">Confirmé</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="enfant-card">
+        <div class="enfant-top">
+          <div class="enfant-info">
+            <h2 class="enfant-nom">Léa Bernatchez</h2>
+            <span class="enfant-details">Né(e) le 2020-11-02 · 5 ans</span>
+          </div>
+          <div class="enfant-buttons">
+            <button class="btn-modifier" onclick="openModal(this.closest('.enfant-card'))">Modifier</button>
+            <button class="btn-supprimer" onclick="supprimerEnfant(this)">Supprimer</button>
+          </div>
+        </div>
+        <div class="enfant-activites">
+          <div class="activites-label"><strong>Activités inscrites :</strong></div>
+          <div class="activites-list">
+            <div class="activite-mini">
+              <strong>Éveil musical</strong>
+              <span>Mer 26 fév à 9h00 · Salle A</span>
+              <span class="statut pending">En attente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h2 id="modalTitle">Ajouter un enfant 👶</h2>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <p class="modal-subtitle">Remplissez les informations de votre enfant</p>
+
+    <form class="modal-form">
+      <fieldset class="form-section">
+        <legend class="section-legend">Informations personnelles</legend>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="childPrenom" class="form-label">Prénom <span class="required">*</span></label>
+            <input type="text" id="childPrenom" class="form-input" placeholder="Prénom" required>
+          </div>
+          <div class="form-group">
+            <label for="childNom" class="form-label">Nom <span class="required">*</span></label>
+            <input type="text" id="childNom" class="form-input" placeholder="Nom" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="childDate" class="form-label">Date de naissance <span class="required">*</span></label>
+          <input type="date" id="childDate" class="form-input" required>
+        </div>
+      </fieldset>
+
+      <fieldset class="form-section">
+        <legend class="section-legend">Lien parental</legend>
+        <div class="form-group">
+          <label for="childRelation" class="form-label">Votre relation avec l'enfant <span class="required">*</span></label>
+          <select id="childRelation" class="form-input" required>
+            <option value="" disabled selected>Sélectionner</option>
+            <option value="Père">Père</option>
+            <option value="Mère">Mère</option>
+            <option value="Tuteur">Tuteur / Tutrice</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="childContact" required>
+          <div class="checkbox-text">
+            <strong>Contact principal</strong>
+            <span>Je suis le contact principal pour cet enfant</span>
+          </div>
+        </label>
+      </fieldset>
+
+      <fieldset class="form-section">
+        <legend class="section-legend">Conditions médicales</legend>
+        <p class="medical-note">Indiquez toute allergie, maladie chronique ou besoin spécial. Ces informations sont essentielles pour la sécurité de votre enfant.</p>
+        <div class="form-group">
+          <label for="childMedical" class="form-label">Condition / Allergie</label>
+          <input type="text" id="childMedical" class="form-input" placeholder="Ex: Allergie aux arachides">
+        </div>
+      </fieldset>
+
+      <div class="modal-buttons">
+        <button type="button" class="btn-annuler" onclick="closeModal()">Annuler</button>
+        <button type="submit" class="btn-creer" id="btnSubmit">Créer le profil de l'enfant →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MENU MOBILE -->
+<button class="mobile-menu-btn" onclick="toggleSidebar()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<script>
+  let editingCard = null;
+  const $ = id => document.getElementById(id);
+  const fields = ['childPrenom','childNom','childDate','childRelation','childContact','childMedical'];
+  const keys   = ['prenom','nom','date','relation','contact','medical'];
+
+  function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.querySelector('.sidebar-overlay').classList.toggle('open');
+  }
+
+  function calculerAge(dn) {
+    const today = new Date(), birth = new Date(dn);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return age;
+  }
+
+  function openModal(card) {
+    $('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    if (card instanceof HTMLElement) {
+      editingCard = card;
+      $('modalTitle').textContent = 'Modifier l\'enfant ✏️';
+      $('btnSubmit').textContent = 'Enregistrer les modifications →';
+      $('childPrenom').value   = card.dataset.prenom;
+      $('childNom').value      = card.dataset.nom;
+      $('childDate').value     = card.dataset.date;
+      $('childRelation').value = card.dataset.relation;
+      $('childContact').checked = card.dataset.contact === 'true';
+      $('childMedical').value  = card.dataset.medical || '';
+    } else {
+      editingCard = null;
+      $('modalTitle').textContent = 'Ajouter un enfant 👶';
+      $('btnSubmit').textContent = 'Créer le profil de l\'enfant →';
+      document.querySelector('.modal-form').reset();
+    }
+  }
+
+  function closeModal(event) {
+    if (event && event.target !== $('modalOverlay')) return;
+    $('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+    editingCard = null;
+  }
+
+  function supprimerEnfant(btn) {
+    if (confirm('Voulez-vous vraiment supprimer ce profil ?')) btn.closest('.enfant-card').remove();
+  }
+
+  function medicalHTML(medical) {
+    return medical ? `<div class="enfant-medical"><span class="medical-label">Conditions médicales :</span><span class="medical-tag">${medical}</span></div>` : '';
+  }
+
+  function creerCarteHTML(prenom, nom, date, medical) {
+    return `<div class="enfant-top">
+            <div class="enfant-info">
+                <h2 class="enfant-nom">${prenom} ${nom}</h2>
+                <span class="enfant-details">Né(e) le ${date} · ${calculerAge(date)} ans</span>
+            </div>
+            <div class="enfant-buttons">
+                <button class="btn-modifier" onclick="openModal(this.closest('.enfant-card'))">Modifier</button>
+                <button class="btn-supprimer" onclick="supprimerEnfant(this)">Supprimer</button>
+            </div>
+        </div>
+        ${medicalHTML(medical)}
+        <div class="enfant-activites">
+            <div class="activites-label"><strong>Activités inscrites :</strong></div>
+            <div class="activites-list">
+                <p style="font-size:13px;color:#191a1c;">Aucune activité inscrite pour le moment.</p>
+            </div>
+        </div>`;
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const v = {
+      prenom:   $('childPrenom').value.trim(),
+      nom:      $('childNom').value.trim(),
+      date:     $('childDate').value,
+      relation: $('childRelation').value,
+      contact:  $('childContact').checked,
+      medical:  $('childMedical').value.trim()
+    };
+
+    if (editingCard) {
+      keys.forEach(k => editingCard.dataset[k] = v[k]);
+      editingCard.querySelector('.enfant-nom').textContent = v.prenom + ' ' + v.nom;
+      editingCard.querySelector('.enfant-details').textContent = `Né(e) le ${v.date} · ${calculerAge(v.date)} ans`;
+
+      const existing = editingCard.querySelector('.enfant-medical');
+      if (v.medical) {
+        if (existing) {
+          existing.querySelector('.medical-tag').textContent = v.medical;
+        } else {
+          editingCard.querySelector('.enfant-top').insertAdjacentHTML('afterend', medicalHTML(v.medical));
+        }
+      } else if (existing) {
+        existing.remove();
+      }
+    } else {
+      const card = document.createElement('div');
+      card.className = 'enfant-card';
+      keys.forEach(k => card.dataset[k] = v[k]);
+      card.innerHTML = creerCarteHTML(v.prenom, v.nom, v.date, v.medical);
+      $('enfantsList').appendChild(card);
+    }
+
+    closeModal();
+  }
+
+  document.querySelector('.modal-form').addEventListener('submit', handleSubmit);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.enfant-card').forEach(card => {
+      const nom = card.querySelector('.enfant-nom').textContent.split(' ');
+      const dateMatch = card.querySelector('.enfant-details').textContent.match(/\d{4}-\d{2}-\d{2}/);
+      const tag = card.querySelector('.medical-tag');
+      Object.assign(card.dataset, {
+        prenom: nom[0] || '', nom: nom.slice(1).join(' ') || '',
+        date: dateMatch ? dateMatch[0] : '', relation: 'Père',
+        contact: 'true', medical: tag ? tag.textContent : ''
+      });
+    });
+  });
+</script>
+</body>
+</html>

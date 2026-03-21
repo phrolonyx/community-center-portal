@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Parent — Manara</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboardParent.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="dashboard-layout">
+
+    <div th:replace="fragments/sidebar :: sidebar('apercu')"></div>
+
+
+
+    <main class="dashboard-main">
+        <div class="welcome-card">
+            <h1>Bonjour, Guillaume ! <span class="wave-emoji">👋</span></h1>
+            <p>Bienvenue dans votre espace parent. Voici un aperçu rapide.</p>
+        </div>
+
+        <div class="overview-grid">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">Prochaines activités</h2>
+                    <a th:href="@{/dashboardParent/inscriptions}" class="section-link">Voir tout →</a>
+                </div>
+                <div id="activitesContainer"></div>
+            </div>
+            <div class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title">Notifications</h2>
+                    <a th:href="@{/dashboardParent/messages}" class="section-link">Voir tout →</a>
+                </div>
+                <div id="notifsContainer"></div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header">
+                <h2 class="section-title" id="calendarTitle">Calendrier</h2>
+                <div class="calendar-nav">
+                    <button class="cal-nav-btn" onclick="changeMonth(-1)">←</button>
+                    <button class="cal-nav-btn" onclick="changeMonth(1)">→</button>
+                </div>
+            </div>
+            <table class="calendar-table">
+                <thead><tr><th>Lun</th><th>Mar</th><th>Mer</th><th>Jeu</th><th>Ven</th><th>Sam</th><th>Dim</th></tr></thead>
+                <tbody id="calendarBody"></tbody>
+            </table>
+            <div class="calendar-legend" id="calendarLegend"></div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+</button>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<script>
+    const inscriptions = [
+        { enfant: 'Arthur', activite: 'Soccer extérieur',   date: '2026-02-25', heure: '10h00', lieu: 'Parc Laurier', color: 'green', statut: 'Confirmé' },
+        { enfant: 'Arthur', activite: 'Arts plastiques',    date: '2026-02-27', heure: '14h00', lieu: 'Salle B',      color: 'pink',  statut: 'Confirmé' },
+        { enfant: 'Léa',   activite: 'Éveil musical',      date: '2026-02-26', heure: '9h00',  lieu: 'Salle A',      color: 'blue',  statut: 'Confirmé' },
+        { enfant: 'Arthur', activite: 'Yoga enfants',       date: '2026-03-05', heure: '10h00', lieu: 'Salle C',      color: 'green', statut: 'Confirmé' },
+        { enfant: 'Léa',   activite: 'Cuisine en famille', date: '2026-03-08', heure: '14h00', lieu: 'Cuisine',      color: 'pink',  statut: 'En attente' }
+    ];
+
+    const messages = [
+        { sender: 'Sophie Tremblay', initials: 'ST', type: 'admin', dateLabel: "Aujourd'hui", text: 'La session de soccer de mardi a été déplacée au Terrain C.', unread: true },
+        { sender: 'Admin Manara',    initials: 'M',  type: 'admin', dateLabel: 'Hier',        text: "L'inscription de Léa à Éveil musical a été confirmée.",     unread: true },
+        { sender: 'Admin Manara',    initials: 'M',  type: 'admin', dateLabel: '10 fév',      text: 'Les nouvelles activités de mars sont disponibles.',         unread: false }
+    ];
+
+    const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+    let currentMonth = 1, currentYear = 2026;
+
+    /* === UTILITAIRES === */
+    const $ = id => document.getElementById(id);
+
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('open');
+        document.querySelector('.sidebar-overlay').classList.toggle('open');
+    }
+
+
+    function renderActivites() {
+        const items = [...inscriptions].sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 4);
+        $('activitesContainer').innerHTML = items.length === 0
+            ? '<p class="empty-msg">Aucune activité inscrite.</p>'
+            : items.map(a => {
+                const d = new Date(a.date);
+                return `<div class="activity-item">
+                    <div class="activity-date"><span class="date-day">${d.getDate()}</span><span class="date-month">${MOIS[d.getMonth()].substring(0,3).toUpperCase()}</span></div>
+                    <div class="activity-info"><strong>${a.activite}</strong><span>${a.enfant} · ${a.heure}</span></div>
+                    <span class="activity-status ${a.statut === 'Confirmé' ? 'confirmed' : 'pending'}">${a.statut}</span>
+                </div>`;
+            }).join('');
+    }
+
+
+    function renderNotifs() {
+        $('notifsContainer').innerHTML = messages.length === 0
+            ? '<p class="empty-msg">Aucune notification.</p>'
+            : messages.map((m, i) => {
+                const cls = m.unread ? 'urgent' : (i === messages.length - 1 ? 'info' : 'warning');
+                return `<div class="notif-item ${cls}">
+                    <div class="notif-top"><strong>${m.sender}</strong><span class="notif-date">${m.dateLabel}</span></div>
+                    <p>${m.text}</p>
+                </div>`;
+            }).join('');
+    }
+
+
+    function changeMonth(dir) {
+        currentMonth += dir;
+        if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+        if (currentMonth < 0)  { currentMonth = 11; currentYear--; }
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        $('calendarTitle').textContent = `Calendrier — ${MOIS[currentMonth]} ${currentYear}`;
+
+        const startDay = (new Date(currentYear, currentMonth, 1).getDay() + 6) % 7;
+        const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+        // Événements du mois indexés par jour
+        const events = {};
+        inscriptions.forEach(a => {
+            const d = new Date(a.date);
+            if (d.getMonth() === currentMonth && d.getFullYear() === currentYear) events[d.getDate()] = a;
+        });
+
+
+        let cells = Array(startDay).fill('<td></td>');
+        for (let d = 1; d <= totalDays; d++) {
+            const ev = events[d];
+            cells.push(ev
+                ? `<td class="cal-event ${ev.color}" title="${ev.activite} — ${ev.enfant}">${d}</td>`
+                : `<td>${d}</td>`);
+        }
+        while (cells.length % 7 !== 0) cells.push('<td></td>');
+
+        const rows = [];
+        for (let i = 0; i < cells.length; i += 7) rows.push(`<tr>${cells.slice(i, i + 7).join('')}</tr>`);
+        $('calendarBody').innerHTML = rows.join('');
+
+
+        const seen = new Set(), legend = [];
+        inscriptions.forEach(a => {
+            const d = new Date(a.date);
+            if (d.getMonth() === currentMonth && d.getFullYear() === currentYear && !seen.has(a.activite)) {
+                seen.add(a.activite);
+                legend.push(`<span><span class="legend-dot ${a.color}"></span> ${a.activite}</span>`);
+            }
+        });
+        const el = $('calendarLegend');
+        el.innerHTML = legend.join('');
+        el.style.display = legend.length ? 'flex' : 'none';
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => { renderActivites(); renderNotifs(); renderCalendar(); });
+</script>
+</body>
+</html>

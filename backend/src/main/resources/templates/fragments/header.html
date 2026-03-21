@@ -1,17 +1,26 @@
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <div th:fragment="header">
+
 
     <header>
         <nav class="navbar">
             <div class="logo">
-                <img src="images/logo.png" alt="Logo du site">
+                <img th:src="@{/images/logo.png}" alt="Logo du site">
             </div>
             <ul class="nav-links">
-                <li><a href="#">Accueil</a></li>
+                <li> <a th:href="@{/}">Accueil</a></li>
                 <li><a href="#">Nos activités</a></li>
             </ul>
             <div class="nav-buttons">
-                <a href="#" class="btn-outline">Connexion</a>
-                <a href="#" class="btn-filled">Inscription</a>
+                <div sec:authorize="isAuthenticated()">
+                    <span th:text="${#authentication.principal.fullName}"></span>
+                    <a th:href="@{/logout}" class="btn-outline">Deconnexion</a>
+                </div>
+                <div sec:authorize="isAnonymous()">
+                    <a th:href="@{/connexion}" class="btn-outline">Connexion</a>
+                    <a th:href="@{/inscription}" class="btn-filled">Inscription</a>
+                </div>
             </div>
         </nav>
     </header>

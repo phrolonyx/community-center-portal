@@ -13,17 +13,17 @@ USE manara_db;
 -- =====================================================
 INSERT INTO user (enabled, role_id, created_at, last_login, first_name, last_name, email, password_hash, user_image_path)
 VALUES
-(b'1',1,'2024-11-12 09:15:00','2026-02-18 14:22:00','Sophie','Tremblay','sophie.tremblay@mail.ca','hash2', 'sophie.png'),
-(b'1',1,'2025-01-05 16:40:00','2026-01-22 10:05:00','Marc','Gagnon','marc.gagnon@mail.ca','hash3', 'marc.jpg'),
-(b'1',1,'2024-09-28 08:10:00','2026-03-01 09:55:00','Julie','Roy','julie.roy@mail.ca','hash4', 'julie.png'),
-(b'1',1,'2025-03-14 11:30:00','2026-02-27 17:20:00','Karim','Benali','karim.benali@mail.ca','hash5', null),
-(b'1',3,'2024-12-02 14:05:00','2026-03-05 13:45:00','Nadia','Hassan','nadia.hassan@manara.ca','hash6', 'nadia.png'),
-(b'1',3,'2025-02-18 10:50:00','2026-02-28 15:30:00','Youssef','Ali','youssef.ali@manara.ca','hash7', null),
-(b'1',1,'2024-10-21 09:00:00','2026-01-30 08:40:00','Fatima','Saadi','fatima.saadi@mail.ca','hash8', 'fatima.png'),
-(b'0',1,'2025-04-07 13:25:00','2026-03-03 12:10:00','Hassan','El Amrani','hassan.elamrani@mail.ca','hash9', 'hassan.png'),
-(b'1',1,'2024-08-19 15:45:00','2026-02-14 09:55:00','Mona','Khalil','mona.khalil@mail.ca','hash10', 'mona.png'),
-(b'1',1,'2025-05-11 10:10:00','2026-03-06 11:50:00','Patrick','Lefebvre','patrick.lefebvre@mail.ca','hash11', null),
-(b'0',1,'2024-07-30 08:35:00','2026-02-20 16:05:00','Amélie','Gauthier','amelie.gauthier@mail.ca','hash12', 'amelie.png');
+(b'1',1,'2024-11-12 09:15:00','2026-02-18 14:22:00','Sophie','Tremblay','sophie.tremblay@mail.ca','password', 'sophie.png'),
+(b'1',1,'2025-01-05 16:40:00','2026-01-22 10:05:00','Marc','Gagnon','marc.gagnon@mail.ca','password', 'marc.jpg'),
+(b'1',1,'2024-09-28 08:10:00','2026-03-01 09:55:00','Julie','Roy','julie.roy@mail.ca','password', 'julie.png'),
+(b'1',1,'2025-03-14 11:30:00','2026-02-27 17:20:00','Karim','Benali','karim.benali@mail.ca','password', null),
+(b'1',3,'2024-12-02 14:05:00','2026-03-05 13:45:00','Nadia','Hassan','nadia.hassan@manara.ca','password', 'nadia.png'),
+(b'1',3,'2025-02-18 10:50:00','2026-02-28 15:30:00','Youssef','Ali','youssef.ali@manara.ca','password', null),
+(b'1',1,'2024-10-21 09:00:00','2026-01-30 08:40:00','Fatima','Saadi','fatima.saadi@mail.ca','password', 'fatima.png'),
+(b'0',1,'2025-04-07 13:25:00','2026-03-03 12:10:00','Hassan','El Amrani','hassan.elamrani@mail.ca','password', 'hassan.png'),
+(b'1',1,'2024-08-19 15:45:00','2026-02-14 09:55:00','Mona','Khalil','mona.khalil@mail.ca','password', 'mona.png'),
+(b'1',1,'2025-05-11 10:10:00','2026-03-06 11:50:00','Patrick','Lefebvre','patrick.lefebvre@mail.ca','password', null),
+(b'0',1,'2024-07-30 08:35:00','2026-02-20 16:05:00','Amélie','Gauthier','amelie.gauthier@mail.ca','password', 'amelie.png');
 
 
 -- =====================================================

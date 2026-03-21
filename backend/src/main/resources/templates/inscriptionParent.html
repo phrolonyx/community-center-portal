@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Inscriptions — Manara</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboardParent.css}">
+    <link rel="stylesheet" th:href="@{/css/inscriptionParent.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="dashboard-layout">
+    <div th:replace="fragments/sidebar :: sidebar('inscriptions')"></div>
+
+    <main class="dashboard-main">
+        <div class="inscriptions-header">
+            <h1 class="inscriptions-title">Mes Inscriptions</h1>
+            <a th:href="@{/dashboardParent/activites}" class="btn-inscrire-activite">+ Inscrire à une activité</a>
+        </div>
+
+        <div class="enfant-section">
+            <div class="enfant-section-header">
+                <h2 class="enfant-section-nom">Arthur Bernatchez</h2>
+                <span class="enfant-section-count">· 2 inscriptions</span>
+            </div>
+            <div class="inscriptions-grid">
+                <div class="inscription-card">
+                    <span class="inscription-statut confirmed">Confirmé</span>
+                    <h3 class="inscription-nom">Soccer extérieur</h3>
+                    <p class="inscription-details">Mar 25 fév à 10h00 ·<br>📍 Parc Laurier</p>
+                    <div class="inscription-actions"><button class="btn-annuler-inscription" onclick="annulerInscription(this)">Annuler</button></div>
+                </div>
+                <div class="inscription-card">
+                    <span class="inscription-statut confirmed">Confirmé</span>
+                    <h3 class="inscription-nom">Arts plastiques</h3>
+                    <p class="inscription-details">Jeu 27 fév à 14h00 ·<br>📍 Salle B</p>
+                    <div class="inscription-actions"><button class="btn-annuler-inscription" onclick="annulerInscription(this)">Annuler</button></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="enfant-section">
+            <div class="enfant-section-header">
+                <h2 class="enfant-section-nom">Léa Bernatchez</h2>
+                <span class="enfant-section-count">· 1 inscription</span>
+            </div>
+            <div class="inscriptions-grid">
+                <div class="inscription-card">
+                    <span class="inscription-statut confirmed">Confirmé</span>
+                    <h3 class="inscription-nom">Éveil musical</h3>
+                    <p class="inscription-details">Mer 26 fév à 9h00 ·<br>📍 Salle A</p>
+                    <div class="inscription-actions"><button class="btn-annuler-inscription" onclick="annulerInscription(this)">Annuler</button></div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+</button>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<script>
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('open');
+        document.querySelector('.sidebar-overlay').classList.toggle('open');
+    }
+
+    function annulerInscription(btn) {
+        if (!confirm('Voulez-vous vraiment annuler cette inscription ?')) return;
+        const card = btn.closest('.inscription-card');
+        const grid = card.closest('.inscriptions-grid');
+        const section = card.closest('.enfant-section');
+        card.remove();
+
+        const n = grid.querySelectorAll('.inscription-card').length;
+        section.querySelector('.enfant-section-count').textContent =
+            n ? `· ${n} inscription${n > 1 ? 's' : ''}` : '· Aucune inscription';
+        if (!n) grid.innerHTML = '<p class="no-inscription">Aucune inscription pour le moment.</p>';
+    }
+</script>
+</body>
+</html>

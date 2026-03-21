@@ -2,10 +2,12 @@ package com.manara.backend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
 import java.util.List;
 
 @Entity
+@Data
 public class Activity {
 
     @Id
@@ -22,44 +24,4 @@ public class Activity {
 
     @OneToMany(mappedBy = "activity")
     private List<ActivitySession> sessions;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getActivityImagePath() {
-        return activityImagePath;
-    }
-
-    public void setActivityImagePath(String activityImagePath) {
-        this.activityImagePath = activityImagePath;
-    }
-
-    public List<ActivitySession> getSessions() {
-        return sessions;
-    }
-
-    public void setSessions(List<ActivitySession> sessions) {
-        this.sessions = sessions;
-    }
 }

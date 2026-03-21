@@ -1,10 +1,12 @@
 package com.manara.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Data
 public class ActivityRegistrationLog {
 
     @Id
@@ -28,60 +30,4 @@ public class ActivityRegistrationLog {
     private LocalDateTime changedAt;
 
     private String note;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public ActivityRegistration getRegistration() {
-        return registration;
-    }
-
-    public void setRegistration(ActivityRegistration registration) {
-        this.registration = registration;
-    }
-
-    public User getChangedBy() {
-        return changedBy;
-    }
-
-    public void setChangedBy(User changedBy) {
-        this.changedBy = changedBy;
-    }
-
-    public String getOldStatus() {
-        return oldStatus;
-    }
-
-    public void setOldStatus(String oldStatus) {
-        this.oldStatus = oldStatus;
-    }
-
-    public String getNewStatus() {
-        return newStatus;
-    }
-
-    public void setNewStatus(String newStatus) {
-        this.newStatus = newStatus;
-    }
-
-    public LocalDateTime getChangedAt() {
-        return changedAt;
-    }
-
-    public void setChangedAt(LocalDateTime changedAt) {
-        this.changedAt = changedAt;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
 }

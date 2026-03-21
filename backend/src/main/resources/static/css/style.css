@@ -197,7 +197,7 @@ header {
 .footer {
     background: #043C5C;
     color: white;
-    margin-top: 60px;
+    padding-top: 60px;
 }
 
 .footer-content {

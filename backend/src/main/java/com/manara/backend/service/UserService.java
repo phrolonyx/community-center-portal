@@ -4,6 +4,7 @@ import com.manara.backend.model.Role;
 import com.manara.backend.model.User;
 import com.manara.backend.repository.RoleRepository;
 import com.manara.backend.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,24 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void createUser(User user) {
-        if (user.getRole() == null) {
+        /*if (user.getRole() == null) {
             user.setRole(roleRepository.findByIsDefaultTrue().orElseThrow());
         } else {
             Role role = roleRepository.findById(user.getRole().getId()).orElseThrow();
             user.setRole(role);
-        }
+        }*/
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         userRepository.save(user);
     }
+
+    // updateUser BCrypt:
+    // if (!passwordEncoder.matches(updatedUser.getPasswordHash(), existing.getPasswordHash())) {
+    //            existing.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
+    //        }
 
     public User findById(Integer id) {
         return userRepository.findById(id).orElseThrow();

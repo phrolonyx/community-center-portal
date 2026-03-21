@@ -1,11 +1,13 @@
 package com.manara.backend.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Data
 public class ActivityRegistration {
 
     @Id
@@ -36,78 +38,6 @@ public class ActivityRegistration {
 
     @OneToMany(mappedBy = "registration")
     private List<ActivityRegistrationLog> logs;
-
-    public Child getChild() {
-        return child;
-    }
-
-    public void setChild(Child child) {
-        this.child = child;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public ActivitySession getActivitySession() {
-        return activitySession;
-    }
-
-    public void setActivitySession(ActivitySession activitySession) {
-        this.activitySession = activitySession;
-    }
-
-    public ParentProfile getParentProfile() {
-        return parentProfile;
-    }
-
-    public void setParentProfile(ParentProfile parentProfile) {
-        this.parentProfile = parentProfile;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getConfirmedAt() {
-        return confirmedAt;
-    }
-
-    public void setConfirmedAt(LocalDateTime confirmedAt) {
-        this.confirmedAt = confirmedAt;
-    }
-
-    public LocalDateTime getCancelledAt() {
-        return cancelledAt;
-    }
-
-    public void setCancelledAt(LocalDateTime cancelledAt) {
-        this.cancelledAt = cancelledAt;
-    }
-
-    public List<ActivityRegistrationLog> getLogs() {
-        return logs;
-    }
-
-    public void setLogs(List<ActivityRegistrationLog> logs) {
-        this.logs = logs;
-    }
 
     public Boolean isConfirmed() {
         return confirmedAt != null;
