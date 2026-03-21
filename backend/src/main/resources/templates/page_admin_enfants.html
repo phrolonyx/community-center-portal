@@ -24,7 +24,7 @@
         <div class="content-main">
 
             <!-- BARRE DE RECHERCHE -->
-            <form method="get" th:action="@{/admin/enfants}" class="content-searchbar">
+            <form method="get" th:action="@{/admin/children}" class="content-searchbar">
 
                 <img class="filter"
                      th:src="@{/images/icons8-filter-96.png}"
@@ -61,15 +61,15 @@
                     <tbody id="children-body">
                     <tr th:each="child : ${children}">
 
-                        <!-- ACTIONS -->
+
                         <td>
                             <button class="user-action">Supprimer</button>
                         </td>
 
-                        <!-- NOM COMPLET -->
+                        <!-- nom complet -->
                         <td th:text="${child.fullName}">Nom complet</td>
 
-                        <!-- PARENTS -->
+                        <!-- parents -->
                         <td>
                             <span th:each="link : ${child.parentLinks}"
                                   th:text="${link.parentProfile.user.firstName + ' ' + link.parentProfile.user.lastName}"
@@ -78,15 +78,15 @@
                             </span>
                         </td>
 
-                        <!-- DATE DE NAISSANCE -->
+                        <!-- date de naisance -->
                         <td th:text="${#temporals.format(child.dateOfBirth, 'dd/MM/yyyy')}">
                             01/01/2020
                         </td>
 
-                        <!-- ÂGE -->
+                        <!-- age -->
                         <td th:text="${child.getAge()}">0</td>
 
-                        <!-- CONDITIONS MÉDICALES -->
+                        <!-- cond medicales -->
                         <td>
                             <span th:if="${child.medicalConditions.size() == 0}">Aucune</span>
 
@@ -107,7 +107,7 @@
     </main>
 </div>
 
-<script th:src="@{/js/admin_children.js}"></script>
+<script th:src="@{/js/admin.js}"></script>
 
 </body>
 </html>

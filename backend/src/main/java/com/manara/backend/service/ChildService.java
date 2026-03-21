@@ -71,20 +71,33 @@ public class ChildService {
 
     public List<Child> searchByName(String keyword) {
 
-        // Si la recherche est vide = on retourne tous les enfants
         if (keyword == null || keyword.trim().isEmpty()) {
             return childRepository.findAll();
         }
 
         keyword = keyword.trim();
 
-        // recherche par prenom ou nom
-        return childRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
-                keyword, keyword
-        );
+        // Resultats enfant
+        List<Child> results = childRepository
+                .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(keyword, keyword);
+
+        // Resultats parent (prénom)
+        List<Child> parentFirst = childRepository
+                .findByParentLinks_ParentProfile_User_FirstNameContainingIgnoreCase(keyword);
+
+        // Resultats parent (nom)
+        List<Child> parentLast = childRepository
+                .findByParentLinks_ParentProfile_User_LastNameContainingIgnoreCase(keyword);
+
+        // Fusion sans doublons
+        parentFirst.forEach(c -> { if (!results.contains(c)) results.add(c); });
+        parentLast.forEach(c -> { if (!results.contains(c)) results.add(c); });
+
+        return results;
     }
 
-    public List<Child> findAll() {
+
+public List<Child> findAll() {
         return childRepository.findAll();
     }
 

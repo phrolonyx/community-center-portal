@@ -60,13 +60,13 @@ public class UserService {
 
     public List<User> search(String keyword) {
 
-        // Recherche simple dans prénom, nom, email
+        // Recherche prenoms et noms et email
         List<User> results = userRepository
                 .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
                         keyword, keyword, keyword
                 );
 
-        // On ajoute les utilisateurs dont le rôle correspond au mot recherche
+        // On ajoute les utilisateurs dont le role correspond au mot recherche
         for (User user : userRepository.findAll()) {
             if (user.getRole().getName().toLowerCase().contains(keyword.toLowerCase())) {
                 if (!results.contains(user)) {

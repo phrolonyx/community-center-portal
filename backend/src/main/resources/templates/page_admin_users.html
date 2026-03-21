@@ -61,7 +61,7 @@
                     <tbody id="users-body">
                     <tr th:each="user : ${users}">
                         <td>
-                            <button class="user-action">Supprimer</button>
+                            <button class="user-action" th:disabled="${user.role.name == 'ADMIN'}" th:classappend="${user.role.name == 'ADMIN'} ? ' disabled-btn-admin'">Supprimer</button>
                         </td>
 
                         <td th:text="${user.firstName}">Prénom</td>

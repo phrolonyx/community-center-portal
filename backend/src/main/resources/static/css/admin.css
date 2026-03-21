@@ -419,3 +419,10 @@ a {
 
 .approve-btn { background: #2ECC71; }
 .reject-btn { background: #E74C3C; }
+
+.disabled-btn-admin {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+

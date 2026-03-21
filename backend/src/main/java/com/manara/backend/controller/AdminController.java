@@ -107,11 +107,9 @@ public class AdminController {
         return "page_admin_enfants";
     }
 
-    @GetMapping("/admin/enfants/search-ajax")
-    @ResponseBody
-    public List<Child> searchChildrenAjax(@RequestParam("search") String search) {
-        return childService.searchByName(search);
-    }
+    
+
+
 
 
 
