@@ -117,6 +117,11 @@ a {
     color: #fff;
 }
 
+/*.sidebar-active {*/
+/*    background: #F3F3F3 !important;*/
+/*    font-weight: 900;*/
+/*}*/
+
 /* ============================================================
    POPUP DECONNEXION
 ============================================================ */
@@ -358,8 +363,7 @@ a {
 
 /* Ajustements individuels des PNG selon la carte */
 .stat-blue .stat-overlay img,
-.stat-green .stat-overlay img,
-.stat-orange .stat-overlay img {
+.stat-green .stat-overlay img{
     width: 70%;
     bottom: -5px;
     position: absolute;
@@ -375,6 +379,16 @@ a {
     right: 10px;
     opacity: 0.9;
 }
+
+.stat-orange .stat-overlay img {
+    width: 70%;
+    bottom: -1px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.9;
+}
+
 
 /* ============================================================
    INSCRIPTIONS EN ATTENTE
@@ -425,4 +439,168 @@ a {
     cursor: not-allowed;
     pointer-events: none;
 }
+
+/* page activite */
+
+.content-header-actions {
+    margin-bottom: 20px;
+    margin-left: 10px; /* éloigne de la sidebar */
+}
+
+.btn-primary {
+    background-color: #043c5c;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    background-color: #065a85;
+}
+
+/* modifier et supprimer */
+
+.action-buttons {
+    display: flex;
+    gap: 10px; /* espace horizontal */
+    flex-wrap: wrap; /* permet de passer sur 2 lignes en mobile */
+}
+
+.btn-edit {
+    background-color: #043c5c;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-edit:hover {
+    background-color: #065a85;
+}
+
+.btn-delete {
+    background-color: #c82333;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background-color: #dc3545;
+}
+
+/* FORMULAIRE MODERNE */
+.form-modern {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+
+}
+
+.form-group label {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #000000;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.input-modern {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #777777;
+    border-radius: 6px;
+    font-size: 15px;
+    background: #fff;
+}
+
+.input-modern:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* UPLOAD IMAGE */
+.file-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-btn {
+    background-color: #007bff;
+    text-transform: lowercase !important;
+    color: white !important;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.file-btn:hover {
+    background-color: #0069d9;
+}
+
+.file-name {
+    font-size: 14px;
+    color: #666;
+}
+
+/* BOUTONS */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-image{
+    font-size: 14px;
+    color: #ffffff;
+    margin-bottom: 6px;
+    display: block;
+
+}
+
+
+@media (max-width: 900px) {
+    .users-table {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .form-modern {
+        padding: 15px;
+        gap: 16px;
+    }
+
+    .input-modern {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .file-upload-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .form-actions {
+        justify-content: center;
+    }
+}
+
+
+
+
 

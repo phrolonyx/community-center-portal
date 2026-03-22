@@ -49,22 +49,18 @@
                 <table class="users-table-grid">
                     <thead>
                     <tr>
-                        <th>Actions</th>
                         <th>Nom complet</th>
                         <th>Parent(s)</th>
                         <th>Date de naissance</th>
                         <th>Âge</th>
                         <th>Conditions médicales</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
 
                     <tbody id="children-body">
                     <tr th:each="child : ${children}">
 
-
-                        <td>
-                            <button class="user-action">Supprimer</button>
-                        </td>
 
                         <!-- nom complet -->
                         <td th:text="${child.fullName}">Nom complet</td>
@@ -95,6 +91,9 @@
                                   style="display:block;">
                                 Condition
                             </span>
+                        </td>
+                        <td>
+                            <button class="btn-delete">Supprimer</button>
                         </td>
 
                     </tr>

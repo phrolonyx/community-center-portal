@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title th:text="${formTitle}">Activité</title>
+
+    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+</head>
+
+<body>
+
+<div class="admin-gestion-des">
+
+    <!-- SIDEBAR -->
+    <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <header th:replace="fragments/admin_header :: adminHeader(${formTitle})"></header>
+
+        <div class="content-main">
+
+            <!-- BOÎTE BLANCHE IDENTIQUE AUX LISTES -->
+            <section class="users-table">
+
+                <form th:action="@{/admin/activities/save}"
+                      th:object="${activity}"
+                      method="post"
+                      enctype="multipart/form-data"
+                      class="admin-form form-modern">
+
+                    <input type="hidden" th:field="*{id}" />
+
+                    <!-- NOM -->
+                    <div class="form-group">
+                        <label>Nom de l'activité</label>
+                        <input type="text" th:field="*{name}" class="input-modern" required>
+                    </div>
+
+                    <!-- DESCRIPTION -->
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea th:field="*{description}" class="input-modern" rows="4"></textarea>
+                    </div>
+
+                    <!-- IMAGE UPLOAD -->
+                    <div class="form-group">
+                        <label>Image de l'activité</label>
+
+                        <div class="file-upload-wrapper">
+                            <input type="file" name="imageFile" id="imageFile" class="file-input" accept="image/*">
+                            <label for="imageFile" class="file-btn">Choisir une image</label>
+                            <span id="file-name" class="file-name">Aucun fichier choisi</span>
+                        </div>
+                    </div>
+
+                    <!-- BOUTONS -->
+                    <div class="form-actions">
+                        <a th:href="@{/admin/activities}" class="btn-edit">Annuler</a>
+                        <button type="submit" class="btn-edit">Enregistrer</button>
+                    </div>
+
+                </form>
+
+            </section>
+
+            <script>
+                document.getElementById("imageFile").addEventListener("change", function() {
+                    const fileName = this.files.length > 0 ? this.files[0].name : "Aucun fichier choisi";
+                    document.getElementById("file-name").textContent = fileName;
+                });
+            </script>
+
+
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

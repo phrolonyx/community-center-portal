@@ -104,7 +104,9 @@ public class UserService {
         return userRepository.findByEnabledFalse();
     }
 
-
+    public List<User> findByRoleName(String roleName) {
+        return userRepository.findByRole_Name(roleName);
+    }
 
 
 

@@ -3,6 +3,8 @@ package com.manara.backend.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -22,6 +24,11 @@ public class Activity {
 
     private String activityImagePath;
 
-    @OneToMany(mappedBy = "activity")
+    @OneToMany(
+            mappedBy = "activity",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ActivitySession> sessions;
 }

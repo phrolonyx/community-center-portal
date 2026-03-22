@@ -2,6 +2,8 @@ package com.manara.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +21,7 @@ public class ActivityAttendance {
 
     @ManyToOne
     @JoinColumn(name = "registration_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ActivityRegistration registration;
 
     @Column(nullable = false)

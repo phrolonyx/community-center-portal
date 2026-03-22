@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion des séances</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<div class="admin-gestion-des">
+
+    <!-- SIDEBAR -->
+    <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- HEADER -->
+        <header th:replace="fragments/admin_header :: adminHeader('Gestion des séances')"></header>
+
+        <div class="content-main">
+
+            <!-- BOUTON AJOUTER -->
+            <div class="content-header-actions">
+                <a th:href="@{/admin/sessions/add}" class="btn-primary">Ajouter une séance</a>
+            </div>
+
+            <!-- TABLEAU -->
+            <section class="users-table">
+
+                <table class="users-table-grid">
+                    <thead>
+                    <tr>
+                        <th>Activité</th>
+                        <th>Animateur</th>
+                        <th>Lieu</th>
+                        <th>Capacité</th>
+                        <th>Date début</th>
+                        <th>Date fin</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="sceance : ${sessions}">
+                        <td th:text="${sceance.activity.name}"></td>
+                        <td th:text="${sceance.host.fullName}"></td>
+                        <td th:text="${sceance.location.name}"></td>
+                        <td th:text="${sceance.capacity}"></td>
+                        <td th:text="${#temporals.format(sceance.dateTimeStart, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${#temporals.format(sceance.dateTimeEnd, 'dd/MM/yyyy HH:mm')}"></td>
+
+                        <td class="action-buttons">
+                            <a th:href="@{/admin/sessions/edit(id=${sceance.id})}" class="btn-edit">Modifier</a>
+
+                            <form th:action="@{/admin/sessions/delete}" method="post" style="display:inline;">
+                                <input type="hidden" name="id" th:value="${sceance.id}">
+                                <button type="submit" class="btn-delete"
+                                        onclick="return confirm('Supprimer cette séance ?');">
+                                    Supprimer
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </section>
+
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

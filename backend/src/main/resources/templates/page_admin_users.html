@@ -47,7 +47,6 @@
                 <table class="users-table-grid">
                     <thead>
                     <tr>
-                        <th>Actions</th>
                         <th>Prénom</th>
                         <th>Nom</th>
                         <th>Rôle</th>
@@ -55,14 +54,13 @@
                         <th>Actif</th>
                         <th>Dernière connexion</th>
                         <th>Création</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
 
                     <tbody id="users-body">
                     <tr th:each="user : ${users}">
-                        <td>
-                            <button class="user-action" th:disabled="${user.role.name == 'ADMIN'}" th:classappend="${user.role.name == 'ADMIN'} ? ' disabled-btn-admin'">Supprimer</button>
-                        </td>
+
 
                         <td th:text="${user.firstName}">Prénom</td>
                         <td th:text="${user.lastName}">Nom</td>
@@ -76,6 +74,9 @@
 
                         <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">
                             Création
+                        </td>
+                        <td>
+                            <button class="btn-delete" th:disabled="${user.role.name == 'ADMIN'}" th:classappend="${user.role.name == 'ADMIN'} ? ' disabled-btn-admin'">Supprimer</button>
                         </td>
                     </tr>
                     </tbody>
