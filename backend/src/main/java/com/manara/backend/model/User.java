@@ -46,6 +46,10 @@ public class User {
     @Column(nullable = false)
     private Boolean enabled;
 
+    @Column(nullable = false)
+    private Boolean pending ;
+
+
     public User() {}
 
     public User(Role role, String email, String passwordHash, String firstName, String lastName, String userImagePath, Boolean enabled) {

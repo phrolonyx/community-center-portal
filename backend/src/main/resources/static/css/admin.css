@@ -431,7 +431,7 @@ a {
     margin-right: 5px;
 }
 
-.approve-btn { background: #2ECC71; }
+.approve-btn { background: #148530; }
 .reject-btn { background: #E74C3C; }
 
 .disabled-btn-admin {
@@ -495,6 +495,36 @@ a {
 .btn-delete:hover {
     background-color: #dc3545;
 }
+
+.btn-deactivate {
+    background-color: #E68C37;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-activate:hover {
+    background-color: #359E20;
+}
+
+.btn-activate {
+    background-color: #309419;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-deactivate:hover {
+    background-color: #E09753;
+}
+
+
 
 /* FORMULAIRE MODERNE */
 .form-modern {

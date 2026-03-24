@@ -76,8 +76,41 @@
                             Création
                         </td>
                         <td>
-                            <button class="btn-delete" th:disabled="${user.role.name == 'ADMIN'}" th:classappend="${user.role.name == 'ADMIN'} ? ' disabled-btn-admin'">Supprimer</button>
+
+                            <!-- ADMIN : bouton gris désactivé -->
+                            <button class="btn-deactivate disabled-btn-admin"
+                                    th:if="${user.role.name == 'ADMIN'}"
+                                    disabled>
+                                Désactiver
+                            </button>
+
+                            <!-- Utilisateur actif : bouton rouge Désactiver -->
+                            <form th:if="${user.enabled and user.role.name != 'ADMIN'}"
+                                  th:action="@{'/admin/users/disable/' + ${user.id}}"
+                                  method="post"
+                                  onsubmit="return confirm('Désactiver cet utilisateur ?');">
+
+                                <button type="submit"
+                                        class="btn-deactivate reject-btn">
+                                    Désactiver
+                                </button>
+                            </form>
+
+                            <!-- Utilisateur inactif : bouton vert Activer -->
+                            <form th:if="${!user.enabled}"
+                                  th:action="@{'/admin/users/enable/' + ${user.id}}"
+                                  method="post">
+
+                                <button type="submit"
+                                        class="btn-activate">
+                                    Activer
+                                </button>
+                            </form>
+
                         </td>
+                        <!--                        <td>-->
+<!--                            <button class="btn-delete" th:disabled="${user.role.name == 'ADMIN'}" th:classappend="${user.role.name == 'ADMIN'} ? ' disabled-btn-admin'">Désactiver</button>-->
+<!--                        </td>-->
                     </tr>
                     </tbody>
 

@@ -59,6 +59,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setCreatedAt(LocalDateTime.now());
             admin.setRole(adminRole);
             admin.setEnabled(true);
+            admin.setPending(false);
             userRepository.save(admin);
 
             // SQL users
@@ -323,6 +324,7 @@ public class DataInitializer implements CommandLineRunner {
         u.setEnabled(enabled);
         u.setCreatedAt(LocalDateTime.parse(createdAt));
         u.setLastLogin(LocalDateTime.parse(lastLogin));
+        u.setPending(false);
         return u;
     }
 

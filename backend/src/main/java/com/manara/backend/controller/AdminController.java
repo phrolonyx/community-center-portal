@@ -51,6 +51,34 @@ public class AdminController {
 
         return "page_admin_users";
     }
+    @PostMapping("/admin/users/disable/{id}")
+    public String disableUser(@PathVariable Integer id) {
+
+        User user = userService.findById(id);
+
+        // Empêcher désactivation d’un admin
+        if (user.getRole().getName().equalsIgnoreCase("ADMIN")) {
+            return "redirect:/admin/users?error=admin-disable-forbidden";
+        }
+
+        user.setEnabled(false);
+        userService.save(user);
+
+        return "redirect:/admin/users?success=disabled";
+    }
+
+    @PostMapping("/admin/users/enable/{id}")
+    public String enableUser(@PathVariable Integer id) {
+
+        User user = userService.findById(id);
+        user.setEnabled(true);
+        userService.save(user);
+
+        return "redirect:/admin/users?success=enabled";
+    }
+
+
+
 
     @GetMapping("/admin/users/search-ajax")
     @ResponseBody
@@ -89,6 +117,37 @@ public class AdminController {
 
     }
 
+    @PostMapping("/admin/users/approve/{id}")
+    public String approveUser(@PathVariable Integer id) {
+
+        User user = userService.findById(id);
+
+        user.setPending(false);
+        user.setEnabled(true);
+
+        userService.save(user);
+
+        return "redirect:/admin/dashboard?approved";
+    }
+
+    @PostMapping("/admin/users/reject/{id}")
+    public String rejectUser(@PathVariable Integer id) {
+
+        User user = userService.findById(id);
+
+        user.setPending(false);
+        user.setEnabled(false);
+
+        userService.save(user);
+
+        return "redirect:/admin/dashboard?rejected";
+    }
+
+
+
+
+
+
     @GetMapping("/admin/children")
     public String adminChildren(
             @RequestParam(value = "search", required = false) String search,
@@ -109,6 +168,17 @@ public class AdminController {
 
         return "page_admin_enfants";
     }
+
+    @PostMapping("/admin/children/delete/{id}")
+    public String deleteChild(@PathVariable Integer id) {
+
+        childService.deleteChild(id);
+
+        return "redirect:/admin/children?success=deleted";
+    }
+
+
+
 
     @Autowired
     private ActivityService activityService;

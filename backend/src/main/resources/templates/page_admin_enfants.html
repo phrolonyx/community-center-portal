@@ -93,7 +93,14 @@
                             </span>
                         </td>
                         <td>
-                            <button class="btn-delete">Supprimer</button>
+                            <form th:action="@{'/admin/children/delete/' + ${child.id}}"
+                                  method="post"
+                                  onsubmit="return confirm('Supprimer cet enfant ?');">
+
+                                <button type="submit" class="btn-delete">
+                                    Supprimer
+                                </button>
+                            </form>
                         </td>
 
                     </tr>

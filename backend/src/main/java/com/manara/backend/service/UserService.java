@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -100,13 +101,18 @@ public class UserService {
         return userRepository.countByEnabledFalse();
     }
 
-    public List<User> findPendingUsers() {  // les users a approuver dans le dashboard
-        return userRepository.findByEnabledFalse();
+    public List<User> findPendingUsers() {
+        return userRepository.findByPendingTrue();
     }
+
 
     public List<User> findByRoleName(String roleName) {
         return userRepository.findByRole_Name(roleName);
     }
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
 
 
 

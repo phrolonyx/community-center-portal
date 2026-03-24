@@ -85,9 +85,34 @@
                             <td th:text="${user.role.name}">Rôle</td>
                             <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">01/01/2026</td>
                             <td>
-                                <button class="approve-btn">Accepter</button>
-                                <button class="reject-btn">Refuser</button>
+
+                                <!-- Approuver -->
+                                <form th:action="@{'/admin/users/approve/' + ${user.id}}"
+                                      method="post"
+                                      style="display:inline-block;">
+
+                                    <button type="submit"
+                                            class="approve-btn"
+                                            onclick="return confirm('Approuver ce compte ?');">
+                                        Accepter
+                                    </button>
+                                </form>
+
+                                <!-- Refuser -->
+                                <form th:action="@{'/admin/users/reject/' + ${user.id}}"
+                                      method="post"
+                                      style="display:inline-block;">
+
+                                    <button type="submit"
+                                            class="reject-btn"
+                                            onclick="return confirm('Refuser ce compte ?');">
+                                        Refuser
+                                    </button>
+                                </form>
+
                             </td>
+
+
                         </tr>
                         </tbody>
                     </table>
