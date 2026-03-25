@@ -102,19 +102,6 @@ public List<Child> findAll() {
 
     @Transactional
     public void deleteChild(Integer childId) {
-        childMedicalRepository.deleteAll(
-                childRepository.findById(childId).orElseThrow().getMedicalConditions()
-        );
-        childParentRepository.deleteAll(
-                childRepository.findById(childId).orElseThrow().getParentLinks()
-        );
-        childRepository.deleteById(childId);
-    }
-
-
-
-    @Transactional
-    public void deleteChild(Integer childId) {
 
         Child child = childRepository.findById(childId).orElseThrow();
 

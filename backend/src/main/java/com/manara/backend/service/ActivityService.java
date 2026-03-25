@@ -35,22 +35,8 @@ public class ActivityService {
         activityRepository.deleteById(id);
     }
 
-
-    @Autowired
-    private ActivityRepository activityRepository;
-
     @Autowired
     private ActivityRegistrationRepository activityRegistrationRepository;
-
-    // Retourne toutes les activites
-    public List<Activity> findAll() {
-        return activityRepository.findAll();
-    }
-
-    // Trouver une activite par son ID
-    public Activity findById(Integer id) {
-        return activityRepository.findById(id).orElseThrow();
-    }
 
     // Sauvegarder une nouvelle inscription
     @Transactional

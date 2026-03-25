@@ -240,7 +240,7 @@ public class AdminController {
     public String editSessionForm(@RequestParam("id") Integer id, Model model) {
         model.addAttribute("session", sessionService.findById(id));
         model.addAttribute("activities", activityService.findAll());
-        model.addAttribute("hosts", userService.findAll());
+        model.addAttribute("hosts", userService.findByRoleName("ANIMATEUR"));
         model.addAttribute("locations", locationService.findAll());
         return "page_admin_sceance_form";
     }
