@@ -21,38 +21,71 @@
             <a th:href="@{/dashboardParent/activites}" class="btn-inscrire-activite">+ Inscrire à une activité</a>
         </div>
 
-        <div class="enfant-section">
-            <div class="enfant-section-header">
-                <h2 class="enfant-section-nom">Arthur Bernatchez</h2>
-                <span class="enfant-section-count">· 2 inscriptions</span>
-            </div>
-            <div class="inscriptions-grid">
-                <div class="inscription-card">
-                    <span class="inscription-statut confirmed">Confirmé</span>
-                    <h3 class="inscription-nom">Soccer extérieur</h3>
-                    <p class="inscription-details">Mar 25 fév à 10h00 ·<br>📍 Parc Laurier</p>
-                    <div class="inscription-actions"><button class="btn-annuler-inscription" onclick="annulerInscription(this)">Annuler</button></div>
-                </div>
-                <div class="inscription-card">
-                    <span class="inscription-statut confirmed">Confirmé</span>
-                    <h3 class="inscription-nom">Arts plastiques</h3>
-                    <p class="inscription-details">Jeu 27 fév à 14h00 ·<br>📍 Salle B</p>
-                    <div class="inscription-actions"><button class="btn-annuler-inscription" onclick="annulerInscription(this)">Annuler</button></div>
-                </div>
-            </div>
+        <!-- Message succes apres inscription -->
+        <div th:if="${param.inscrit}" class="alert-success">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span>Inscription effectuée avec succès !</span>
         </div>
 
-        <div class="enfant-section">
-            <div class="enfant-section-header">
-                <h2 class="enfant-section-nom">Léa Bernatchez</h2>
-                <span class="enfant-section-count">· 1 inscription</span>
-            </div>
-            <div class="inscriptions-grid">
-                <div class="inscription-card">
-                    <span class="inscription-statut confirmed">Confirmé</span>
-                    <h3 class="inscription-nom">Éveil musical</h3>
-                    <p class="inscription-details">Mer 26 fév à 9h00 ·<br>📍 Salle A</p>
-                    <div class="inscription-actions"><button class="btn-annuler-inscription" onclick="annulerInscription(this)">Annuler</button></div>
+        <!-- Message annulation en rouge -->
+        <div th:if="${param.annule}" class="alert-annule">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <span>Inscription annulée avec succès.</span>
+        </div>
+
+        <!-- Si aucun enfant enregistre -->
+        <div th:if="${children == null or children.isEmpty()}" class="empty-state">
+            <p>Aucun enfant enregistré. <a th:href="@{/dashboardParent/enfants}">Ajouter un enfant</a></p>
+        </div>
+
+        <!-- Boucle par enfant : afficher ses inscriptions -->
+        <div th:if="${children != null and !children.isEmpty()}">
+            <div th:each="child : ${children}" class="enfant-section">
+                <div class="enfant-section-header">
+                    <h2 class="enfant-section-nom" th:text="${child.firstName + ' ' + child.lastName}">Enfant</h2>
+                </div>
+                <div class="inscriptions-grid">
+
+                    <th:block th:with="hasInscription=false">
+                        <th:block th:each="reg : ${registrations}">
+                            <!-- Afficher seulement les inscriptions non-annulees de cet enfant -->
+                            <div class="inscription-card"
+                                 th:if="${reg.child != null and reg.child.id == child.id and reg.status != 'Annulé' and reg.status != 'ANNULÉ'}">
+
+                                <!-- Statut avec couleur -->
+                                <span class="inscription-statut"
+                                      th:classappend="${reg.status == 'CONFIRMÉ' or reg.status == 'Confirmé' ? 'confirmed' : (reg.status == 'EN_ATTENTE' or reg.status == 'En attente' ? 'pending' : (reg.status == 'ANNULÉ' or reg.status == 'Annulé' ? 'cancelled' : ''))}"
+                                      th:text="${reg.status}">Statut</span>
+
+                                <!-- Nom de l'activite -->
+                                <h3 class="inscription-nom"
+                                    th:text="${reg.activitySession.activity.name}">Activité</h3>
+
+                                <!-- Date et lieu -->
+                                <p class="inscription-details">
+                                    <span th:text="${#temporals.format(reg.activitySession.dateTimeStart, 'dd MMM yyyy')}">Date</span>
+                                    <br>
+                                    <span th:if="${reg.activitySession.location != null}"
+                                          th:text="'📍 ' + ${reg.activitySession.location.name}">Lieu</span>
+                                </p>
+
+                                <!-- Bouton annuler -->
+                                <div class="inscription-actions">
+                                    <form th:action="@{/dashboardParent/inscriptions/annuler}" method="post">
+                                        <input type="hidden" name="registrationId" th:value="${reg.id}">
+                                        <button type="submit" class="btn-annuler-inscription"
+                                                onclick="return confirm('Voulez-vous vraiment annuler cette inscription ?')">
+                                            Annuler
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </th:block>
+                    </th:block>
                 </div>
             </div>
         </div>
@@ -61,6 +94,7 @@
 
 <div th:replace="fragments/footer :: footer"></div>
 
+<!-- Bouton menu mobile -->
 <button class="mobile-menu-btn" onclick="toggleSidebar()">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
@@ -72,19 +106,6 @@
     function toggleSidebar() {
         document.querySelector('.sidebar').classList.toggle('open');
         document.querySelector('.sidebar-overlay').classList.toggle('open');
-    }
-
-    function annulerInscription(btn) {
-        if (!confirm('Voulez-vous vraiment annuler cette inscription ?')) return;
-        const card = btn.closest('.inscription-card');
-        const grid = card.closest('.inscriptions-grid');
-        const section = card.closest('.enfant-section');
-        card.remove();
-
-        const n = grid.querySelectorAll('.inscription-card').length;
-        section.querySelector('.enfant-section-count').textContent =
-            n ? `· ${n} inscription${n > 1 ? 's' : ''}` : '· Aucune inscription';
-        if (!n) grid.innerHTML = '<p class="no-inscription">Aucune inscription pour le moment.</p>';
     }
 </script>
 </body>
