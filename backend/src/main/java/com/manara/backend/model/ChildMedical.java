@@ -6,6 +6,10 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entite pour les conditions medicales d'un enfant.
+ * Chaque enfant peut avoir plusieurs conditions (allergies, etc.).
+ */
 @Entity
 @Data
 public class ChildMedical {
@@ -14,18 +18,21 @@ public class ChildMedical {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    // L'enfant associe a cette condition
     @ManyToOne
     @JoinColumn(nullable = false)
     private Child child;
 
+    // La condition medicale (ex: "Allergie aux arachides")
     @Column(name = "medical_condition", length = 200, nullable = false)
     @NotBlank(message = "La condition médicale de votre enfant est obligatoire")
     private String condition;
 
-    @Column(nullable = false)
-    @NotBlank(message = "La sévérité du condition médicale est obligatoire")
+    // La severite est optionnelle (le parent n'est pas oblige de la specifier)
+    @Column
     private String severity;
 
+    // Notes supplementaires (optionnel)
     private String notes;
 
     @Column(nullable = false)

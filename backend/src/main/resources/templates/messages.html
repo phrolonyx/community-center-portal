@@ -18,62 +18,15 @@
   <main class="dashboard-main">
     <div class="messages-header">
       <h1 class="messages-title">Messages</h1>
-      <span class="messages-count">3 messages</span>
+      <span class="messages-count">0 messages</span>
     </div>
 
-    <div class="messages-list">
-      <div class="message-card unread" onclick="toggleMessage(this)">
-        <div class="message-top">
-          <div class="message-sender">
-            <div class="sender-avatar">ST</div>
-            <div class="sender-info"><strong>Sophie Tremblay</strong><span class="sender-role">Animatrice — Soccer extérieur</span></div>
-          </div>
-          <div class="message-meta"><span class="message-date">Aujourd'hui</span><span class="unread-dot"></span></div>
-        </div>
-        <p class="message-preview">La session de soccer de mardi a été déplacée au Terrain C en raison de travaux. Merci de prévoir des crampons.</p>
-        <div class="message-expanded">
-          <p>Bonjour M. Manara,</p>
-          <p>Je vous informe que la prochaine session de soccer extérieur prévue le mardi 25 février a été déplacée du Terrain B au Terrain C en raison de travaux d'entretien.</p>
-          <p>Merci de prévoir des crampons adaptés pour Arthur, car le nouveau terrain est en gazon naturel.</p>
-          <p>N'hésitez pas à me contacter si vous avez des questions.</p>
-          <p>Cordialement,<br>Sophie Tremblay</p>
-        </div>
-      </div>
-
-      <div class="message-card unread" onclick="toggleMessage(this)">
-        <div class="message-top">
-          <div class="message-sender">
-            <div class="sender-avatar admin">M</div>
-            <div class="sender-info"><strong>Admin Manara</strong><span class="sender-role">Administration</span></div>
-          </div>
-          <div class="message-meta"><span class="message-date">Hier</span><span class="unread-dot"></span></div>
-        </div>
-        <p class="message-preview">L'inscription de Léa à Éveil musical a été confirmée. La première session est prévue le mercredi 26 février.</p>
-        <div class="message-expanded">
-          <p>Bonjour,</p>
-          <p>Nous vous confirmons que l'inscription de Léa Bernatchez à l'activité Éveil musical a bien été enregistrée.</p>
-          <p>La première session aura lieu le mercredi 26 février à 9h00 en Salle A. Aucun matériel particulier n'est requis.</p>
-          <p>Bienvenue au Centre Manara !</p>
-          <p>L'équipe administrative</p>
-        </div>
-      </div>
-
-      <div class="message-card" onclick="toggleMessage(this)">
-        <div class="message-top">
-          <div class="message-sender">
-            <div class="sender-avatar admin">M</div>
-            <div class="sender-info"><strong>Admin Manara</strong><span class="sender-role">Administration</span></div>
-          </div>
-          <div class="message-meta"><span class="message-date">10 fév</span></div>
-        </div>
-        <p class="message-preview">Les nouvelles activités de mars sont disponibles. Consultez la page Activités pour découvrir les nouveautés.</p>
-        <div class="message-expanded">
-          <p>Bonjour,</p>
-          <p>Nous avons le plaisir de vous informer que les activités du mois de mars sont maintenant disponibles sur votre espace parent.</p>
-          <p>Cette saison, nous proposons des nouveautés comme Yoga enfants et Cuisine en famille. N'hésitez pas à consulter la page Activités pour en savoir plus et inscrire vos enfants.</p>
-          <p>À bientôt au Centre Manara !</p>
-        </div>
-      </div>
+    <div class="messages-empty">
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#C8CDD3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <h2>Aucune notification pour le moment</h2>
+      <p>Vos messages et notifications apparaîtront ici.</p>
     </div>
   </main>
 </div>
@@ -92,21 +45,6 @@
     document.querySelector('.sidebar').classList.toggle('open');
     document.querySelector('.sidebar-overlay').classList.toggle('open');
   }
-
-  function toggleMessage(card) {
-    document.querySelectorAll('.message-card.open').forEach(c => { if (c !== card) c.classList.remove('open'); });
-    card.classList.toggle('open');
-    if (card.classList.contains('unread')) { card.classList.remove('unread'); updateCount(); }
-  }
-
-  function updateCount() {
-    const unread = document.querySelectorAll('.message-card.unread').length;
-    const total = document.querySelectorAll('.message-card').length;
-    document.querySelector('.messages-count').textContent =
-            unread ? `${unread} non lu${unread > 1 ? 's' : ''} · ${total} messages` : `${total} messages`;
-  }
-
-  updateCount();
 </script>
 </body>
 </html>

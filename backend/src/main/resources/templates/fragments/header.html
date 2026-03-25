@@ -13,9 +13,22 @@
                 <li><a href="#">Nos activités</a></li>
             </ul>
             <div class="nav-buttons">
-                <div sec:authorize="isAuthenticated()">
-                    <span th:text="${#authentication.principal.fullName}"></span>
-                    <a th:href="@{/logout}" class="btn-outline">Deconnexion</a>
+                <div sec:authorize="isAuthenticated()" class="profile-container">
+                    <div class="profile-trigger">
+                        <span th:text="${#authentication.principal.fullName}"></span>
+                        <img src="/images/profileIcon.png" alt="Profil" class="profile-icon">
+                    </div>
+
+                    <div class="profile-menu">
+                        <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/dashboard}">
+                            Gestion
+                        </a>
+
+                        <a sec:authorize="hasAuthority('PARENT')" th:href="@{/dashboardParent}">
+                            Mon profil
+                        </a>
+                        <a th:href="@{/logout}">Déconnexion</a>
+                    </div>
                 </div>
                 <div sec:authorize="isAnonymous()">
                     <a th:href="@{/connexion}" class="btn-outline">Connexion</a>
@@ -25,5 +38,6 @@
         </nav>
     </header>
 
+    <script src="/js/header.js"></script>
 </div>
 

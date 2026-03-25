@@ -1,4 +1,6 @@
-/* EN-TÊTE */
+/* === INSCRIPTIONPARENT.CSS — Page Mes Inscriptions === */
+
+/* EN-TETE */
 .inscriptions-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 .inscriptions-title { font-size: 30px; font-weight: 900; color: #043C5C; margin: 0; }
 .btn-inscrire-activite { padding: 12px 22px; background: #E8BB08; color: #043C5C; font-size: 14px; font-weight: 700; text-decoration: none; border-radius: 6px; transition: background .2s, transform .15s; }
@@ -10,29 +12,64 @@
 .enfant-section-nom { font-size: 22px; font-weight: 900; color: #043C5C; margin: 0; }
 .enfant-section-count { font-size: 14px; color: #6B7280; font-weight: 600; }
 
-/* GRILLE */
+/* GRILLE DES CARTES */
 .inscriptions-grid { display: flex; gap: 20px; flex-wrap: wrap; }
 
-/* CARTE */
+/* CARTE D'INSCRIPTION */
 .inscription-card { background: #FFF; border-radius: 12px; padding: 20px; min-width: 220px; flex: 1; max-width: 300px; box-shadow: 0 1px 4px rgba(0,0,0,.06); display: flex; flex-direction: column; gap: 8px; }
 
-/* STATUT */
+/* COULEURS DE STATUT : vert = confirme, jaune = en attente, rouge = annule */
 .inscription-statut { display: inline-block; padding: 4px 12px; border-radius: 14px; font-size: 11px; font-weight: 700; width: fit-content; }
 .inscription-statut.confirmed { background: #15A63B; color: #FFF; }
 .inscription-statut.pending { background: #E8BB08; color: #043C5C; }
 .inscription-statut.cancelled { background: #DC2626; color: #FFF; }
 
-/* NOM + DÉTAILS */
+/* NOM ET DETAILS */
 .inscription-nom { font-size: 17px; font-weight: 800; color: #043C5C; margin: 4px 0 0; }
 .inscription-details { font-size: 13px; color: #6B7280; line-height: 1.5; margin: 0; }
 
-/* ACTIONS */
+/* BOUTON ANNULER */
 .inscription-actions { display: flex; gap: 8px; margin-top: 8px; }
 .btn-annuler-inscription { padding: 7px 16px; background: #DC2626; border: none; color: #FFF; font-size: 12px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: background .2s; }
 .btn-annuler-inscription:hover { background: #B91C1C; }
 
-/* VIDE */
+/* ETAT VIDE */
 .no-inscription { font-size: 14px; color: #6B7280; font-weight: 600; }
+
+/* MESSAGE SUCCES (inscription reussie) */
+.alert-success {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #2e7d32;
+    animation: fadeIn 0.3s ease;
+}
+
+/* MESSAGE ANNULATION (en rouge) */
+.alert-annule {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: #fce4ec;
+    color: #c62828;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #c62828;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 /* RESPONSIVE */
 @media (max-width: 768px) {

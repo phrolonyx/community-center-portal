@@ -1,6 +1,6 @@
-/* === ENFANTS.CSS — Page Mes Enfants Manara === */
+/* === ENFANTS.CSS — Page Mes Enfants === */
 
-/* EN-TÊTE */
+/* EN-TETE */
 .enfants-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
 .enfants-title { font-size: 30px; font-weight: 900; color: #043C5C; margin: 0; }
 .btn-ajouter { padding: 12px 22px; background: #E8BB08; color: #043C5C; font-size: 14px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; transition: background .2s, transform .15s; }
@@ -19,12 +19,12 @@
 .btn-supprimer { background: #DC2626; }
 .btn-supprimer:hover { background: #B91C1C; }
 
-/* CONDITIONS MÉDICALES */
+/* CONDITIONS MEDICALES */
 .enfant-medical { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #F0F0F0; }
 .medical-label { font-size: 14px; font-weight: 700; color: #E65C00; }
 .medical-tag { padding: 6px 16px; background: #FEF2F2; border: 1px solid #E65C00; border-radius: 20px; font-size: 12px; font-weight: 700; color: #E65C00; }
 
-/* ACTIVITÉS INSCRITES */
+/* ACTIVITES INSCRITES */
 .enfant-activites { margin-top: 8px; }
 .activites-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; color: #043C5C; }
 .lien-inscrire { font-size: 13px; font-weight: 600; color: #E8BB08; text-decoration: none; transition: color .2s; }
@@ -35,11 +35,13 @@
 .activite-mini strong { display: block; font-size: 14px; color: #043C5C; margin-bottom: 4px; }
 .activite-mini span:not(.statut) { display: block; font-size: 12px; color: #6B7280; margin-bottom: 8px; }
 
-.statut { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; }
+/* COULEURS DE STATUT : vert = confirme, jaune = en attente, rouge = annule */
+.statut { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; }
 .statut.confirmed { background: #15A63B; color: #FFF; }
 .statut.pending { background: #E8BB08; color: #043C5C; }
+.statut.cancelled { background: #DC2626; color: #FFF; }
 
-/* MODAL */
+/* MODAL AJOUTER/MODIFIER */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 300; justify-content: center; align-items: flex-start; padding: 40px 20px; overflow-y: auto; }
 .modal-overlay.open { display: flex; }
 .modal { background: #FFF3D6; border-radius: 14px; padding: 32px; width: 100%; max-width: 520px; position: relative; }
@@ -50,7 +52,7 @@
 .modal-close:hover { border-color: #043C5C; color: #043C5C; }
 .modal-subtitle { font-size: 14px; color: #6B7280; margin: 0 0 24px; }
 
-/* FORMULAIRE */
+/* FORMULAIRE DU MODAL */
 .modal-form { display: flex; flex-direction: column; gap: 16px; }
 .form-section { border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
 .section-legend { font-size: 15px; font-weight: 700; color: #E8BB08; padding-right: 12px; margin-bottom: 2px; display: flex; align-items: center; gap: 12px; width: 100%; }
@@ -78,6 +80,26 @@ select.form-input { appearance: none; background-image: url("data:image/svg+xml,
 .btn-annuler:hover { background: #FEF2F2; }
 .btn-creer { flex: 1; padding: 14px 24px; background: #043C5C; color: #FFF; font-size: 14px; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; transition: background .2s, transform .15s; }
 .btn-creer:hover { background: #065A85; transform: translateY(-1px); }
+
+/* MESSAGE DE SUCCES (ajout, modif, suppr) */
+.alert-success {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #2e7d32;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 /* RESPONSIVE */
 @media (max-width: 768px) {

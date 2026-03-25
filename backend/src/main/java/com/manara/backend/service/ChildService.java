@@ -100,8 +100,6 @@ public List<Child> findAll() {
         return childRepository.findAll();
     }
 
-
-
     @Transactional
     public void deleteChild(Integer childId) {
 

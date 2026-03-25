@@ -16,13 +16,13 @@
 
     <div th:replace="fragments/sidebar :: sidebar('activites')"></div>
 
-
     <main class="dashboard-main">
         <div class="activites-header">
             <h1 class="activites-title">Nos Activités</h1>
             <p class="activites-subtitle">Explorez et inscrivez vos enfants aux activités du Centre Manara</p>
         </div>
 
+        <!-- Barre de recherche -->
         <div class="search-bar">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -30,52 +30,44 @@
             <input type="text" id="searchInput" placeholder="Rechercher une activité..." onkeyup="filterActivities()">
         </div>
 
+        <!-- Grille des activites -->
         <div class="activites-grid">
-            <div class="activite-card" data-name="soccer extérieur" data-age-min="5" data-age-max="10">
-                <div class="card-image"><img th:src="@{/images/soccer.jpg}" alt="Soccer extérieur"></div>
-                <div class="card-body">
-                    <div class="card-top">
-                        <h3 class="card-name">Soccer extérieur</h3>
-                        <div class="card-badges"><span class="badge age">5-10ans</span><span class="badge date">2026-02-28</span></div>
-                    </div>
-                    <p class="card-desc">Initiation au soccer en plein air. Les enfants développent coordination, esprit d'équipe et technique de base dans un environnement ludique et sécuritaire.</p>
-                    <button class="btn-inscrire" onclick="openInscrireModal(this)">Inscrire mon enfant</button>
-                </div>
+
+            <!-- Si aucune activite -->
+            <div th:if="${activities == null or activities.isEmpty()}" style="grid-column:1/-1">
+                <p style="text-align:center;color:#666;padding:2rem;">Aucune activité disponible pour le moment.</p>
             </div>
 
-            <div class="activite-card" data-name="éveil musical" data-age-min="3" data-age-max="6">
-                <div class="card-image"><img th:src="@{/images/musique.jpg}" alt="Éveil musical"></div>
-                <div class="card-body">
-                    <div class="card-top">
-                        <h3 class="card-name">Éveil musical</h3>
-                        <div class="card-badges"><span class="badge age">3-6ans</span><span class="badge date">2026-02-29</span></div>
-                    </div>
-                    <p class="card-desc">Découverte des instruments, du rythme et du chant. Une activité joyeuse qui stimule la créativité et la motricité fine des tout-petits.</p>
-                    <button class="btn-inscrire" onclick="openInscrireModal(this)">Inscrire mon enfant</button>
+            <!-- Boucle sur les activites depuis la BD -->
+            <div th:each="activity : ${activities}" class="activite-card"
+                 th:data-name="${activity.name.toLowerCase()}"
+                 th:data-id="${activity.id}">
+                <div class="card-image">
+                    <img th:if="${activity.activityImagePath != null}"
+                         th:src="@{${activity.activityImagePath}}"
+                         th:alt="${activity.name}">
+                    <img th:if="${activity.activityImagePath == null}"
+                         th:src="@{/images/default-activity.jpg}"
+                         alt="Activité">
                 </div>
-            </div>
-
-            <div class="activite-card" data-name="yoga enfants" data-age-min="3" data-age-max="7">
-                <div class="card-image"><img th:src="@{/images/yoga.jpg}" alt="Yoga enfants"></div>
                 <div class="card-body">
                     <div class="card-top">
-                        <h3 class="card-name">Yoga enfants</h3>
-                        <div class="card-badges"><span class="badge age">3-7ans</span><span class="badge date">2026-03-02</span></div>
+                        <h3 class="card-name" th:text="${activity.name}">Activité</h3>
+                        <div class="card-badges">
+                            <span th:if="${activity.sessions != null and !activity.sessions.isEmpty()}"
+                                  class="badge date"
+                                  th:text="${#temporals.format(activity.sessions[0].dateTimeStart, 'yyyy-MM-dd')}">
+                                Date
+                            </span>
+                        </div>
                     </div>
-                    <p class="card-desc">Séances de yoga ludiques avec postures animales, jeux de respiration et relaxation. Parfait pour développer la concentration et la souplesse.</p>
-                    <button class="btn-inscrire" onclick="openInscrireModal(this)">Inscrire mon enfant</button>
-                </div>
-            </div>
-
-            <div class="activite-card" data-name="cuisine en famille" data-age-min="5" data-age-max="12">
-                <div class="card-image"><img th:src="@{/images/cuisine.jpg}" alt="Cuisine en famille"></div>
-                <div class="card-body">
-                    <div class="card-top">
-                        <h3 class="card-name">Cuisine en famille</h3>
-                        <div class="card-badges"><span class="badge age">5-12ans</span><span class="badge date">2026-03-04</span></div>
-                    </div>
-                    <p class="card-desc">Atelier culinaire parent-enfant ! Apprenez à préparer des recettes simples et délicieuses ensemble. Ingrédients et matériel fournis.</p>
-                    <button class="btn-inscrire" onclick="openInscrireModal(this)">Inscrire mon enfant</button>
+                    <p class="card-desc" th:text="${activity.description} ?: 'Aucune description disponible.'">Description</p>
+                    <button class="btn-inscrire"
+                            th:data-activity-id="${activity.id}"
+                            th:data-activity-name="${activity.name}"
+                            onclick="openInscrireModal(this)">
+                        Inscrire mon enfant
+                    </button>
                 </div>
             </div>
         </div>
@@ -86,7 +78,7 @@
 
 <div th:replace="fragments/footer :: footer"></div>
 
-<!-- MODAL -->
+<!-- Modal pour choisir quel enfant inscrire -->
 <div class="modal-overlay" id="inscrireOverlay" onclick="closeInscrireModal(event)">
     <div class="modal-inscrire" onclick="event.stopPropagation()">
         <div class="modal-inscrire-header">
@@ -94,11 +86,33 @@
             <button class="modal-close" onclick="closeInscrireModal()">&times;</button>
         </div>
         <p class="modal-inscrire-subtitle">Choisissez l'enfant à inscrire</p>
-        <div class="enfants-choices" id="enfantsChoices"></div>
+        <div class="enfants-choices" id="enfantsChoices">
+
+            <!-- Si aucun enfant -->
+            <div th:if="${children == null or children.isEmpty()}">
+                <p class="no-enfants-msg">Aucun enfant enregistré. <a th:href="@{/dashboardParent/enfants}">Ajouter un enfant</a></p>
+            </div>
+
+            <!-- Liste des enfants du parent -->
+            <div th:each="child : ${children}" class="enfant-choice"
+                 th:data-child-id="${child.id}">
+                <div class="choice-avatar" th:text="${child.firstName.charAt(0)}">A</div>
+                <div class="choice-info">
+                    <strong th:text="${child.firstName + ' ' + child.lastName}">Enfant</strong>
+                    <span th:text="${child.getAge() + ' ans'}">0 ans</span>
+                </div>
+                <form th:action="@{/dashboardParent/activites/inscrire}" method="post" style="display:inline">
+                    <input type="hidden" name="childId" th:value="${child.id}">
+                    <input type="hidden" name="activityId" class="activity-id-input" value="">
+                    <button type="submit" class="btn-choice-inscrire">Inscrire</button>
+                </form>
+            </div>
+
+        </div>
     </div>
 </div>
 
-<!-- MENU MOBILE -->
+<!-- Bouton menu mobile -->
 <button class="mobile-menu-btn" onclick="toggleSidebar()">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
@@ -107,11 +121,6 @@
 <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 <script>
-    const enfants = [
-        { prenom: 'Arthur', nom: 'Bernatchez', dateNaissance: '2018-05-11' },
-        { prenom: 'Léa',    nom: 'Bernatchez', dateNaissance: '2020-11-02' }
-    ];
-
     const $ = id => document.getElementById(id);
 
     function toggleSidebar() {
@@ -119,6 +128,7 @@
         document.querySelector('.sidebar-overlay').classList.toggle('open');
     }
 
+    // Filtrer les activites par nom
     function filterActivities() {
         const q = $('searchInput').value.toLowerCase();
         let visible = 0;
@@ -130,51 +140,27 @@
         $('noResults').style.display = visible ? 'none' : 'block';
     }
 
-    function calculerAge(dn) {
-        const today = new Date(), birth = new Date(dn);
-        let age = today.getFullYear() - birth.getFullYear();
-        const m = today.getMonth() - birth.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-        return age;
-    }
-
+    // Ouvrir le modal d'inscription avec le nom de l'activite
     function openInscrireModal(btn) {
-        const card = btn.closest('.activite-card');
-        const nom = card.querySelector('.card-name').textContent;
-        const ageMin = +card.dataset.ageMin, ageMax = +card.dataset.ageMax;
+        const activityId = btn.dataset.activityId;
+        const activityName = btn.dataset.activityName;
 
-        $('inscrireTitle').textContent = 'Inscrire à : ' + nom;
-        const container = $('enfantsChoices');
+        $('inscrireTitle').textContent = 'Inscrire à : ' + activityName;
 
-        if (!enfants.length) {
-            container.innerHTML = '<p class="no-enfants-msg">Aucun enfant enregistré. <a href="/dashboardParent/enfants">Ajouter un enfant</a></p>';
-        } else {
-            container.innerHTML = enfants.map(e => {
-                const age = calculerAge(e.dateNaissance);
-                const ok = age >= ageMin && age <= ageMax;
-                return `<div class="enfant-choice${ok ? '' : ' disabled'}">
-                    <div class="choice-avatar">${e.prenom.charAt(0)}</div>
-                    <div class="choice-info"><strong>${e.prenom} ${e.nom}</strong><span>${age} ans</span></div>
-                    ${ok
-                    ? `<button class="btn-choice-inscrire" onclick="confirmerInscription('${e.prenom}','${nom}')">Inscrire</button>`
-                    : `<span class="choice-ineligible">Âge non compatible (${ageMin}-${ageMax} ans)</span>`}
-                </div>`;
-            }).join('');
-        }
+        // Mettre l'activityId dans tous les formulaires caches
+        document.querySelectorAll('.activity-id-input').forEach(input => {
+            input.value = activityId;
+        });
 
         $('inscrireOverlay').classList.add('open');
         document.body.style.overflow = 'hidden';
     }
 
+    // Fermer le modal
     function closeInscrireModal(event) {
         if (event && event.target !== $('inscrireOverlay')) return;
         $('inscrireOverlay').classList.remove('open');
         document.body.style.overflow = '';
-    }
-
-    function confirmerInscription(prenom, activite) {
-        alert(prenom + ' a été inscrit(e) à ' + activite + ' !');
-        closeInscrireModal();
     }
 </script>
 </body>
