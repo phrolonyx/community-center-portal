@@ -10,13 +10,13 @@
 
 <div class="admin-gestion-des">
 
-    <!-- SIDEBAR -->
+
     <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
 
-    <!-- MAIN -->
+
     <main class="main-content">
 
-        <!-- HEADER -->
+
         <header th:replace="fragments/admin_header :: adminHeader('Ajouter une séance')"></header>
 
         <div class="content-main">
@@ -30,7 +30,7 @@
 
                     <input type="hidden" th:field="*{id}"/>
 
-                    <!-- ACTIVITÉ -->
+                    <!-- Activite -->
                     <div class="form-group">
                         <label>Activité</label>
                         <select th:field="*{activity.id}" class="input-modern">
@@ -42,7 +42,7 @@
                         </select>
                     </div>
 
-                    <!-- ANIMATEUR -->
+                    <!-- animateur -->
                     <div class="form-group">
                         <label>Animateur</label>
                         <select th:field="*{host.id}" class="input-modern">
@@ -54,7 +54,7 @@
                         </select>
                     </div>
 
-                    <!-- LIEU -->
+                    <!-- lieu -->
                     <div class="form-group">
                         <label>Lieu</label>
                         <select th:field="*{location.id}" class="input-modern">
@@ -66,25 +66,25 @@
                         </select>
                     </div>
 
-                    <!-- CAPACITÉ -->
+                    <!-- capacite -->
                     <div class="form-group">
                         <label>Capacité</label>
                         <input type="number" th:field="*{capacity}" class="input-modern" min="1">
                     </div>
 
-                    <!-- DATE DEBUT -->
+                    <!-- date debut -->
                     <div class="form-group">
                         <label>Date de début</label>
                         <input type="datetime-local" th:field="*{dateTimeStart}" class="input-modern">
                     </div>
 
-                    <!-- DATE FIN -->
+                    <!-- date fin -->
                     <div class="form-group">
                         <label>Date de fin</label>
                         <input type="datetime-local" th:field="*{dateTimeEnd}" class="input-modern">
                     </div>
 
-                    <!-- BOUTONS -->
+                    <!-- boutons -->
                     <div class="form-actions">
                         <a th:href="@{/admin/sessions}" class="btn-edit">Annuler</a>
                         <button type="submit" class="btn-edit">Enregistrer</button>

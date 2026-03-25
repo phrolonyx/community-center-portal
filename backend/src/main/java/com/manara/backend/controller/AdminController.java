@@ -143,11 +143,6 @@ public class AdminController {
         return "redirect:/admin/dashboard?rejected";
     }
 
-
-
-
-
-
     @GetMapping("/admin/children")
     public String adminChildren(
             @RequestParam(value = "search", required = false) String search,

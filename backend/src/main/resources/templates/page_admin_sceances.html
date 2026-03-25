@@ -10,23 +10,23 @@
 
 <div class="admin-gestion-des">
 
-    <!-- SIDEBAR -->
+
     <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
 
-    <!-- MAIN -->
+
     <main class="main-content">
 
-        <!-- HEADER -->
+
         <header th:replace="fragments/admin_header :: adminHeader('Gestion des séances')"></header>
 
         <div class="content-main">
 
-            <!-- BOUTON AJOUTER -->
+            <!-- bouton ajouter -->
             <div class="content-header-actions">
                 <a th:href="@{/admin/sessions/add}" class="btn-primary">Ajouter une séance</a>
             </div>
 
-            <!-- TABLEAU -->
+            <!-- Tableau -->
             <section class="users-table">
 
                 <table class="users-table-grid">

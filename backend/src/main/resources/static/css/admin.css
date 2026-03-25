@@ -117,10 +117,6 @@ a {
     color: #fff;
 }
 
-/*.sidebar-active {*/
-/*    background: #F3F3F3 !important;*/
-/*    font-weight: 900;*/
-/*}*/
 
 /* ============================================================
    POPUP DECONNEXION
@@ -389,6 +385,35 @@ a {
     opacity: 0.9;
 }
 
+/* ============================================================
+   DASHBOARD — NOUVELLES INSCRIPTIONS À APPROUVER
+============================================================ */
+
+.pending-users-section {
+    margin-left: 20px;
+    margin-top: 30px;
+    padding: 10px 0;
+}
+
+    .pending-users-section h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+
+.pending-users-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.main-content,
+.content-main,
+.dashboard-content {
+    padding-right: 3px;
+    box-sizing: border-box;
+}
 
 /* ============================================================
    INSCRIPTIONS EN ATTENTE
@@ -444,7 +469,7 @@ a {
 
 .content-header-actions {
     margin-bottom: 20px;
-    margin-left: 10px; /* éloigne de la sidebar */
+    margin-left: 10px;
 }
 
 .btn-primary {
@@ -464,8 +489,8 @@ a {
 
 .action-buttons {
     display: flex;
-    gap: 10px; /* espace horizontal */
-    flex-wrap: wrap; /* permet de passer sur 2 lignes en mobile */
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .btn-edit {
@@ -525,8 +550,6 @@ a {
 }
 
 
-
-/* FORMULAIRE MODERNE */
 .form-modern {
     padding: 25px;
     display: flex;
@@ -587,7 +610,7 @@ a {
     color: #666;
 }
 
-/* BOUTONS */
+
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -628,6 +651,8 @@ a {
     .form-actions {
         justify-content: center;
     }
+
+
 }
 
 

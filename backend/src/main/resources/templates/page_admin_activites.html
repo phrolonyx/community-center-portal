@@ -12,25 +12,24 @@
 
 <div class="admin-gestion-des">
 
-    <!-- SIDEBAR -->
+
     <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
 
-    <!-- MAIN -->
+
     <main class="main-content">
 
-        <!-- HEADER -->
+
         <header th:replace="fragments/admin_header :: adminHeader('Gestion des activités')"></header>
 
         <div class="content-main">
 
-            <!-- BOUTON AJOUTER -->
+
             <div class="content-header-actions">
                 <a th:href="@{/admin/activities/add}" class="btn-primary">
                     Ajouter une activité
                 </a>
             </div>
 
-            <!-- TABLEAU ACTIVITÉS -->
             <section class="users-table">
                 <table class="users-table-grid">
                     <thead>
@@ -47,10 +46,10 @@
                     <tbody>
                     <tr th:each="activity : ${activities}">
 
-                        <!-- NOM -->
+                        <!-- nom -->
                         <td th:text="${activity.name}">Nom activité</td>
 
-                        <!-- DESCRIPTION -->
+                        <!-- description -->
                         <td th:text="${activity.description}">Description</td>
 
 <!--                        &lt;!&ndash; NOMBRE DE SÉANCES &ndash;&gt;-->

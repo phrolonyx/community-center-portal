@@ -12,18 +12,18 @@
 
 <div class="admin-gestion-des">
 
-    <!-- SIDEBAR -->
+
     <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
 
-    <!-- MAIN -->
+
     <main class="main-content">
 
-        <!-- HEADER -->
+
         <header th:replace="fragments/admin_header :: adminHeader('Gestion des enfants')"></header>
 
         <div class="content-main">
 
-            <!-- BARRE DE RECHERCHE -->
+
             <form method="get" th:action="@{/admin/children}" class="content-searchbar">
 
                 <img class="filter"
@@ -44,7 +44,7 @@
 
             </form>
 
-            <!-- TABLEAU ENFANTS -->
+            <!-- Tab kids -->
             <section class="users-table">
                 <table class="users-table-grid">
                     <thead>
@@ -62,7 +62,7 @@
                     <tr th:each="child : ${children}">
 
 
-                        <!-- nom complet -->
+                        <!-- noms -->
                         <td th:text="${child.fullName}">Nom complet</td>
 
                         <!-- parents -->
