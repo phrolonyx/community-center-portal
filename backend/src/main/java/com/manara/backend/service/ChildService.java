@@ -88,6 +88,17 @@ public class ChildService {
         return childRepository.findAll();
     }
 
+    @Transactional
+    public void deleteChild(Integer childId) {
+        childMedicalRepository.deleteAll(
+                childRepository.findById(childId).orElseThrow().getMedicalConditions()
+        );
+        childParentRepository.deleteAll(
+                childRepository.findById(childId).orElseThrow().getParentLinks()
+        );
+        childRepository.deleteById(childId);
+    }
+
 
 
 }
