@@ -2,6 +2,8 @@ package com.manara.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +22,7 @@ public class ActivityRegistration {
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ActivitySession activitySession;
 
     @Column(nullable = false)
@@ -36,7 +39,12 @@ public class ActivityRegistration {
 
     private LocalDateTime cancelledAt;
 
-    @OneToMany(mappedBy = "registration")
+    @OneToMany(
+            mappedBy = "registration",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ActivityRegistrationLog> logs;
 
     public Boolean isConfirmed() {

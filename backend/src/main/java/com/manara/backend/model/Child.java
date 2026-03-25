@@ -32,16 +32,13 @@ public class Child {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "child")
-    @JsonIgnore
+    @OneToMany(mappedBy = "child", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ChildMedical> medicalConditions;
 
-    @OneToMany(mappedBy = "child")
-    @JsonIgnore
+    @OneToMany(mappedBy = "child", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ChildParent> parentLinks;
 
-    @OneToMany(mappedBy = "child")
-    @JsonIgnore
+    @OneToMany(mappedBy = "child", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ActivityRegistration> registrations;
 
     public String getFullName() {

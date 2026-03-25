@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin - Activités</title>
+    <title>Admin - Gestion des activités</title>
 
     <link rel="stylesheet" th:href="@{/css/admin.css}" />
 </head>
@@ -12,19 +12,101 @@
 
 <div class="admin-gestion-des">
 
-    <!-- SIDEBAR -->
+
     <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
 
-    <!-- MAIN -->
+
     <main class="main-content">
 
-        <!-- HEADER -->
-        <header th:replace="fragments/admin_header :: adminHeader('Activités')"></header>
 
-        <!-- CONTENU SPÉCIFIQUE -->
+        <header th:replace="fragments/admin_header :: adminHeader('Gestion des activités')"></header>
+
+        <div class="content-main">
+
+
+            <div class="content-header-actions">
+                <a th:href="@{/admin/activities/add}" class="btn-primary">
+                    Ajouter une activité
+                </a>
+            </div>
+
+            <section class="users-table">
+                <table class="users-table-grid">
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Description</th>
+<!--                        <th></th>-->
+<!--                        <th>Date & Heure</th>-->
+                        <th>Actions</th>
+
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="activity : ${activities}">
+
+                        <!-- nom -->
+                        <td th:text="${activity.name}">Nom activité</td>
+
+                        <!-- description -->
+                        <td th:text="${activity.description}">Description</td>
+
+<!--                        &lt;!&ndash; NOMBRE DE SÉANCES &ndash;&gt;-->
+<!--                        <td>-->
+<!--                            <span th:if="${activity.sessions.size() == 0}">Aucun</span>-->
+
+<!--                            <span th:each="s : ${activity.sessions}"-->
+<!--                                  th:text="${s.location != null ? s.location.name : 'Lieu inconnu'}"-->
+<!--                                  style="display:block;">-->
+<!--                            </span>-->
+<!--                        </td>-->
+
+<!--                        <td>-->
+<!--                            <span th:if="${activity.sessions.size() == 0}">-->
+<!--                                Aucune séance-->
+<!--                            </span>-->
+
+<!--                            <span th:each="s : ${activity.sessions}"-->
+<!--                                  th:text="${#temporals.format(s.dateTimeStart, 'dd/MM/yyyy HH:mm')}"-->
+<!--                                  style="display:block;">-->
+<!--                            </span>-->
+<!--                        </td>-->
+
+                        <!-- ACTIONS -->
+
+                        <td>
+                            <div class="action-buttons">
+                                <a th:href="@{/admin/activities/edit(id=${activity.id})}"
+                                   class="btn-edit">Modifier</a>
+
+                                <form th:action="@{/admin/activities/delete}" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" th:value="${activity.id}" />
+                                    <button type="submit" class="btn-delete"
+                                            onclick="return confirm('Supprimer cette activité ?');">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
+
+
+                        </td>
+
+
+
+
+                    </tr>
+                    </tbody>
+
+                </table>
+            </section>
+
+        </div>
     </main>
 </div>
-<script th:src="@{/js/admin.js}"></script>
 
+<script th:src="@{/js/admin.js}"></script>
 </body>
+
 </html>
+

@@ -7,9 +7,11 @@ import com.manara.backend.repository.RoleRepository;
 import com.manara.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /*
@@ -29,7 +31,6 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Creer un utilisateur (methode existante des collegues)
     public void createUser(User user) {
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         userRepository.save(user);
@@ -60,18 +61,15 @@ public class UserService {
         user.setEnabled(!user.getEnabled());
     }
 
-    // Methode existante des collegues (non utilisee dans notre partie)
-    public boolean authenticate(String email, String password) {
-        User user = userRepository.findByEmailAndPasswordHash(email, password).orElse(null);
-        return user != null;
-    }
-
-    // Recherche d'utilisateurs (methode existante des collegues)
     public List<User> search(String keyword) {
+
+        // Recherche prenoms et noms et email
         List<User> results = userRepository
                 .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
                         keyword, keyword, keyword
                 );
+
+        // On ajoute les utilisateurs dont le role correspond au mot recherche
         for (User user : userRepository.findAll()) {
             if (user.getRole().getName().toLowerCase().contains(keyword.toLowerCase())) {
                 if (!results.contains(user)) {
@@ -95,9 +93,16 @@ public class UserService {
     }
 
     public List<User> findPendingUsers() {
-        return userRepository.findByEnabledFalse();
+        return userRepository.findByPendingTrue();
     }
 
+
+    public List<User> findByRoleName(String roleName) {
+        return userRepository.findByRole_Name(roleName);
+    }
+    public void save(User user) {
+        userRepository.save(user);
+    }
 
 
     // Creer un compte a partir du formulaire d'inscription
@@ -117,6 +122,7 @@ public class UserService {
                 null,
                 false  // compte desactive par defaut (un admin doit l'approuver)
         );
+        user.setPending(true);
 
         return userRepository.save(user);
     }

@@ -20,7 +20,7 @@
 
         <div class="content-main">
 
-            <!-- FORMULAIRE DE RECHERCHE -->
+            <!-- forulaire de recherche -->
             <form method="get" th:action="@{/admin/users}" class="content-searchbar">
 
                 <img class="filter"
@@ -47,7 +47,6 @@
                 <table class="users-table-grid">
                     <thead>
                     <tr>
-                        <th>Actions</th>
                         <th>Prénom</th>
                         <th>Nom</th>
                         <th>Rôle</th>
@@ -55,14 +54,13 @@
                         <th>Actif</th>
                         <th>Dernière connexion</th>
                         <th>Création</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
 
                     <tbody id="users-body">
                     <tr th:each="user : ${users}">
-                        <td>
-                            <button class="user-action">Supprimer</button>
-                        </td>
+
 
                         <td th:text="${user.firstName}">Prénom</td>
                         <td th:text="${user.lastName}">Nom</td>
@@ -77,6 +75,42 @@
                         <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">
                             Création
                         </td>
+                        <td>
+
+                            <!-- admin bouton gris désactive -->
+                            <button class="btn-deactivate disabled-btn-admin"
+                                    th:if="${user.role.name == 'ADMIN'}"
+                                    disabled>
+                                Désactiver
+                            </button>
+
+                            <!-- Utilisateur actif  bouton rouge Désactive -->
+                            <form th:if="${user.enabled and user.role.name != 'ADMIN'}"
+                                  th:action="@{'/admin/users/disable/' + ${user.id}}"
+                                  method="post"
+                                  onsubmit="return confirm('Désactiver cet utilisateur ?');">
+
+                                <button type="submit"
+                                        class="btn-deactivate reject-btn">
+                                    Désactiver
+                                </button>
+                            </form>
+
+                            <!-- Utilisateur inactif  bouton vert Activer -->
+                            <form th:if="${!user.enabled}"
+                                  th:action="@{'/admin/users/enable/' + ${user.id}}"
+                                  method="post">
+
+                                <button type="submit"
+                                        class="btn-activate">
+                                    Activer
+                                </button>
+                            </form>
+
+                        </td>
+                        <!--                        <td>-->
+<!--                            <button class="btn-delete" th:disabled="${user.role.name == 'ADMIN'}" th:classappend="${user.role.name == 'ADMIN'} ? ' disabled-btn-admin'">Désactiver</button>-->
+<!--                        </td>-->
                     </tr>
                     </tbody>
 

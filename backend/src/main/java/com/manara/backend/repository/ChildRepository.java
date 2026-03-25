@@ -15,6 +15,11 @@ public interface ChildRepository extends JpaRepository<Child, Integer> {
             String firstName,
             String lastName
     );
+    // Recherche par prénom/nom du parent (via ChildParent → ParentProfile → User)
+    List<Child> findByParentLinks_ParentProfile_User_FirstNameContainingIgnoreCase(String firstName);
+
+    List<Child> findByParentLinks_ParentProfile_User_LastNameContainingIgnoreCase(String lastName);
+
 }
 
 

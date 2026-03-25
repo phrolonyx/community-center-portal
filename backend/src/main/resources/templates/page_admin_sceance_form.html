@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulaire séance</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+
+<body>
+
+<div class="admin-gestion-des">
+
+
+    <nav th:replace="fragments/admin_sidebar :: adminSidebar"></nav>
+
+
+    <main class="main-content">
+
+
+        <header th:replace="fragments/admin_header :: adminHeader('Ajouter une séance')"></header>
+
+        <div class="content-main">
+
+            <section class="users-table">
+
+                <form th:action="@{/admin/sessions/save}"
+                      th:object="${session}"
+                      method="post"
+                      class="admin-form form-modern">
+
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <!-- Activite -->
+                    <div class="form-group">
+                        <label>Activité</label>
+                        <select th:field="*{activity.id}" class="input-modern">
+                            <option value="">-- Choisir une activité --</option>
+                            <option th:each="a : ${activities}"
+                                    th:value="${a.id}"
+                                    th:text="${a.name}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- animateur -->
+                    <div class="form-group">
+                        <label>Animateur</label>
+                        <select th:field="*{host.id}" class="input-modern">
+                            <option value="">-- Choisir un animateur --</option>
+                            <option th:each="u : ${hosts}"
+                                    th:value="${u.id}"
+                                    th:text="${u.fullName}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- lieu -->
+                    <div class="form-group">
+                        <label>Lieu</label>
+                        <select th:field="*{location.id}" class="input-modern">
+                            <option value="">-- Choisir un lieu --</option>
+                            <option th:each="l : ${locations}"
+                                    th:value="${l.id}"
+                                    th:text="${l.name}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- capacite -->
+                    <div class="form-group">
+                        <label>Capacité</label>
+                        <input type="number" th:field="*{capacity}" class="input-modern" min="1">
+                    </div>
+
+                    <!-- date debut -->
+                    <div class="form-group">
+                        <label>Date de début</label>
+                        <input type="datetime-local" th:field="*{dateTimeStart}" class="input-modern">
+                    </div>
+
+                    <!-- date fin -->
+                    <div class="form-group">
+                        <label>Date de fin</label>
+                        <input type="datetime-local" th:field="*{dateTimeEnd}" class="input-modern">
+                    </div>
+
+                    <!-- boutons -->
+                    <div class="form-actions">
+                        <a th:href="@{/admin/sessions}" class="btn-edit">Annuler</a>
+                        <button type="submit" class="btn-edit">Enregistrer</button>
+                    </div>
+
+                </form>
+
+            </section>
+
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

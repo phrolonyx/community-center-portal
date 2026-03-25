@@ -1,25 +1,28 @@
 package com.manara.backend.controller;
 
 import com.manara.backend.model.Activity;
+import com.manara.backend.model.ActivitySession;
 import com.manara.backend.model.Child;
 import com.manara.backend.model.User;
 import com.manara.backend.repository.ActivityRepository;
 import com.manara.backend.repository.ChildRepository;
-import com.manara.backend.service.ChildService;
-import com.manara.backend.service.UserService;
+import com.manara.backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
 @Controller
 public class AdminController {
+
+    @Autowired
+    private ActivitySessionService sessionService;
+
+    @Autowired
+    private LocationService locationService;
 
     @Autowired
     private UserService userService;
@@ -48,6 +51,34 @@ public class AdminController {
 
         return "page_admin_users";
     }
+    @PostMapping("/admin/users/disable/{id}")
+    public String disableUser(@PathVariable Integer id) {
+
+        User user = userService.findById(id);
+
+        // Empêcher désactivation d’un admin
+        if (user.getRole().getName().equalsIgnoreCase("ADMIN")) {
+            return "redirect:/admin/users?error=admin-disable-forbidden";
+        }
+
+        user.setEnabled(false);
+        userService.save(user);
+
+        return "redirect:/admin/users?success=disabled";
+    }
+
+    @PostMapping("/admin/users/enable/{id}")
+    public String enableUser(@PathVariable Integer id) {
+
+        User user = userService.findById(id);
+        user.setEnabled(true);
+        userService.save(user);
+
+        return "redirect:/admin/users?success=enabled";
+    }
+
+
+
 
     @GetMapping("/admin/users/search-ajax")
     @ResponseBody
@@ -66,7 +97,7 @@ public class AdminController {
         // les stats des tableaux enfaite juste les nombres
         long totalUsers = userService.countAllUsers();
         long totalParents = userService.countUsersByRole("PARENT");
-        long totalAdmins = userService.countUsersByRole("ADMIN");
+        long totalAnimateurs = userService.countUsersByRole("ANIMATEUR");
         long totalDisabled = userService.countDisabledUsers();
 
         // nouvelles inscriptions a approuver
@@ -75,7 +106,7 @@ public class AdminController {
         // envoi au html
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("totalParents", totalParents);
-        model.addAttribute("totalAdmins", totalAdmins);
+        model.addAttribute("totalAnimateurs", totalAnimateurs);
         model.addAttribute("totalDisabled", totalDisabled);
 
         model.addAttribute("pendingUsers", pendingUsers);
@@ -84,6 +115,32 @@ public class AdminController {
 
 
 
+    }
+
+    @PostMapping("/admin/users/approve/{id}")
+    public String approveUser(@PathVariable Integer id) {
+
+        User user = userService.findById(id);
+
+        user.setPending(false);
+        user.setEnabled(true);
+
+        userService.save(user);
+
+        return "redirect:/admin/dashboard?approved";
+    }
+
+    @PostMapping("/admin/users/reject/{id}")
+    public String rejectUser(@PathVariable Integer id) {
+
+        User user = userService.findById(id);
+
+        user.setPending(false);
+        user.setEnabled(false);
+
+        userService.save(user);
+
+        return "redirect:/admin/dashboard?rejected";
     }
 
     @GetMapping("/admin/children")
@@ -107,25 +164,98 @@ public class AdminController {
         return "page_admin_enfants";
     }
 
-    @GetMapping("/admin/enfants/search-ajax")
-    @ResponseBody
-    public List<Child> searchChildrenAjax(@RequestParam("search") String search) {
-        return childService.searchByName(search);
+    @PostMapping("/admin/children/delete/{id}")
+    public String deleteChild(@PathVariable Integer id) {
+
+        childService.deleteChild(id);
+
+        return "redirect:/admin/children?success=deleted";
     }
 
 
 
 
+    @Autowired
+    private ActivityService activityService;
+
+    // -------------------------
+// GESTION DES ACTIVITÉS
+// -------------------------
+    @GetMapping("/admin/activities")
+    public String adminActivities(Model model) {
+
+        List<Activity> activities = activityService.findAll();
+        model.addAttribute("activities", activities);
+
+        return "page_admin_activites";
+    }
+
+    @GetMapping("/admin/activities/add")
+    public String addActivityForm(Model model) {
+        model.addAttribute("activity", new Activity());
+        model.addAttribute("formTitle", "Ajouter une activité");
+        return "page_admin_activite_form";
+    }
+
+    @GetMapping("/admin/activities/edit")
+    public String editActivityForm(@RequestParam("id") Integer id, Model model) {
+        Activity activity = activityService.findById(id);
+        model.addAttribute("activity", activity);
+        model.addAttribute("formTitle", "Modifier une activité");
+        return "page_admin_activite_form";
+    }
+
+    @PostMapping("/admin/activities/save")
+    public String saveActivity(@ModelAttribute Activity activity) {
+        activityService.save(activity);
+        return "redirect:/admin/activities";
+    }
 
 
+    @PostMapping("/admin/activities/delete")
+    public String deleteActivity(@RequestParam("id") Integer id) {
+        activityService.deleteById(id);
+        return "redirect:/admin/activities";
+    }
 
+    // -------------------------
+    // GESTION DES SÉANCES
+    // -------------------------
+    @GetMapping("/admin/sessions")
+    public String adminSessions(Model model) {
+        model.addAttribute("sessions", sessionService.findAll());
+        return "page_admin_sceances";
+    }
 
+    @GetMapping("/admin/sessions/add")
+    public String addSessionForm(Model model) {
+        model.addAttribute("session", new ActivitySession());
+        model.addAttribute("activities", activityService.findAll());
+        model.addAttribute("hosts", userService.findByRoleName("ANIMATEUR"));
+        model.addAttribute("locations", locationService.findAll());
+        return "page_admin_sceance_form";
+    }
 
+    @GetMapping("/admin/sessions/edit")
+    public String editSessionForm(@RequestParam("id") Integer id, Model model) {
+        model.addAttribute("session", sessionService.findById(id));
+        model.addAttribute("activities", activityService.findAll());
+        model.addAttribute("hosts", userService.findAll());
+        model.addAttribute("locations", locationService.findAll());
+        return "page_admin_sceance_form";
+    }
 
+    @PostMapping("/admin/sessions/save")
+    public String saveSession(@ModelAttribute ActivitySession session) {
+        sessionService.save(session);
+        return "redirect:/admin/sessions";
+    }
 
-
-
-
+    @PostMapping("/admin/sessions/delete")
+    public String deleteSession(@RequestParam("id") Integer id) {
+        sessionService.deleteById(id);
+        return "redirect:/admin/sessions";
+    }
 }
 
 

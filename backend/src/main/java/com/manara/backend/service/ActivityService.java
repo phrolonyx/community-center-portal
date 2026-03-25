@@ -16,6 +16,25 @@ import java.util.List;
  */
 @Service
 public class ActivityService {
+    @Autowired
+    private ActivityRepository activityRepository;
+
+    public List<Activity> findAll() {
+        return activityRepository.findAll();
+    }
+
+    public Activity findById(Integer id) {
+        return activityRepository.findById(id).orElseThrow();
+    }
+
+    public Activity save(Activity activity) {
+        return activityRepository.save(activity);
+    }
+
+    public void deleteById(Integer id) {
+        activityRepository.deleteById(id);
+    }
+
 
     @Autowired
     private ActivityRepository activityRepository;

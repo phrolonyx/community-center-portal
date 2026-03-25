@@ -1,72 +1,127 @@
 <!DOCTYPE html>
-
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
+<body>
+
 <div th:replace="fragments/header :: header"></div>
 
-<section class="hero">
-    <img src="images/cartoon-style childr.png" alt="Illustration" class="hero-img">
+<!-- HERO -->
+<section class="hero section fade">
 
-    <div class="hero-overlay">
-        <p class="hero-text">
-            Votre centre, vos enfants,<br>
-            un seul portail!<br>
-        </p>
-        <a th:href="@{/inscription}" class="btn-yellow">Inscrivez-vous</a>
+    <!-- VIDÉO DE FOND -->
+    <video class="hero-video" autoplay muted loop playsinline>
+        <source src="videos/ManaraVideo.mp4" type="video/mp4">
+    </video>
+
+    <div class="hero-content">
+
+        <!-- OVERLAY BLEU À GAUCHE -->
+        <div class="hero-overlay">
+            <h2>Votre centre, vos enfants,<br>un seul portail.</h2>
+            <h6>Inscriptions, présences, communications — tout au même endroit pour les familles et les centres.</h6>
+
+            <div class="hero-buttons">
+                <a th:href="@{/inscription}" class="btn btn-primary">Inscrire mon enfant</a>
+                <a th:href="@{/connexion}" class="btn btn-secondary">Me connecter</a>
+            </div>
+
+            <h6 class="hero-note">Pensé pour les parents, conçu pour les centres communautaires.</h6>
+        </div>
+
     </div>
 </section>
-
-
-
-
-
-
 
 
 
 <!-- NOTRE MISSION -->
-<section class="mission">
-    <div class="mission-title">Notre Mission</div>
-    <p class="mission-textf"
-    >
-        Le Centre communautaire Manara connecte les familles et simplifie la gestion des activités
-        grâce à Manara CRM, notre plateforme moderne pour inscriptions et plannings.
-    </p>
+<section class="mission section fade">
+    <div class="mission-text mission-box">
+        <h2>Notre mission</h2>
+        <p>
+            Manara simplifie la vie des familles et des centres en centralisant inscriptions,
+            présences et communications dans un portail unique, moderne et accessible.
+        </p>
+    </div>
+
+    <div class="mission-visual slide-up">
+        <img src="images/2.png" alt="Illustration famille connectée" class="mission-img">
+    </div>
 </section>
 
-<!-- TITRE ACTIVITÉS -->
-<div class="activities-title">
-    Nos Activités
-</div>
+<!-- ACTIVITÉS / PROGRAMMES -->
+<section class="programs section fade">
+    <h2>Des activités pour chaque enfant</h2>
+    <p class="section-subtitle">Sports, arts, soutien scolaire et plus encore — tout géré au même endroit.</p>
 
-<!-- ACTIVITÉS -->
-<section class="activities">
+    <div class="program-grid">
 
-    <div class="activity">
-        <img src="images/child1.png" alt="">
-        <div class="tag green">Accompagner</div>
+        <article class="program-card pop">
+            <img src="images/children1.gif" alt="Illustration accompagner" class="program-img">
+            <h3>Accompagner</h3>
+            <p>Suivez les progrès de vos enfants et restez informés des activités en temps réel.</p>
+        </article>
+
+        <article class="program-card pop">
+            <img src="images/children2.gif" alt="Illustration encadrer" class="program-img">
+            <h3>Encadrer</h3>
+            <p>Offrez un cadre sécuritaire et structuré, avec des outils simples pour votre équipe.</p>
+        </article>
+
+        <article class="program-card pop">
+            <img src="images/children.gif" alt="Illustration participer" class="program-img">
+            <h3>Participer</h3>
+            <p>Impliquez les familles grâce à un portail clair, accessible et convivial.</p>
+        </article>
+
     </div>
-
-    <div class="activity">
-        <img src="images/child2.png" alt="">
-        <div class="tag pink">Encadrer</div>
-    </div>
-
-    <div class="activity">
-        <img src="images/child3.png" alt="">
-        <div class="tag blue">Participer</div>
-    </div>
-
 </section>
 
+<!-- COMMENT ÇA MARCHE -->
+<section class="how-it-works section fade">
+    <h2>C'est simple ! </h2>
+
+    <div class="steps">
+        <div class="step slide-up">
+            <span class="step-number">1</span>
+            <h3>Créer un compte</h3>
+            <p>Les parents créent leur profil et ajoutent leurs enfants en quelques clics.</p>
+        </div>
+
+        <div class="step slide-up">
+            <span class="step-number">2</span>
+            <h3>Choisir les activités</h3>
+            <p>Inscrivez vos enfants aux programmes offerts par votre centre.</p>
+        </div>
+
+        <div class="step slide-up">
+            <span class="step-number">3</span>
+            <h3>Suivre au quotidien</h3>
+            <p>Recevez les informations importantes, présences et messages directement dans le portail.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- CTA FINALE -->
+<section class="cta section fade">
+    <div class="cta-inner">
+        <h2>Prêt à simplifier votre organisation ?</h2>
+        <p>Créez votre compte</p>
+
+        <div class="cta-buttons">
+            <a th:href="@{/inscription}" class="btn btn-primary">Commencer maintenant</a>
+        </div>
+    </div>
+</section>
 
 <div th:replace="fragments/footer :: footer"></div>
+
+<script th:src="@{/js/accueil.js}"></script>
 
 </body>
 </html>
