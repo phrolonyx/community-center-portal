@@ -6,11 +6,13 @@
     <header>
         <nav class="navbar">
             <div class="logo">
-                <img th:src="@{/images/logo.png}" alt="Logo du site">
+                <a th:href="@{/}">
+                    <img th:src="@{/images/logo.png}" alt="Logo du site">
+                </a>
             </div>
             <ul class="nav-links">
                 <li> <a th:href="@{/}">Accueil</a></li>
-                <li><a href="#">Nos activités</a></li>
+                <li><a th:href="@{/activities}">Nos activités</a></li>
             </ul>
             <div class="nav-buttons">
                 <div sec:authorize="isAuthenticated()" class="profile-container">

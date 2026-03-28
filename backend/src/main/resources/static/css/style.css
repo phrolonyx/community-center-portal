@@ -637,3 +637,12 @@ header {
         font-size: 2.1rem;
     }
 }
+
+.dashboard-main {
+    flex: 1;
+    background: #FFF3D6;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}

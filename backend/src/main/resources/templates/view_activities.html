@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/activites.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<main class="dashboard-main">
+    <div class="activites-header">
+        <h1 class="activites-title">Nos Activités</h1>
+        <p class="activites-subtitle">Explorez et inscrivez vos enfants aux activités du Centre Manara</p>
+    </div>
+
+    <!-- Barre de recherche -->
+    <div class="search-bar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Rechercher une activité..." onkeyup="filterActivities()">
+    </div>
+
+    <!-- Grille des activites -->
+    <div class="activites-grid">
+
+        <!-- Si aucune activite -->
+        <div th:if="${activities == null or activities.isEmpty()}" style="grid-column:1/-1">
+            <p style="text-align:center;color:#666;padding:2rem;">Aucune activité disponible pour le moment.</p>
+        </div>
+
+        <!-- Boucle sur les activites depuis la BD -->
+        <div th:each="activity : ${activities}" class="activite-card"
+             th:data-name="${activity.name.toLowerCase()}"
+             th:data-id="${activity.id}">
+            <div class="card-image">
+                <img th:if="${activity.activityImagePath != null}"
+                     th:src="@{${activity.activityImagePath}}"
+                     th:alt="${activity.name}">
+                <img th:if="${activity.activityImagePath == null}"
+                     th:src="@{/images/default-activity.jpg}"
+                     alt="Activité">
+            </div>
+            <div class="card-body">
+                <div class="card-top">
+                    <h3 class="card-name" th:text="${activity.name}">Activité</h3>
+
+                </div>
+                <p class="card-desc" th:text="${activity.description} ?: 'Aucune description disponible.'">Description</p>
+                <div class="card-footer">
+                <a th:href="@{/inscription}"
+                   class="btn-inscrire-guest"
+                   th:data-activity-id="${activity.id}"
+                   th:data-activity-name="${activity.name}">
+                    Créer un compte
+                </a>
+                <a th:href="@{/connexion}"
+                   class="btn-connexion-guest"
+                   th:data-activity-id="${activity.id}"
+                   th:data-activity-name="${activity.name}">
+                    Me connecter
+                </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="no-results" id="noResults">Aucune activité trouvée.</div>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script>
+    const $ = id => document.getElementById(id);
+
+    // Filtrer les activites par nom
+    function filterActivities() {
+        const q = $('searchInput').value.toLowerCase();
+        let visible = 0;
+        document.querySelectorAll('.activite-card').forEach(c => {
+            const match = c.dataset.name.includes(q);
+            c.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        $('noResults').style.display = visible ? 'none' : 'block';
+    }
+
+</script>
+
+</body>
+</html>
