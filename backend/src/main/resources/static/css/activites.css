@@ -25,6 +25,12 @@
 .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
 .card-name { font-size: 18px; font-weight: 800; color: #043C5C; margin: 0; }
 .card-badges { display: flex; gap: 6px; flex-shrink: 0; }
+.card-footer {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+}
 
 .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 .badge.age { background: #043C5C; color: #FFF; }
@@ -34,6 +40,12 @@
 
 .btn-inscrire { display: inline-block; padding: 10px 20px; background: #E8BB08; color: #043C5C; font-size: 13px; font-weight: 700; text-decoration: none; border-radius: 6px; transition: background .2s, transform .15s; }
 .btn-inscrire:hover { background: #D4A907; transform: translateY(-1px); }
+
+.btn-inscrire-guest { display: inline-block; padding: 10px 20px; background: #E8BB08; color: #043C5C; font-size: 13px; font-weight: 700; text-decoration: none; border-radius: 6px; transition: background .2s, transform .15s; }
+.btn-inscrire-guest:hover { background: #D4A907; transform: translateY(-1px); }
+
+.btn-connexion-guest { display: inline-block; padding: 10px 20px; background: #DDDDDD; color: #043C5C; font-size: 13px; font-weight: 700; text-decoration: none; border-radius: 6px; transition: background .2s, transform .15s; }
+.btn-connexion-guest:hover { background: #D4A907; transform: translateY(-1px); }
 
 /* AUCUN RÉSULTAT */
 .no-results { display: none; text-align: center; padding: 40px; font-size: 16px; color: #6B7280; font-weight: 600; }
