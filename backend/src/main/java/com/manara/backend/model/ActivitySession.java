@@ -30,8 +30,10 @@ public class ActivitySession {
     @Positive(message = "L'activité ne peut avoir une capacité négative")
     private Integer capacity;
 
+    @Column(nullable = false)
     private Integer minAge;
 
+    @Column(nullable = false)
     private Integer maxAge;
 
     @ManyToOne

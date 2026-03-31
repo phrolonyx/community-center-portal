@@ -210,16 +210,16 @@ public class DataInitializer implements CommandLineRunner {
 
             // host_name_user_id 6 = nadia, 7 = youssef (SQL user order)
             activitySessionRepository.saveAll(List.of(
-                    makeSession(acts.get(0), 15, nadia,   locs.get(3), "2026-04-01T10:00:00", "2026-04-01T11:30:00"),
-                    makeSession(acts.get(1), 15, nadia,   locs.get(3), "2026-04-02T10:00:00", "2026-04-02T11:30:00"),
-                    makeSession(acts.get(2), 12, youssef, locs.get(1), "2026-04-03T14:00:00", "2026-04-03T15:30:00"),
-                    makeSession(acts.get(3), 10, youssef, locs.get(2), "2026-04-04T15:00:00", "2026-04-04T16:30:00"),
-                    makeSession(acts.get(4), 10, nadia,   locs.get(4), "2026-04-05T16:00:00", "2026-04-05T17:30:00"),
-                    makeSession(acts.get(5), 10, youssef, locs.get(0), "2026-04-06T10:00:00", "2026-04-06T11:30:00"),
-                    makeSession(acts.get(6), 12, nadia,   locs.get(0), "2026-04-07T10:00:00", "2026-04-07T11:30:00"),
-                    makeSession(acts.get(7), 12, youssef, locs.get(0), "2026-04-08T10:00:00", "2026-04-08T11:30:00"),
-                    makeSession(acts.get(8), 10, nadia,   locs.get(4), "2026-04-09T14:00:00", "2026-04-09T15:30:00"),
-                    makeSession(acts.get(9), 10, youssef, locs.get(2), "2026-04-10T14:00:00", "2026-04-10T15:30:00")
+                    makeSession(acts.get(0), 15, nadia,   locs.get(3), "2026-04-01T10:00:00", "2026-04-01T11:30:00",4,8),
+                    makeSession(acts.get(1), 15, nadia,   locs.get(3), "2026-04-02T10:00:00", "2026-04-02T11:30:00", 5, 9),
+                    makeSession(acts.get(2), 12, youssef, locs.get(1), "2026-04-03T14:00:00", "2026-04-03T15:30:00", 4, 10),
+                    makeSession(acts.get(3), 10, youssef, locs.get(2), "2026-04-04T15:00:00", "2026-04-04T16:30:00", 6, 10),
+                    makeSession(acts.get(4), 10, nadia,   locs.get(4), "2026-04-05T16:00:00", "2026-04-05T17:30:00", 7, 11),
+                    makeSession(acts.get(5), 10, youssef, locs.get(0), "2026-04-06T10:00:00", "2026-04-06T11:30:00", 6, 12),
+                    makeSession(acts.get(6), 12, nadia,   locs.get(0), "2026-04-07T10:00:00", "2026-04-07T11:30:00", 5, 10),
+                    makeSession(acts.get(7), 12, youssef, locs.get(0), "2026-04-08T10:00:00", "2026-04-08T11:30:00", 4, 9),
+                    makeSession(acts.get(8), 10, nadia,   locs.get(4), "2026-04-09T14:00:00", "2026-04-09T15:30:00", 7, 11),
+                    makeSession(acts.get(9), 10, youssef, locs.get(2), "2026-04-10T14:00:00", "2026-04-10T15:30:00", 6, 10)
             ));
         }
 
@@ -388,7 +388,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private ActivitySession makeSession(Activity activity, int capacity, User host, Location location,
-                                        String start, String end) {
+                                        String start, String end, int minAge, int maxAge) {
         ActivitySession s = new ActivitySession();
         s.setActivity(activity);
         s.setCapacity(capacity);
@@ -396,6 +396,8 @@ public class DataInitializer implements CommandLineRunner {
         s.setLocation(location);
         s.setDateTimeStart(LocalDateTime.parse(start));
         s.setDateTimeEnd(LocalDateTime.parse(end));
+        s.setMinAge(minAge);
+        s.setMaxAge(maxAge);
         return s;
     }
 
