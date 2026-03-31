@@ -30,6 +30,10 @@ public class ActivitySession {
     @Positive(message = "L'activité ne peut avoir une capacité négative")
     private Integer capacity;
 
+    private Integer minAge;
+
+    private Integer maxAge;
+
     @ManyToOne
     @JoinColumn(nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

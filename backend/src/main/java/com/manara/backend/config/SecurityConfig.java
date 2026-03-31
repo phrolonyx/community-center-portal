@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Pages publiques (pas besoin d'etre connecte)
                         .requestMatchers("/connexion", "/inscription", "/inscription/**",
-                                "/images/**", "/js/**", "/css/**", "/webjars/**").permitAll()
+                                "/images/**", "/js/**", "/css/**", "/webjars/**", "/uploads/**").permitAll()
                         // Pages admin : seulement pour le role ADMIN
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         // Pages parent : seulement pour le role PARENT

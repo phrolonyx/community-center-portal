@@ -332,7 +332,7 @@ public class DataInitializer implements CommandLineRunner {
         Activity a = new Activity();
         a.setName(name);
         a.setDescription(description);
-        a.setActivityImagePath(imagePath);
+        a.setActivityImagePath("/images/" + imagePath);
         return a;
     }
 

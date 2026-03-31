@@ -10,9 +10,11 @@ import com.manara.backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -178,6 +180,9 @@ public class AdminController {
     @Autowired
     private ActivityService activityService;
 
+    @Autowired
+    private ImageStorageService imageStorageService;
+
     // -------------------------
 // GESTION DES ACTIVITÉS
 // -------------------------
@@ -206,7 +211,21 @@ public class AdminController {
     }
 
     @PostMapping("/admin/activities/save")
-    public String saveActivity(@ModelAttribute Activity activity) {
+    public String saveActivity(@ModelAttribute Activity activity,
+                               @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) {
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String fileName = imageStorageService.store(imageFile, "uploads/activities");
+                activity.setActivityImagePath("/uploads/activities/" + fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (activity.getId() != null) {
+            Activity existing = activityService.findById(activity.getId());
+            activity.setActivityImagePath(existing.getActivityImagePath());
+        }
+
         activityService.save(activity);
         return "redirect:/admin/activities";
     }

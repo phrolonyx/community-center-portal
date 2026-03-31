@@ -33,38 +33,42 @@
         <!-- Grille des activites -->
         <div class="activites-grid">
 
-            <!-- Si aucune activite -->
-            <div th:if="${activities == null or activities.isEmpty()}" style="grid-column:1/-1">
-                <p style="text-align:center;color:#666;padding:2rem;">Aucune activité disponible pour le moment.</p>
+            <div th:if="${seances == null or seances.isEmpty()}" style="grid-column:1/-1">
+                <p style="text-align:center;color:#666;padding:2rem;">Aucune séance disponible pour le moment.</p>
             </div>
 
-            <!-- Boucle sur les activites depuis la BD -->
-            <div th:each="activity : ${activities}" class="activite-card"
-                 th:data-name="${activity.name.toLowerCase()}"
-                 th:data-id="${activity.id}">
+            <div th:each="seance : ${seances}" class="activite-card"
+                 th:data-name="${seance.activity.name.toLowerCase()}"
+                 th:data-id="${seance.id}">
                 <div class="card-image">
-                    <img th:if="${activity.activityImagePath != null}"
-                         th:src="@{${activity.activityImagePath}}"
-                         th:alt="${activity.name}">
-                    <img th:if="${activity.activityImagePath == null}"
+                    <img th:if="${seance.activity.activityImagePath != null}"
+                         th:src="@{${seance.activity.activityImagePath}}"
+                         th:alt="${seance.activity.name}">
+                    <img th:if="${seance.activity.activityImagePath == null}"
                          th:src="@{/images/default-activity.jpg}"
                          alt="Activité">
                 </div>
                 <div class="card-body">
                     <div class="card-top">
-                        <h3 class="card-name" th:text="${activity.name}">Activité</h3>
+                        <h3 class="card-name" th:text="${seance.activity.name}">Activité</h3>
                         <div class="card-badges">
-                            <span th:if="${activity.sessions != null and !activity.sessions.isEmpty()}"
-                                  class="badge date"
-                                  th:text="${#temporals.format(activity.sessions[0].dateTimeStart, 'yyyy-MM-dd')}">
-                                Date
-                            </span>
+                            <span class="badge date"
+                                  th:text="${#temporals.format(seance.dateTimeStart, 'dd MMM yyyy')}">Date</span>
+                            <span class="badge date"
+                                  th:text="${#temporals.format(seance.dateTimeStart, 'HH:mm') + ' - ' + #temporals.format(seance.dateTimeEnd, 'HH:mm')}">Heure</span>
                         </div>
                     </div>
-                    <p class="card-desc" th:text="${activity.description} ?: 'Aucune description disponible.'">Description</p>
+                    <p class="card-desc" th:text="${seance.activity.description} ?: 'Aucune description.'">Description</p>
+                    <div style="font-size: 0.85rem; color: #555; margin-bottom: 0.5rem;">
+                        <span th:if="${seance.location != null}" th:text="'Lieu : ' + ${seance.location.name}"></span>
+                        <br th:if="${seance.host != null}"/>
+                        <span th:if="${seance.host != null}" th:text="'Animateur : ' + ${seance.host.firstName + ' ' + seance.host.lastName}"></span>
+                    </div>
                     <button class="btn-inscrire"
-                            th:data-activity-id="${activity.id}"
-                            th:data-activity-name="${activity.name}"
+                            th:data-session-id="${seance.id}"
+                            th:data-activity-name="${seance.activity.name}"
+                            th:data-age-min="${seance.minAge}"
+                            th:data-age-max="${seance.maxAge}"
                             onclick="openInscrireModal(this)">
                         Inscrire mon enfant
                     </button>
@@ -95,7 +99,8 @@
 
             <!-- Liste des enfants du parent -->
             <div th:each="child : ${children}" class="enfant-choice"
-                 th:data-child-id="${child.id}">
+                 th:data-child-id="${child.id}"
+                 th:data-age="${child.getAge()}">
                 <div class="choice-avatar" th:text="${child.firstName.charAt(0)}">A</div>
                 <div class="choice-info">
                     <strong th:text="${child.firstName + ' ' + child.lastName}">Enfant</strong>
@@ -103,9 +108,10 @@
                 </div>
                 <form th:action="@{/dashboardParent/activites/inscrire}" method="post" style="display:inline">
                     <input type="hidden" name="childId" th:value="${child.id}">
-                    <input type="hidden" name="activityId" class="activity-id-input" value="">
+                    <input type="hidden" name="sessionId" class="session-id-input" value="">
                     <button type="submit" class="btn-choice-inscrire">Inscrire</button>
                 </form>
+                <span class="age-erreur" style="display:none; color:#c0392b; font-size:0.8rem; margin-top:4px;">Âge non compatible</span>
             </div>
 
         </div>
@@ -128,7 +134,6 @@
         document.querySelector('.sidebar-overlay').classList.toggle('open');
     }
 
-    // Filtrer les activites par nom
     function filterActivities() {
         const q = $('searchInput').value.toLowerCase();
         let visible = 0;
@@ -140,23 +145,44 @@
         $('noResults').style.display = visible ? 'none' : 'block';
     }
 
-    // Ouvrir le modal d'inscription avec le nom de l'activite
     function openInscrireModal(btn) {
-        const activityId = btn.dataset.activityId;
-        const activityName = btn.dataset.activityName;
+        const sessionId = btn.dataset.sessionId;
+        const ageMin = btn.dataset.ageMin ? parseInt(btn.dataset.ageMin) : null;
+        const ageMax = btn.dataset.ageMax ? parseInt(btn.dataset.ageMax) : null;
 
-        $('inscrireTitle').textContent = 'Inscrire à : ' + activityName;
+        $('inscrireTitle').textContent = 'Inscrire à : ' + btn.dataset.activityName;
 
-        // Mettre l'activityId dans tous les formulaires caches
-        document.querySelectorAll('.activity-id-input').forEach(input => {
-            input.value = activityId;
+        document.querySelectorAll('.session-id-input').forEach(input => {
+            input.value = sessionId;
+        });
+
+        document.querySelectorAll('.enfant-choice').forEach(div => {
+            const ageEnfant = parseInt(div.dataset.age);
+            const btnInscrire = div.querySelector('.btn-choice-inscrire');
+            const msgErreur = div.querySelector('.age-erreur');
+
+            let horsTrancheAge = false;
+            if (ageMin !== null && ageEnfant < ageMin) horsTrancheAge = true;
+            if (ageMax !== null && ageEnfant > ageMax) horsTrancheAge = true;
+
+            if (horsTrancheAge) {
+                btnInscrire.disabled = true;
+                btnInscrire.style.opacity = '0.4';
+                btnInscrire.style.cursor = 'not-allowed';
+                msgErreur.style.display = 'inline';
+                msgErreur.textContent = 'Âge requis : ' + ageMin + '-' + ageMax + ' ans';
+            } else {
+                btnInscrire.disabled = false;
+                btnInscrire.style.opacity = '';
+                btnInscrire.style.cursor = '';
+                msgErreur.style.display = 'none';
+            }
         });
 
         $('inscrireOverlay').classList.add('open');
         document.body.style.overflow = 'hidden';
     }
 
-    // Fermer le modal
     function closeInscrireModal(event) {
         if (event && event.target !== $('inscrireOverlay')) return;
         $('inscrireOverlay').classList.remove('open');

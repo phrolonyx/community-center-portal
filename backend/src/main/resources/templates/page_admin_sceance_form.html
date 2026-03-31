@@ -72,6 +72,15 @@
                         <input type="number" th:field="*{capacity}" class="input-modern" min="1">
                     </div>
 
+                    <div class="form-group">
+                        <label>Âge minimum</label>
+                        <input type="number" th:field="*{minAge}" class="input-modern" min="0" max="18" placeholder="Ex: 4">
+                    </div>
+                    <div class="form-group">
+                        <label>Âge maximum</label>
+                        <input type="number" th:field="*{maxAge}" class="input-modern" min="0" max="18" placeholder="Ex: 12">
+                    </div>
+
                     <!-- date debut -->
                     <div class="form-group">
                         <label>Date de début</label>
