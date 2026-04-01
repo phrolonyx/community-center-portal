@@ -107,7 +107,6 @@ public class ParentController {
             @RequestParam String dateOfBirth,
             @RequestParam(required = false) String medical
     ) {
-        // Mettre a jour les infos de base de l'enfant
         Child child = childService.findById(childId);
         child.setFirstName(firstName);
         child.setLastName(lastName);
@@ -115,18 +114,15 @@ public class ParentController {
         child.setUpdatedAt(LocalDateTime.now());
         childService.updateChild(child);
 
-        // Mettre a jour la condition medicale
         if (medical != null && !medical.trim().isEmpty()) {
             List<ChildMedical> conditions = child.getMedicalConditions();
 
             if (conditions != null && !conditions.isEmpty()) {
-                // Modifier la condition existante
                 ChildMedical existing = conditions.get(0);
                 existing.setCondition(medical.trim());
                 existing.setUpdatedAt(LocalDateTime.now());
                 childService.updateMedicalCondition(existing);
             } else {
-                // Creer une nouvelle condition
                 ChildMedical condition = new ChildMedical();
                 condition.setCondition(medical.trim());
                 condition.setSeverity("Non spécifiée");
@@ -138,28 +134,23 @@ public class ParentController {
         return "redirect:/dashboardParent/enfants?modif";
     }
 
-    // Supprimer un enfant
     @PostMapping("/dashboardParent/enfants/supprimer")
     public String supprimerEnfant(@RequestParam Integer childId) {
         childService.deleteChild(childId);
         return "redirect:/dashboardParent/enfants?suppr";
     }
 
-    // ==================== ACTIVITES ====================
-
-    // Affiche le catalogue des activites disponibles
     @GetMapping("/dashboardParent/activites")
     public String activites(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         User user = userDetails.getUser();
         model.addAttribute("user", user);
         model.addAttribute("seances", activitySessionService.findAll());
 
-        // Charger les enfants pour le modal d'inscription
         List<ParentProfile> profiles = parentService.findByUserId(user.getId());
         if (!profiles.isEmpty()) {
             ParentProfile profile = profiles.get(0);
-            List<Child> children = childService.findByParentProfileId(profile.getId());
-            model.addAttribute("children", children);
+            model.addAttribute("children", childService.findByParentProfileId(profile.getId()));
+            model.addAttribute("registrations", activityService.findRegistrationsByParentId(profile.getId()));
         }
 
         return "activites";
@@ -171,40 +162,40 @@ public class ParentController {
             @RequestParam Integer childId,
             @RequestParam Integer sessionId
     ) {
-        User user = userDetails.getUser();
-        List<ParentProfile> profiles = parentService.findByUserId(user.getId());
-
-        if (!profiles.isEmpty()) {
-            ParentProfile profile = profiles.get(0);
-            Child child = childService.findById(childId);
-            ActivitySession seance = activitySessionService.findById(sessionId);
-
-            Integer ageEnfant = child.getAge();
-            Integer ageMin = seance.getMinAge();
-            Integer ageMax = seance.getMaxAge();
-
-            if (ageMin != null && ageEnfant < ageMin) {
-                return "redirect:/dashboardParent/activites?erreurAge";
-            }
-            if (ageMax != null && ageEnfant > ageMax) {
-                return "redirect:/dashboardParent/activites?erreurAge";
-            }
-
-            ActivityRegistration registration = new ActivityRegistration();
-            registration.setParentProfile(profile);
-            registration.setChild(child);
-            registration.setActivitySession(seance);
-            registration.setStatus("En attente");
-            registration.setCreatedAt(LocalDateTime.now());
-            activityService.saveRegistration(registration);
+        List<ParentProfile> profiles = parentService.findByUserId(userDetails.getUser().getId());
+        if (profiles.isEmpty()) {
+            return "redirect:/dashboardParent/activites";
         }
+
+        if (activityService.isAlreadyRegistered(childId, sessionId)) {
+            return "redirect:/dashboardParent/activites?doublon";
+        }
+
+        ParentProfile profile = profiles.get(0);
+        Child child = childService.findById(childId);
+        ActivitySession seance = activitySessionService.findById(sessionId);
+
+        if (!estDansTrancheAge(child.getAge(), seance.getMinAge(), seance.getMaxAge())) {
+            return "redirect:/dashboardParent/activites?erreurAge";
+        }
+
+        ActivityRegistration registration = new ActivityRegistration();
+        registration.setParentProfile(profile);
+        registration.setChild(child);
+        registration.setActivitySession(seance);
+        registration.setStatus("En attente");
+        registration.setCreatedAt(LocalDateTime.now());
+        activityService.saveRegistration(registration);
 
         return "redirect:/dashboardParent/activites?inscrit";
     }
 
-    // ==================== INSCRIPTIONS ====================
+    private boolean estDansTrancheAge(Integer age, Integer min, Integer max) {
+        if (min != null && age < min) return false;
+        if (max != null && age > max) return false;
+        return true;
+    }
 
-    // Affiche les inscriptions du parent (par enfant)
     @GetMapping("/dashboardParent/inscriptions")
     public String inscriptions(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         User user = userDetails.getUser();
@@ -222,16 +213,12 @@ public class ParentController {
         return "inscriptionParent";
     }
 
-    // Annuler une inscription
     @PostMapping("/dashboardParent/inscriptions/annuler")
     public String annulerInscription(@RequestParam Integer registrationId) {
         activityService.cancelRegistration(registrationId);
         return "redirect:/dashboardParent/inscriptions?annule";
     }
 
-    // ==================== MESSAGES ====================
-
-    // Affiche la page de messages (placeholder pour l'instant)
     @GetMapping("/dashboardParent/messages")
     public String messages(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         User user = userDetails.getUser();
@@ -239,9 +226,6 @@ public class ParentController {
         return "messages";
     }
 
-    // ==================== PROFIL ====================
-
-    // Affiche le profil du parent
     @GetMapping("/dashboardParent/profil")
     public String profil(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         User user = userDetails.getUser();
@@ -255,7 +239,6 @@ public class ParentController {
         return "profil";
     }
 
-    // Modifier le profil du parent
     @PostMapping("/dashboardParent/profil/modifier")
     public String modifierProfil(
             @AuthenticationPrincipal CustomUserDetails userDetails,
@@ -270,14 +253,12 @@ public class ParentController {
             @RequestParam(required = false) String emergencyRelationship,
             @RequestParam(required = false) String emergencyPhone
     ) {
-        // Mettre a jour les infos du User
         User user = userDetails.getUser();
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
         parentService.updateUser(user);
 
-        // Mettre a jour le profil parent
         List<ParentProfile> profiles = parentService.findByUserId(user.getId());
         if (!profiles.isEmpty()) {
             ParentProfile profile = profiles.get(0);

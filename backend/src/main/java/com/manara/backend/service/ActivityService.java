@@ -11,13 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/*
- * Service pour gerer les activites et les inscriptions.
- */
 @Service
 public class ActivityService {
+
     @Autowired
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private ActivityRegistrationRepository registrationRepository;
 
     public List<Activity> findAll() {
         return activityRepository.findAll();
@@ -35,26 +36,26 @@ public class ActivityService {
         activityRepository.deleteById(id);
     }
 
-    @Autowired
-    private ActivityRegistrationRepository activityRegistrationRepository;
+    public boolean isAlreadyRegistered(Integer childId, Integer sessionId) {
+        return registrationRepository.existsByChildIdAndActivitySessionIdAndStatusNot(
+                childId, sessionId, "Annulé"
+        );
+    }
 
-    // Sauvegarder une nouvelle inscription
     @Transactional
     public void saveRegistration(ActivityRegistration registration) {
-        activityRegistrationRepository.save(registration);
+        registrationRepository.save(registration);
     }
 
-    // Trouver toutes les inscriptions d'un parent
     public List<ActivityRegistration> findRegistrationsByParentId(Integer parentProfileId) {
-        return activityRegistrationRepository.findByParentProfileId(parentProfileId);
+        return registrationRepository.findByParentProfileId(parentProfileId);
     }
 
-    // Annuler une inscription (change le statut a "Annule")
     @Transactional
     public void cancelRegistration(Integer registrationId) {
-        ActivityRegistration reg = activityRegistrationRepository.findById(registrationId).orElseThrow();
-        reg.setStatus("Annulé");
-        reg.setCancelledAt(LocalDateTime.now());
-        activityRegistrationRepository.save(reg);
+        ActivityRegistration registration = registrationRepository.findById(registrationId).orElseThrow();
+        registration.setStatus("Annulé");
+        registration.setCancelledAt(LocalDateTime.now());
+        registrationRepository.save(registration);
     }
 }

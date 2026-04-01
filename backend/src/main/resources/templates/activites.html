@@ -22,6 +22,17 @@
             <p class="activites-subtitle">Explorez et inscrivez vos enfants aux activités du Centre Manara</p>
         </div>
 
+        <!-- Messages de feedback -->
+        <div th:if="${param.doublon != null}" class="alert-erreur">
+            Ce profil est déjà inscrit à cette activité.
+        </div>
+        <div th:if="${param.erreurAge != null}" class="alert-erreur">
+            L'âge de l'enfant ne correspond pas aux critères de cette activité.
+        </div>
+        <div th:if="${param.inscrit != null}" class="alert-succes">
+            Inscription enregistrée avec succès !
+        </div>
+
         <!-- Barre de recherche -->
         <div class="search-bar">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -111,7 +122,8 @@
                     <input type="hidden" name="sessionId" class="session-id-input" value="">
                     <button type="submit" class="btn-choice-inscrire">Inscrire</button>
                 </form>
-                <span class="age-erreur" style="display:none; color:#c0392b; font-size:0.8rem; margin-top:4px;">Âge non compatible</span>
+                <span class="validation-erreur" data-type="age"></span>
+                <span class="validation-erreur" data-type="doublon">Ce profil est déjà inscrit à cette activité</span>
             </div>
 
         </div>
@@ -126,68 +138,92 @@
 </button>
 <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-<script>
-    const $ = id => document.getElementById(id);
+<script th:inline="javascript">
+    const inscriptionsActives = new Set();
+    /*[# th:each="reg : ${registrations}"]*/
+        /*[# th:if="${reg.status != 'Annulé'}"]*/
+            inscriptionsActives.add(/*[[${reg.child.id}]]*/ 0 + '-' + /*[[${reg.activitySession.id}]]*/ 0);
+        /*[/]*/
+    /*[/]*/
+</script>
 
-    function toggleSidebar() {
+<script>
+    const el = id => document.getElementById(id);
+
+    const toggleSidebar = () => {
         document.querySelector('.sidebar').classList.toggle('open');
         document.querySelector('.sidebar-overlay').classList.toggle('open');
-    }
+    };
 
-    function filterActivities() {
-        const q = $('searchInput').value.toLowerCase();
+    const filterActivities = () => {
+        const query = el('searchInput').value.toLowerCase();
         let visible = 0;
-        document.querySelectorAll('.activite-card').forEach(c => {
-            const match = c.dataset.name.includes(q);
-            c.style.display = match ? '' : 'none';
+        document.querySelectorAll('.activite-card').forEach(card => {
+            const match = card.dataset.name.includes(query);
+            card.style.display = match ? '' : 'none';
             if (match) visible++;
         });
-        $('noResults').style.display = visible ? 'none' : 'block';
-    }
+        el('noResults').style.display = visible ? 'none' : 'block';
+    };
 
-    function openInscrireModal(btn) {
-        const sessionId = btn.dataset.sessionId;
-        const ageMin = btn.dataset.ageMin ? parseInt(btn.dataset.ageMin) : null;
-        const ageMax = btn.dataset.ageMax ? parseInt(btn.dataset.ageMax) : null;
+    const bloquerBouton = (btn, msgSpan, texte) => {
+        btn.disabled = true;
+        btn.classList.add('disabled');
+        if (texte) msgSpan.textContent = texte;
+        msgSpan.classList.add('visible');
+    };
 
-        $('inscrireTitle').textContent = 'Inscrire à : ' + btn.dataset.activityName;
-
-        document.querySelectorAll('.session-id-input').forEach(input => {
-            input.value = sessionId;
+    const resetEnfantChoix = (div) => {
+        const btn = div.querySelector('.btn-choice-inscrire');
+        btn.disabled = false;
+        btn.classList.remove('disabled');
+        div.querySelectorAll('.validation-erreur').forEach(span => {
+            span.classList.remove('visible');
         });
+    };
+
+    const validerEnfant = (div, sessionId, ageMin, ageMax) => {
+        const { childId, age } = div.dataset;
+        const btn = div.querySelector('.btn-choice-inscrire');
+        const msgDoublon = div.querySelector('[data-type="doublon"]');
+        const msgAge = div.querySelector('[data-type="age"]');
+
+        if (inscriptionsActives.has(`${childId}-${sessionId}`)) {
+            bloquerBouton(btn, msgDoublon);
+            return;
+        }
+
+        const ageEnfant = parseInt(age);
+        const horsTrancheAge = (ageMin !== null && ageEnfant < ageMin)
+                            || (ageMax !== null && ageEnfant > ageMax);
+
+        if (horsTrancheAge) {
+            bloquerBouton(btn, msgAge, `Âge requis : ${ageMin}-${ageMax} ans`);
+        }
+    };
+
+    const openInscrireModal = (btn) => {
+        const { sessionId, activityName, ageMin, ageMax } = btn.dataset;
+        const parsedMin = ageMin ? parseInt(ageMin) : null;
+        const parsedMax = ageMax ? parseInt(ageMax) : null;
+
+        el('inscrireTitle').textContent = `Inscrire à : ${activityName}`;
+        document.querySelectorAll('.session-id-input').forEach(input => input.value = sessionId);
 
         document.querySelectorAll('.enfant-choice').forEach(div => {
-            const ageEnfant = parseInt(div.dataset.age);
-            const btnInscrire = div.querySelector('.btn-choice-inscrire');
-            const msgErreur = div.querySelector('.age-erreur');
-
-            let horsTrancheAge = false;
-            if (ageMin !== null && ageEnfant < ageMin) horsTrancheAge = true;
-            if (ageMax !== null && ageEnfant > ageMax) horsTrancheAge = true;
-
-            if (horsTrancheAge) {
-                btnInscrire.disabled = true;
-                btnInscrire.style.opacity = '0.4';
-                btnInscrire.style.cursor = 'not-allowed';
-                msgErreur.style.display = 'inline';
-                msgErreur.textContent = 'Âge requis : ' + ageMin + '-' + ageMax + ' ans';
-            } else {
-                btnInscrire.disabled = false;
-                btnInscrire.style.opacity = '';
-                btnInscrire.style.cursor = '';
-                msgErreur.style.display = 'none';
-            }
+            resetEnfantChoix(div);
+            validerEnfant(div, sessionId, parsedMin, parsedMax);
         });
 
-        $('inscrireOverlay').classList.add('open');
+        el('inscrireOverlay').classList.add('open');
         document.body.style.overflow = 'hidden';
-    }
+    };
 
-    function closeInscrireModal(event) {
-        if (event && event.target !== $('inscrireOverlay')) return;
-        $('inscrireOverlay').classList.remove('open');
+    const closeInscrireModal = (event = null) => {
+        if (event && event.target !== el('inscrireOverlay')) return;
+        el('inscrireOverlay').classList.remove('open');
         document.body.style.overflow = '';
-    }
+    };
 </script>
 </body>
 </html>
