@@ -31,6 +31,9 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
     public void createUser(User user) {
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         userRepository.save(user);
@@ -123,6 +126,7 @@ public class UserService {
                 false  // compte desactive par defaut (un admin doit l'approuver)
         );
         user.setPending(true);
+        emailService.sendNoReplyEmail(dto.getEmail(), "Bienvenue au CRM de Manara", "Bienvenue sur Manara");
 
         return userRepository.save(user);
     }
