@@ -5,6 +5,8 @@ import com.manara.backend.model.security.CustomUserDetails;
 import com.manara.backend.service.ActivityService;
 import com.manara.backend.service.ActivitySessionService;
 import com.manara.backend.service.ChildService;
+import com.manara.backend.service.EmailService;
+import com.manara.backend.service.MessageService;
 import com.manara.backend.service.ParentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +20,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/*
+ * Controller du tableau de bord parent.
+ * Gere les enfants, activites, inscriptions, messages et profil.
+ */
 @Controller
 public class ParentController {
 
@@ -32,6 +38,12 @@ public class ParentController {
 
     @Autowired
     private ActivitySessionService activitySessionService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private MessageService messageService;
 
     @GetMapping("/dashboardParent")
     public String dashboardParent(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
@@ -187,6 +199,16 @@ public class ParentController {
         registration.setCreatedAt(LocalDateTime.now());
         activityService.saveRegistration(registration);
 
+        // envoyer un courriel de confirmation au parent
+        String dateSeance = seance.getDateTimeStart().toLocalDate().toString();
+        emailService.envoyerConfirmationInscription(
+            userDetails.getUser().getEmail(),
+            userDetails.getUser().getFirstName(),
+            child.getFullName(),
+            seance.getActivity().getName(),
+            dateSeance
+        );
+
         return "redirect:/dashboardParent/activites?inscrit";
     }
 
@@ -214,16 +236,46 @@ public class ParentController {
     }
 
     @PostMapping("/dashboardParent/inscriptions/annuler")
-    public String annulerInscription(@RequestParam Integer registrationId) {
+    public String annulerInscription(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam Integer registrationId
+    ) {
+        ActivityRegistration reg = activityService.findRegistrationById(registrationId);
+        String nomEnfant = reg.getChild().getFullName();
+        String nomActivite = reg.getActivitySession().getActivity().getName();
+
         activityService.cancelRegistration(registrationId);
+
+        // courriel pour informer le parent de l'annulation
+        emailService.envoyerAnnulation(
+            userDetails.getUser().getEmail(),
+            userDetails.getUser().getFirstName(),
+            nomEnfant,
+            nomActivite
+        );
+
         return "redirect:/dashboardParent/inscriptions?annule";
     }
 
+    // page des messages recus par le parent (perso + globaux)
     @GetMapping("/dashboardParent/messages")
     public String messages(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         User user = userDetails.getUser();
         model.addAttribute("user", user);
+
+        List<Message> messages = messageService.getMessagesForUser(user.getId());
+        long unreadCount = messageService.countUnread(user.getId());
+        model.addAttribute("messages", messages);
+        model.addAttribute("unreadCount", unreadCount);
+
         return "messages";
+    }
+
+    // quand le parent clique sur "marquer comme lu"
+    @PostMapping("/dashboardParent/messages/lire")
+    public String marquerLu(@RequestParam Integer messageId) {
+        messageService.markAsRead(messageId);
+        return "redirect:/dashboardParent/messages";
     }
 
     @GetMapping("/dashboardParent/profil")

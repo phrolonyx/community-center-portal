@@ -47,6 +47,10 @@ public class ActivityService {
         registrationRepository.save(registration);
     }
 
+    public ActivityRegistration findRegistrationById(Integer id) {
+        return registrationRepository.findById(id).orElseThrow();
+    }
+
     public List<ActivityRegistration> findRegistrationsByParentId(Integer parentProfileId) {
         return registrationRepository.findByParentProfileId(parentProfileId);
     }

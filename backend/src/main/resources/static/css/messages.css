@@ -58,6 +58,43 @@
 .messages-empty h2 { font-size: 1.25rem; color: #043C5C; margin: 1rem 0 0.5rem; }
 .messages-empty p { font-size: 0.95rem; color: #9CA3AF; }
 
+/* SUJET */
+.message-subject { font-size: 15px; font-weight: 700; color: #043C5C; margin: 8px 0 4px; }
+
+/* BADGE NON LU HEADER */
+.unread-badge { background: #E8BB08; color: #043C5C; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px; }
+
+/* BOUTON MARQUER COMME LU */
+.btn-mark-read { background: #043C5C; color: #FFF; border: none; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .2s; }
+.btn-mark-read:hover { background: #032E48; }
+
+/* TYPE BADGES */
+.type-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+.type-badge.annonce { background: #DBEAFE; color: #1E40AF; }
+.type-badge.rappel { background: #FEF3C7; color: #92400E; }
+.type-badge.annulation { background: #FEE2E2; color: #991B1B; }
+
+/* ALERTE SUCCES */
+.alert-succes { background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; border-radius: 8px; padding: 12px 18px; font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+
+/* FORMULAIRE ADMIN - ENVOI MESSAGE */
+.send-message-card { background: #FFF; border-radius: 12px; padding: 28px; margin-bottom: 28px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.send-title { font-size: 20px; font-weight: 800; color: #043C5C; margin: 0 0 20px; }
+.section-subtitle { font-size: 18px; font-weight: 800; color: #043C5C; margin: 0 0 12px; }
+
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: 700; color: #043C5C; margin-bottom: 6px; }
+.form-group input,
+.form-group select,
+.form-group textarea { width: 100%; padding: 10px 14px; border: 2px solid #C8CDD3; border-radius: 8px; font-size: 14px; font-family: Arial, sans-serif; color: #043C5C; background: #FFF; transition: border-color .2s; box-sizing: border-box; }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: #043C5C; outline: none; box-shadow: 0 0 0 3px rgba(4,60,92,.12); }
+.form-group textarea { resize: vertical; }
+
+.btn-send { background: #E8BB08; color: #043C5C; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background .2s; }
+.btn-send:hover { background: #D4A907; }
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .messages-title { font-size: 24px; }

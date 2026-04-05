@@ -8,7 +8,6 @@ import com.manara.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -126,7 +125,7 @@ public class UserService {
                 false  // compte desactive par defaut (un admin doit l'approuver)
         );
         user.setPending(true);
-        emailService.sendNoReplyEmail(dto.getEmail(), "Bienvenue au CRM de Manara", "Bienvenue sur Manara");
+        emailService.envoyerBienvenue(dto.getEmail(), dto.getPrenom());
 
         return userRepository.save(user);
     }

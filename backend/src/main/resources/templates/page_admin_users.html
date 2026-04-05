@@ -118,7 +118,67 @@
             </section>
 
         </div>
+
+        <!-- Bouton pour ouvrir le formulaire de message -->
+        <div style="padding: 0 24px 24px;">
+            <button onclick="document.getElementById('msgModal').style.display='flex'"
+                    style="background:#043C5C; color:#FFF; border:none; padding:12px 24px; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer;">
+                Envoyer un message
+            </button>
+        </div>
+
+        <!-- Alerte succes -->
+        <div th:if="${param.msgEnvoye}" style="margin:0 24px 16px; background:#D1FAE5; color:#065F46; border:1px solid #A7F3D0; border-radius:8px; padding:12px 18px; font-size:14px; font-weight:600;">
+            Message envoye avec succes !
+        </div>
+
     </main>
+</div>
+
+<!-- Modal envoi message -->
+<div id="msgModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:300; justify-content:center; align-items:flex-start; padding:80px 20px;">
+    <div style="background:#FFF; border-radius:14px; padding:28px; width:100%; max-width:500px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="margin:0; font-size:20px; font-weight:800; color:#043C5C;">Nouveau message</h2>
+            <button onclick="document.getElementById('msgModal').style.display='none'"
+                    style="width:34px; height:34px; background:none; border:2px solid #C8CDD3; border-radius:50%; font-size:18px; color:#6B7280; cursor:pointer;">X</button>
+        </div>
+
+        <form th:action="@{/admin/messages/send-from-users}" method="post">
+            <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Destinataire</label>
+                <select name="recipientId" style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px;">
+                    <option value="">Tous les parents</option>
+                    <option th:each="user : ${users}" th:if="${user.role.name == 'PARENT'}" th:value="${user.id}" th:text="${user.fullName}"></option>
+                </select>
+            </div>
+
+            <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Type</label>
+                <select name="type" style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px;">
+                    <option value="ANNONCE">Annonce</option>
+                    <option value="RAPPEL">Rappel</option>
+                    <option value="ANNULATION">Annulation</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom:14px;">
+                <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Sujet</label>
+                <input type="text" name="subject" placeholder="Ex: Annulation du cours de danse" required
+                       style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px; box-sizing:border-box;">
+            </div>
+
+            <div style="margin-bottom:16px;">
+                <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Message</label>
+                <textarea name="content" rows="4" placeholder="Ecrivez votre message ici..." required
+                          style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px; resize:vertical; box-sizing:border-box;"></textarea>
+            </div>
+
+            <button type="submit" style="background:#E8BB08; color:#043C5C; border:none; padding:12px 24px; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; width:100%;">
+                Envoyer
+            </button>
+        </form>
+    </div>
 </div>
 
 <script th:src="@{/js/admin.js}"></script>

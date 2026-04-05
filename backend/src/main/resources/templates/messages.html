@@ -18,15 +18,54 @@
   <main class="dashboard-main">
     <div class="messages-header">
       <h1 class="messages-title">Messages</h1>
-      <span class="messages-count">0 messages</span>
+      <span class="messages-count" th:text="${#lists.size(messages)} + ' message(s)'">0 messages</span>
+      <span th:if="${unreadCount > 0}" class="unread-badge" th:text="${unreadCount} + ' non lu(s)'"></span>
     </div>
 
-    <div class="messages-empty">
+    <!-- Liste des messages -->
+    <div th:if="${!messages.isEmpty()}" class="messages-list">
+      <div th:each="msg : ${messages}"
+           th:classappend="${!msg.isRead} ? ' unread' : ''"
+           class="message-card" onclick="toggleMessage(this)">
+
+        <div class="message-top">
+          <div class="message-sender">
+            <div class="sender-avatar admin" th:text="${msg.senderInitials}">AD</div>
+            <div class="sender-info">
+              <strong th:text="${msg.sender.fullName}">Admin</strong>
+              <span class="sender-role">
+                <span class="type-badge"
+                      th:classappend="${msg.type == 'ANNULATION'} ? ' annulation' : (${msg.type == 'RAPPEL'} ? ' rappel' : ' annonce')"
+                      th:text="${msg.type}">ANNONCE</span>
+              </span>
+            </div>
+          </div>
+          <div class="message-meta">
+            <span class="message-date" th:text="${#temporals.format(msg.createdAt, 'dd MMM yyyy HH:mm')}">01 avr 2026</span>
+            <span th:if="${!msg.isRead}" class="unread-dot"></span>
+          </div>
+        </div>
+
+        <p class="message-subject" th:text="${msg.subject}">Sujet du message</p>
+        <p class="message-preview" th:text="${msg.content}">Apercu du message...</p>
+
+        <div class="message-expanded">
+          <p th:utext="${msg.content}"></p>
+          <form th:if="${!msg.isRead}" th:action="@{/dashboardParent/messages/lire}" method="post" style="margin-top:12px;">
+            <input type="hidden" name="messageId" th:value="${msg.id}">
+            <button type="submit" class="btn-mark-read">Marquer comme lu</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aucun message -->
+    <div th:if="${messages.isEmpty()}" class="messages-empty">
       <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#C8CDD3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
       <h2>Aucune notification pour le moment</h2>
-      <p>Vos messages et notifications apparaîtront ici.</p>
+      <p>Vos messages et notifications apparaitront ici.</p>
     </div>
   </main>
 </div>
@@ -44,6 +83,9 @@
   function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('open');
     document.querySelector('.sidebar-overlay').classList.toggle('open');
+  }
+  function toggleMessage(card) {
+    card.classList.toggle('open');
   }
 </script>
 </body>

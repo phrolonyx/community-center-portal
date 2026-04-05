@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages — Admin Manara</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/dashboardParent.css}">
+  <link rel="stylesheet" th:href="@{/css/messages.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="dashboard-layout">
+  <div th:replace="fragments/sidebar :: sidebar('messages')"></div>
+
+  <main class="dashboard-main">
+    <div class="messages-header">
+      <h1 class="messages-title">Messages</h1>
+    </div>
+
+    <!-- Alerte succes -->
+    <div th:if="${param.envoye}" class="alert-succes">Message envoye avec succes !</div>
+
+    <!-- Formulaire d'envoi -->
+    <div class="send-message-card">
+      <h2 class="send-title">Nouveau message</h2>
+      <form th:action="@{/admin/messages/send}" method="post">
+
+        <div class="form-group">
+          <label for="recipientId">Destinataire</label>
+          <select id="recipientId" name="recipientId">
+            <option value="">Tous les parents</option>
+            <option th:each="parent : ${parents}" th:value="${parent.id}" th:text="${parent.fullName}"></option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="type">Type</label>
+          <select id="type" name="type">
+            <option value="ANNONCE">Annonce</option>
+            <option value="RAPPEL">Rappel</option>
+            <option value="ANNULATION">Annulation</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Sujet</label>
+          <input type="text" id="subject" name="subject" placeholder="Ex: Annulation du cours de danse" required>
+        </div>
+
+        <div class="form-group">
+          <label for="content">Message</label>
+          <textarea id="content" name="content" rows="5" placeholder="Ecrivez votre message ici..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-send">Envoyer</button>
+      </form>
+    </div>
+
+    <!-- Historique des messages envoyes -->
+    <h2 class="section-subtitle">Messages envoyes</h2>
+    <div th:if="${!messages.isEmpty()}" class="messages-list">
+      <div th:each="msg : ${messages}" class="message-card" onclick="toggleMessage(this)">
+        <div class="message-top">
+          <div class="message-sender">
+            <div class="sender-avatar admin" th:text="${msg.senderInitials}">AD</div>
+            <div class="sender-info">
+              <strong th:text="${msg.subject}">Sujet</strong>
+              <span class="sender-role">
+                <span class="type-badge"
+                      th:classappend="${msg.type == 'ANNULATION'} ? ' annulation' : (${msg.type == 'RAPPEL'} ? ' rappel' : ' annonce')"
+                      th:text="${msg.type}">ANNONCE</span>
+                &mdash;
+                <span th:text="${msg.recipient != null} ? ${msg.recipient.fullName} : 'Tous les parents'">Destinataire</span>
+              </span>
+            </div>
+          </div>
+          <div class="message-meta">
+            <span class="message-date" th:text="${#temporals.format(msg.createdAt, 'dd MMM yyyy HH:mm')}">01 avr 2026</span>
+          </div>
+        </div>
+        <p class="message-preview" th:text="${msg.content}">Contenu...</p>
+        <div class="message-expanded">
+          <p th:utext="${msg.content}"></p>
+        </div>
+      </div>
+    </div>
+
+    <div th:if="${messages.isEmpty()}" class="messages-empty">
+      <p>Aucun message envoye pour le moment.</p>
+    </div>
+  </main>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<button class="mobile-menu-btn" onclick="toggleSidebar()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<script>
+  function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.querySelector('.sidebar-overlay').classList.toggle('open');
+  }
+  function toggleMessage(card) {
+    card.classList.toggle('open');
+  }
+</script>
+</body>
+</html>

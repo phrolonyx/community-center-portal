@@ -4,10 +4,12 @@ import com.manara.backend.model.Activity;
 import com.manara.backend.model.ActivitySession;
 import com.manara.backend.model.Child;
 import com.manara.backend.model.User;
+import com.manara.backend.model.security.CustomUserDetails;
 import com.manara.backend.repository.ActivityRepository;
 import com.manara.backend.repository.ChildRepository;
 import com.manara.backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -274,6 +276,51 @@ public class AdminController {
     public String deleteSession(@RequestParam("id") Integer id) {
         sessionService.deleteById(id);
         return "redirect:/admin/sessions";
+    }
+
+    @Autowired
+    private MessageService messageService;
+
+    // page admin pour voir et envoyer des messages aux parents
+    @GetMapping("/admin/messages")
+    public String adminMessages(Model model) {
+        model.addAttribute("messages", messageService.findAll());
+        model.addAttribute("parents", userService.findByRoleName("PARENT"));
+        return "page_admin_messages";
+    }
+
+    // envoi depuis la page users (le modal)
+    @PostMapping("/admin/messages/send-from-users")
+    public String sendMessageFromUsers(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam String subject, @RequestParam String content,
+            @RequestParam String type, @RequestParam(required = false) Integer recipientId
+    ) {
+        envoyerMessage(userDetails, subject, content, type, recipientId);
+        return "redirect:/admin/users?msgEnvoye";
+    }
+
+    // envoi depuis la page messages
+    @PostMapping("/admin/messages/send")
+    public String sendMessage(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam String subject, @RequestParam String content,
+            @RequestParam String type, @RequestParam(required = false) Integer recipientId
+    ) {
+        envoyerMessage(userDetails, subject, content, type, recipientId);
+        return "redirect:/admin/messages?envoye";
+    }
+
+    // methode privee pour eviter de dupliquer le code d'envoi
+    private void envoyerMessage(CustomUserDetails userDetails, String subject,
+            String content, String type, Integer recipientId) {
+        User sender = userDetails.getUser();
+        User recipient = (recipientId != null) ? userService.findById(recipientId) : null;
+        if (recipient != null) {
+            messageService.sendMessage(sender, recipient, subject, content, type);
+        } else {
+            messageService.sendToAll(sender, subject, content, type);
+        }
     }
 }
 
