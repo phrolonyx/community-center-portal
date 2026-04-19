@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /*
  * DTO (Data Transfer Object) pour le formulaire d'inscription.
@@ -12,6 +13,7 @@ import lombok.Data;
  */
 
 @Data
+@NoArgsConstructor
 public class RegisterRequest {
 
     @NotBlank(message = "Le prénom est requis")

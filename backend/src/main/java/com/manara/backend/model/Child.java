@@ -1,9 +1,11 @@
 package com.manara.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.manara.backend.validation.IsChild;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,8 @@ public class Child {
 
     @Column(nullable = false)
     @NotNull(message = "L'année de naissance de l'enfant est obligatoire")
+    @PastOrPresent(message = "La date de naissance est invalide")
+    @IsChild(message = "L'enfant doit avoir moins de 18 ans")
     private LocalDateTime dateOfBirth;
 
     @Column(nullable = false)
