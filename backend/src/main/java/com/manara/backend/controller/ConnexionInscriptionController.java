@@ -1,6 +1,6 @@
 package com.manara.backend.controller;
 
-import com.manara.backend.dto.InscriptionRequest;
+import com.manara.backend.dto.RegisterRequest;
 import com.manara.backend.model.User;
 import com.manara.backend.service.ParentService;
 import com.manara.backend.service.UserService;
@@ -47,7 +47,7 @@ public class ConnexionInscriptionController {
     // Traite le formulaire d'inscription
     @PostMapping("/inscription")
     public String processInscription(
-            @Valid @ModelAttribute InscriptionRequest dto,
+            @Valid @ModelAttribute RegisterRequest dto,
             BindingResult bindingResult,
             Model model
     ) {

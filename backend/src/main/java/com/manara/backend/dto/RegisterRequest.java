@@ -12,7 +12,7 @@ import lombok.Data;
  */
 
 @Data
-public class InscriptionRequest {
+public class RegisterRequest {
 
     @NotBlank(message = "Le prénom est requis")
     @Size(min = 2, max = 100, message = "Le prénom doit contenir entre 2 et 100 caractères")

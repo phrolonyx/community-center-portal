@@ -1,6 +1,6 @@
 package com.manara.backend.service;
 
-import com.manara.backend.dto.InscriptionRequest;
+import com.manara.backend.dto.RegisterRequest;
 import com.manara.backend.model.Role;
 import com.manara.backend.model.User;
 import com.manara.backend.repository.RoleRepository;
@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /*
@@ -109,7 +108,7 @@ public class UserService {
 
     // Creer un compte a partir du formulaire d'inscription
     @Transactional
-    public User registerUser(InscriptionRequest dto) {
+    public User registerUser(RegisterRequest dto) {
         // Trouver le role (PARENT ou ANIMATEUR)
         Role role = roleRepository.findByName(dto.getRole())
                 .orElseThrow(() -> new RuntimeException("Rôle introuvable : " + dto.getRole()));

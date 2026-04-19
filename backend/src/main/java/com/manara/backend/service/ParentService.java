@@ -1,6 +1,6 @@
 package com.manara.backend.service;
 
-import com.manara.backend.dto.InscriptionRequest;
+import com.manara.backend.dto.RegisterRequest;
 import com.manara.backend.model.ParentProfile;
 import com.manara.backend.model.User;
 import com.manara.backend.repository.ParentProfileRepository;
@@ -45,7 +45,7 @@ public class ParentService {
 
     // Creer un profil parent a partir du formulaire d'inscription
     @Transactional
-    public void createProfileFromInscription(User user, InscriptionRequest dto) {
+    public void createProfileFromInscription(User user, RegisterRequest dto) {
         ParentProfile profile = new ParentProfile(user);
         profile.setPhoneNumber(dto.getTelephone());
         profile.setAddressLine1(dto.getAdresse());
