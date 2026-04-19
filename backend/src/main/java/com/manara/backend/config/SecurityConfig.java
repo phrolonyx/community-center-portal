@@ -86,7 +86,7 @@ public class SecurityConfig {
                         // Plus nécessaire en REST
                         /*.accessDeniedPage("/access-denied")*/
 
-                        // RÉponses d'erreur en JSON
+                        // RÉponses d'erreur en JSON au lieu de redirects de pages html
                         .authenticationEntryPoint((req, res, ex) -> {
                             res.setStatus(401);
                             res.setContentType("application/json;charset=UTF-8");
