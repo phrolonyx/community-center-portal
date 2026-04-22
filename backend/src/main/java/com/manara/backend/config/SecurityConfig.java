@@ -52,7 +52,7 @@ public class SecurityConfig {
 
                         // Routes publiques
                         .requestMatchers("/auth/login", "/auth/register",
-                                "/auth/check-email", "/activities",
+                                "/auth/check-email", "/activities/**",
                                 "/uploads/**").permitAll()
                         // Routes admin
                         .requestMatchers("/admin/**", "/users/**",

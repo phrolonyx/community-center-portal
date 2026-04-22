@@ -1,5 +1,6 @@
 package com.manara.backend.dto;
 
+import com.manara.backend.model.Activity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,4 +13,11 @@ public class ActivityRequest {
     private String name;
 
     private String description;
+
+    public Activity toActivity(ActivityRequest activityRequest) {
+        Activity activity = new Activity();
+        activity.setName(activityRequest.getName());
+        activity.setDescription(activityRequest.getDescription());
+        return activity;
+    }
 }
