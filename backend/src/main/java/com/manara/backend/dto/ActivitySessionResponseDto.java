@@ -13,7 +13,6 @@ public class ActivitySessionResponseDto {
     private LocalDateTime dateTimeEnd;
     private Integer capacity;
 
-    // Résumés aplatis pour éviter les références circulaires
     private Integer activityId;
     private String activityName;
     private Integer locationId;
