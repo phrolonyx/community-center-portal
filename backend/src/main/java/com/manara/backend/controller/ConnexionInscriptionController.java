@@ -18,6 +18,7 @@ import java.util.Map;
  * Gere la creation de compte et la verification AJAX du email.
  */
 @Controller
+@RequestMapping("/MVC")
 public class ConnexionInscriptionController {
 
     @Autowired

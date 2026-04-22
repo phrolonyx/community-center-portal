@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
+@RequestMapping("/MVC")
 public class AdminController {
 
     @Autowired
