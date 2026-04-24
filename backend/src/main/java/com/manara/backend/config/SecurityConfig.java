@@ -39,7 +39,7 @@ public class SecurityConfig {
                 // Regles d'acces aux pages
                 .authorizeHttpRequests(auth -> auth
 
-                        /* // Cette version n'est plus utile dans la version REST
+                         // Cette version n'est plus utile dans la version REST
                         // Pages publiques (pas besoin d'etre connecte)
                         .requestMatchers("/connexion", "/inscription", "/inscription/**",
                                 "/images/**", "/js/**", "/css/**", "/webjars/**", "/uploads/**").permitAll()
@@ -48,19 +48,19 @@ public class SecurityConfig {
                         // Pages parent : seulement pour le role PARENT
                         .requestMatchers("/dashboardParent/**").hasAuthority("PARENT")
                         // Toutes les autres pages sont publiques
-                        .anyRequest().permitAll() */
+                        .anyRequest().permitAll()
 
-                        // Routes publiques
-                        .requestMatchers("/auth/login", "/auth/register",
-                                "/auth/check-email", "/activities",
-                                "/uploads/**").permitAll()
-                        // Routes admin
-                        .requestMatchers("/admin/**", "/users/**",
-                                "/sessions/**").hasAuthority("ADMIN")
-                        // Routes parent
-                        .requestMatchers("/registrations/**").hasAnyAuthority("PARENT", "ADMIN")
-                        // Sécurisation par défaut et de possibles endpoints futurs
-                        .anyRequest().authenticated()
+//                        // Routes publiques
+//                        .requestMatchers("/auth/login", "/auth/register",
+//                                "/auth/check-email", "/activities",
+//                                "/uploads/**").permitAll()
+//                        // Routes admin
+//                        .requestMatchers("/admin/**", "/users/**",
+//                                "/sessions/**").hasAuthority("ADMIN")
+//                        // Routes parent
+//                        .requestMatchers("/registrations/**").hasAnyAuthority("PARENT", "ADMIN")
+//                        // Sécurisation par défaut et de possibles endpoints futurs
+//                        .anyRequest().authenticated()
 
                 )
 
