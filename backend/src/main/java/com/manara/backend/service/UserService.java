@@ -6,9 +6,11 @@ import com.manara.backend.model.User;
 import com.manara.backend.repository.RoleRepository;
 import com.manara.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class UserService {
     }
 
     public User findById(Integer id) {
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User non trouve"));
     }
 
     public User findByEmail(String email) {

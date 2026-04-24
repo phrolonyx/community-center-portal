@@ -3,8 +3,10 @@ package com.manara.backend.service;
 import com.manara.backend.model.*;
 import com.manara.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -31,10 +33,12 @@ public class ChildService {
         childParentRepository.save(childParent);
     }
 
-
+    public Child save(Child child) {
+        return childRepository.save(child);
+    }
 
     public Child findById(Integer id) {
-        return childRepository.findById(id).orElseThrow();
+        return childRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "child non trouvé"));
     }
 
     public List<Child> findByParentProfileId(Integer parentProfileId) {
@@ -103,7 +107,7 @@ public List<Child> findAll() {
     @Transactional
     public void deleteChild(Integer childId) {
 
-        Child child = childRepository.findById(childId).orElseThrow();
+        Child child = findById(childId);
 
         // 1. Supprimer les conditions médicales
         if (child.getMedicalConditions() != null) {

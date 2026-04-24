@@ -14,10 +14,10 @@ public class ActivityRequest {
 
     private String description;
 
-    public Activity toActivity(ActivityRequest activityRequest) {
+    public Activity toActivity() {
         Activity activity = new Activity();
-        activity.setName(activityRequest.getName());
-        activity.setDescription(activityRequest.getDescription());
+        activity.setName(this.name);
+        activity.setDescription(this.description);
         return activity;
     }
 }

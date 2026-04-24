@@ -1,5 +1,7 @@
 package com.manara.backend.dto;
 
+import com.manara.backend.model.Child;
+import com.manara.backend.model.ChildParent;
 import com.manara.backend.validation.IsChild;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,4 +29,13 @@ public class ChildRequest {
     private String relationship; // Père, Mère, Tuteur, etc.
 
     private String medical;
+
+    public Child toChild() {
+        Child child = new Child();
+        child.setFirstName(this.firstName);
+        child.setLastName(this.lastName);
+        child.setDateOfBirth(this.dateOfBirth);
+        child.setUpdatedAt(LocalDateTime.now());
+        return child;
+    }
 }

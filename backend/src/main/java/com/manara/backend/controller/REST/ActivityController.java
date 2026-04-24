@@ -26,40 +26,28 @@ public class ActivityController {
 
     @GetMapping("/{id}")
     public ActivityResponseDto getActivity(@PathVariable Integer id){
-        if (activityService.findById(id) == null){
-            return null;
-        }
-        return ActivityResponseDto.from(activityService.findById(id));
+        Activity activity = activityService.findById(id);
+        return ActivityResponseDto.from(activity);
     }
 
     @PostMapping
     public ResponseEntity<ActivityResponseDto> addActivity(@RequestBody @Valid ActivityRequest activityRequest){
-        Activity activity = activityService.save(activityRequest.toActivity(activityRequest));
+        Activity activity = activityService.save(activityRequest.toActivity());
         return ResponseEntity.status(HttpStatus.CREATED).body(ActivityResponseDto.from(activity));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ActivityResponseDto> updateActivity(@PathVariable Integer id, @RequestBody @Valid ActivityRequest activityRequest){
         Activity existingActivity = activityService.findById(id);
-
-        if (existingActivity == null){
-            return ResponseEntity.notFound().build();
-        }
-
         existingActivity.setName(activityRequest.getName());
         existingActivity.setDescription(activityRequest.getDescription());
         activityService.save(existingActivity);
-
         return ResponseEntity.ok(ActivityResponseDto.from(existingActivity));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ActivityResponseDto> deleteActivity(@PathVariable Integer id){
-
-        if (activityService.findById(id) == null){
-            return ResponseEntity.notFound().build();
-        }
-
+        activityService.findById(id);
         activityService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
