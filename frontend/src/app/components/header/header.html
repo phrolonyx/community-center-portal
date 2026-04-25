@@ -1,1 +1,49 @@
-<p>header works!</p>
+<header>
+  <nav class="navbar">
+
+    <!-- LOGO -->
+    <div class="logo">
+      <a routerLink="/">
+        <img src="assets/images/logo.png" alt="Logo du site">
+      </a>
+    </div>
+
+    <!-- NAVIGATION -->
+    <ul class="nav-links">
+      <li><a routerLink="/">Accueil</a></li>
+
+      <li>
+        <a >Nos activités</a>
+        <!-- <a >Nos activités</a> -->
+      </li>
+    </ul>
+
+    <!-- BOUTONS / PROFIL -->
+    <div class="nav-buttons">
+
+      <!-- SI CONNECTÉ -->
+      <!-- <div class="profile-container"> -->
+
+        <!-- <div class="profile-trigger">
+          <span></span>
+          <img src="assets/images/profileIcon.png" alt="Profil" class="profile-icon">
+        </div> -->
+
+        <!-- <div class="profile-menu">
+          <a >Gestion</a>
+          <a >Mon profil</a>
+          <a >Déconnexion</a>
+        </div> -->
+
+      <!-- </div> -->
+
+      <!-- SI NON CONNECTÉ -->
+      <div>
+        <a routerLink="/connexion" class="btn-outline">Connexion</a>
+        <a routerLink="/inscription" class="btn-filled">Inscription</a>
+      </div>
+
+    </div>
+
+  </nav>
+</header>
