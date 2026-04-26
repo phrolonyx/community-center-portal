@@ -1,7 +1,6 @@
 package com.manara.backend.dto;
 
 import com.manara.backend.model.Child;
-import com.manara.backend.model.ChildParent;
 import com.manara.backend.validation.IsChild;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,9 +25,13 @@ public class ChildRequest {
     @IsChild(message = "L'enfant doit avoir moins de 18 ans")
     private LocalDateTime dateOfBirth;
 
+    @NotNull
     private String relationship; // Père, Mère, Tuteur, etc.
 
     private String medical;
+
+    @NotNull
+    private Integer parentId;
 
     public Child toChild() {
         Child child = new Child();

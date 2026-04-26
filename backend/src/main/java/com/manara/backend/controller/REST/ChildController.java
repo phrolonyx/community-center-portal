@@ -32,18 +32,13 @@ public class ChildController {
 
     @PostMapping
     public ResponseEntity<ChildResponseDto> addChild(@RequestBody @Valid ChildRequest request) {
-        Child child = childService.save(request.toChild());
+        Child child = childService.createChild(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ChildResponseDto.from(child));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ChildResponseDto> updateChild(@PathVariable Integer id, @RequestBody @Valid ChildRequest request) {
-        Child child = childService.findById(id);
-        child.setFirstName(request.getFirstName());
-        child.setLastName(request.getLastName());
-        child.setDateOfBirth(request.getDateOfBirth());
-        child.setUpdatedAt(LocalDateTime.now());
-        childService.save(child);
+        Child child = childService.updateChild(id, request);
         return ResponseEntity.status(HttpStatus.OK).body(ChildResponseDto.from(child));
     }
 

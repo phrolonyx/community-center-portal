@@ -41,6 +41,7 @@ public class ActivityController {
         Activity existingActivity = activityService.findById(id);
         existingActivity.setName(activityRequest.getName());
         existingActivity.setDescription(activityRequest.getDescription());
+        existingActivity.setActivityImagePath(activityRequest.getActivityImagePath());
         activityService.save(existingActivity);
         return ResponseEntity.ok(ActivityResponseDto.from(existingActivity));
     }

@@ -14,10 +14,13 @@ public class ActivityRequest {
 
     private String description;
 
+    private String activityImagePath;
+
     public Activity toActivity() {
         Activity activity = new Activity();
         activity.setName(this.name);
         activity.setDescription(this.description);
+        activity.setActivityImagePath(this.activityImagePath);
         return activity;
     }
 }
