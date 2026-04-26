@@ -1,4 +1,4 @@
-package com.manara.backend.controller;
+package com.manara.backend.controller.mvc;
 
 import com.manara.backend.model.*;
 import com.manara.backend.model.security.CustomUserDetails;
