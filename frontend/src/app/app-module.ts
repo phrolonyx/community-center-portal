@@ -14,6 +14,9 @@ import { MessagesAdmin } from './components/admin/messages-admin/messages-admin'
 import { FormSceanceAdmin } from './components/admin/form-sceance-admin/form-sceance-admin';
 import { SceancesAdmin } from './components/admin/sceances-admin/sceances-admin';
 import { UsersAdmin } from './components/admin/users-admin/users-admin';
+import { AdminSidebar } from './components/admin/admin-sidebar/admin-sidebar';
+import { AdminHeader } from './components/admin/admin-header/admin-header';
+import { AdminLayout } from './components/admin/admin-layout/admin-layout';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,9 @@ import { UsersAdmin } from './components/admin/users-admin/users-admin';
     FormSceanceAdmin,
     SceancesAdmin,
     UsersAdmin,
+    AdminSidebar,
+    AdminHeader,
+    AdminLayout,
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [provideBrowserGlobalErrorListeners()],
