@@ -1,0 +1,11 @@
+<aside class="sidebar">
+  <div class="sidebar-title">Mon espace</div>
+  <nav class="sidebar-nav">
+    <a routerLink="/dashboard-parent" class="nav-item" [class.active]="active === 'apercu'">Aperçu</a>
+    <a routerLink="/dashboard-parent/activites" class="nav-item" [class.active]="active === 'activites'">Activités</a>
+    <a routerLink="/dashboard-parent/enfants" class="nav-item" [class.active]="active === 'enfants'">Mes enfants</a>
+    <a routerLink="/dashboard-parent/inscriptions" class="nav-item" [class.active]="active === 'inscriptions'">Inscriptions</a>
+    <a routerLink="/dashboard-parent/messages" class="nav-item" [class.active]="active === 'messages'">Messages</a>
+    <a routerLink="/dashboard-parent/profil" class="nav-item" [class.active]="active === 'profil'">Mon profil</a>
+  </nav>
+</aside>

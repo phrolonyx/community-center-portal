@@ -1,0 +1,70 @@
+<app-header></app-header>
+
+<div class="dashboard-layout">
+  <app-parent-sidebar [active]="'inscriptions'"></app-parent-sidebar>
+
+  <main class="dashboard-main">
+    <div class="inscriptions-header">
+      <h1 class="inscriptions-title">Mes Inscriptions</h1>
+      <a routerLink="/dashboard-parent/activites" class="btn-inscrire-activite">+ Inscrire à une activité</a>
+    </div>
+
+    <div *ngIf="messageInscrit" class="alert-success">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>Inscription effectuée avec succès !</span>
+    </div>
+
+    <div *ngIf="messageAnnule" class="alert-annule">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+      <span>Inscription annulée avec succès.</span>
+    </div>
+
+    <div *ngIf="!enfants.length" class="empty-state">
+      <p>Aucun enfant enregistré. <a routerLink="/dashboard-parent/enfants">Ajouter un enfant</a></p>
+    </div>
+
+    <div *ngIf="enfants.length">
+      <div *ngFor="let enfant of enfants" class="enfant-section">
+        <div class="enfant-section-header">
+          <h2 class="enfant-section-nom">{{ enfant.firstName }} {{ enfant.lastName }}</h2>
+        </div>
+        <div class="inscriptions-grid">
+          <div *ngFor="let i of inscriptionsParEnfant(enfant)" class="inscription-card">
+
+            <span class="inscription-statut"
+                  [class.confirmed]="estConfirme(i.status)"
+                  [class.pending]="estEnAttente(i.status)"
+                  [class.cancelled]="estAnnule(i.status)">{{ i.status }}</span>
+
+            <h3 class="inscription-nom">{{ i.activitySession.activity.name }}</h3>
+
+            <p class="inscription-details">
+              <span>{{ i.activitySession.dateTimeStart | date:'dd MMM yyyy' }}</span>
+              <br>
+              <span *ngIf="i.activitySession.location">📍 {{ i.activitySession.location.name }}</span>
+            </p>
+
+            <div class="inscription-actions">
+              <button type="button" class="btn-annuler-inscription" (click)="annulerInscription(i.id)">
+                Annuler
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<app-footer></app-footer>
+
+<button class="mobile-menu-btn" (click)="toggleSidebar()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+<div class="sidebar-overlay" (click)="toggleSidebar()"></div>

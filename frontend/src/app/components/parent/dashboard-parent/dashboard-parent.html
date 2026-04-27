@@ -1,0 +1,77 @@
+<app-header></app-header>
+
+<div class="dashboard-layout">
+
+  <app-parent-sidebar [active]="'apercu'"></app-parent-sidebar>
+
+  <main class="dashboard-main">
+
+    <div class="welcome-card">
+      <h1>Bonjour, <span>{{ utilisateur.firstName }}</span> ! <span class="wave-emoji">👋</span></h1>
+      <p>Bienvenue dans votre espace parent. Voici un aperçu rapide.</p>
+    </div>
+
+    <div class="overview-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">Mes enfants</h2>
+          <a routerLink="/dashboard-parent/enfants" class="section-link">Gérer →</a>
+        </div>
+        <div id="enfantsContainer">
+          <div *ngIf="enfants && enfants.length > 0">
+            <div *ngFor="let enfant of enfants" class="activity-item">
+              <div class="activity-info">
+                <strong>{{ enfant.firstName }} {{ enfant.lastName }}</strong>
+                <span>{{ formatNaissance(enfant) }}</span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!enfants || enfants.length === 0">
+            <p class="empty-msg">Aucun enfant enregistré. <a routerLink="/dashboard-parent/enfants">Ajouter un enfant</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">Notifications</h2>
+          <a routerLink="/dashboard-parent/messages" class="section-link">Voir tout →</a>
+        </div>
+        <div id="notifsContainer">
+          <p class="empty-msg">Aucune notification pour le moment.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">
+        <h2 class="section-title">{{ titreCalendrier }}</h2>
+        <div class="calendar-nav">
+          <button class="cal-nav-btn" (click)="changeMonth(-1)">←</button>
+          <button class="cal-nav-btn" (click)="changeMonth(1)">→</button>
+        </div>
+      </div>
+      <table class="calendar-table">
+        <thead>
+          <tr>
+            <th>Lun</th><th>Mar</th><th>Mer</th><th>Jeu</th><th>Ven</th><th>Sam</th><th>Dim</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let semaine of semaines">
+            <td *ngFor="let jour of semaine">{{ jour }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<app-footer></app-footer>
+
+<button class="mobile-menu-btn" (click)="toggleSidebar()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+<div class="sidebar-overlay" (click)="toggleSidebar()"></div>

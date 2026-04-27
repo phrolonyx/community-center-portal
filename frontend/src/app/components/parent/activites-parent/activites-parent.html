@@ -1,0 +1,95 @@
+<app-header></app-header>
+
+<div class="dashboard-layout">
+  <app-parent-sidebar [active]="'activites'"></app-parent-sidebar>
+
+  <main class="dashboard-main">
+    <div class="activites-header">
+      <h1 class="activites-title">Nos Activités</h1>
+      <p class="activites-subtitle">Explorez et inscrivez vos enfants aux activités du Centre Manara</p>
+    </div>
+
+    <div *ngIf="doublonParam" class="alert-erreur">
+      Ce profil est déjà inscrit à cette activité.
+    </div>
+    <div *ngIf="erreurAgeParam" class="alert-erreur">
+      L'âge de l'enfant ne correspond pas aux critères de cette activité.
+    </div>
+    <div *ngIf="inscritParam" class="alert-succes">
+      Inscription enregistrée avec succès !
+    </div>
+
+    <div class="search-bar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" [(ngModel)]="recherche" (keyup)="onRecherche()" placeholder="Rechercher une activité...">
+    </div>
+
+    <div class="activites-grid">
+      <div *ngIf="!seances.length" style="grid-column:1/-1">
+        <p style="text-align:center;color:#666;padding:2rem;">Aucune séance disponible pour le moment.</p>
+      </div>
+
+      <div *ngFor="let s of seances" [hidden]="!matchRecherche(s)" class="activite-card">
+        <div class="card-image">
+          <img [src]="getImage(s)" [alt]="s.activity.name">
+        </div>
+        <div class="card-body">
+          <div class="card-top">
+            <h3 class="card-name">{{ s.activity.name }}</h3>
+            <div class="card-badges">
+              <span class="badge date">{{ s.dateTimeStart | date:'dd MMM yyyy' }}</span>
+              <span class="badge date">{{ s.dateTimeStart | date:'HH:mm' }} - {{ s.dateTimeEnd | date:'HH:mm' }}</span>
+            </div>
+          </div>
+          <p class="card-desc">{{ s.activity.description || 'Aucune description.' }}</p>
+          <div style="font-size:0.85rem;color:#555;margin-bottom:0.5rem;">
+            <span *ngIf="s.location">Lieu : {{ s.location.name }}</span>
+            <br *ngIf="s.host">
+            <span *ngIf="s.host">Animateur : {{ s.host.firstName }} {{ s.host.lastName }}</span>
+          </div>
+          <button class="btn-inscrire" (click)="ouvrirModal(s)">Inscrire mon enfant</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-results" *ngIf="aucunResultat">Aucune activité trouvée.</div>
+  </main>
+</div>
+
+<div class="modal-overlay" [class.open]="modalOuvert" (click)="fermerModal($event)">
+  <div class="modal-inscrire" (click)="$event.stopPropagation()">
+    <div class="modal-inscrire-header">
+      <h2 *ngIf="seanceChoisie">Inscrire à : {{ seanceChoisie.activity.name }}</h2>
+      <button class="modal-close" type="button" (click)="fermerModal()">&times;</button>
+    </div>
+    <p class="modal-inscrire-subtitle">Choisissez l'enfant à inscrire</p>
+    <div class="enfants-choices">
+      <div *ngIf="!enfants.length">
+        <p class="no-enfants-msg">Aucun enfant enregistré. <a routerLink="/dashboard-parent/enfants">Ajouter un enfant</a></p>
+      </div>
+      <div *ngFor="let e of enfants" class="enfant-choice">
+        <div class="choice-avatar">{{ initiale(e.firstName) }}</div>
+        <div class="choice-info">
+          <strong>{{ e.firstName }} {{ e.lastName }}</strong>
+          <span>{{ e.age }} ans</span>
+        </div>
+        <button type="button" class="btn-choice-inscrire"
+                [disabled]="!estEligible(e).ok"
+                [class.disabled]="!estEligible(e).ok"
+                (click)="inscrire(e)">Inscrire</button>
+        <span class="validation-erreur" [class.visible]="!estEligible(e).ok">{{ estEligible(e).raison }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="mobile-menu-btn" (click)="toggleSidebar()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+<div class="sidebar-overlay" (click)="toggleSidebar()"></div>
+
+<app-footer></app-footer>

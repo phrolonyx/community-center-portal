@@ -1,0 +1,8 @@
+:host { display: flex; flex-shrink: 0; }
+.sidebar { width: 200px; background: #043C5C; color: #FFF; display: flex; flex-direction: column; flex-shrink: 0; flex: 1; }
+.sidebar-title { padding: 24px 20px; font-size: 18px; font-weight: 900; border-bottom: 1px solid rgba(255,255,255,.1); }
+.sidebar-nav { flex: 1; display: flex; flex-direction: column; padding: 12px 0; }
+
+.nav-item { padding: 13px 20px; color: rgba(255,255,255,.7); text-decoration: none; font-size: 15px; font-weight: 600; transition: background .2s, color .2s; }
+.nav-item:hover { background: rgba(255,255,255,.08); color: #FFF; }
+.nav-item.active { color: #FFF; background: rgba(255,255,255,.12); border-left: 3px solid #E8BB08; padding-left: 17px; }
