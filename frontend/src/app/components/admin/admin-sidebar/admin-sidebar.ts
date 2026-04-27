@@ -18,6 +18,6 @@ export class AdminSidebar {
   logout() {
     // Pour l'instant statique
     // Plus tard : authService.logout()
-    window.location.href = "/connexion";
+    window.location.href = " ";
   }
 }

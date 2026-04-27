@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input} from '@angular/core';
 
 
 
@@ -9,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './admin-header.css',
 })
 export class AdminHeader {
-
+@Input() title: string = 'Titre section';
 }

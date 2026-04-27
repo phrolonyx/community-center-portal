@@ -16,7 +16,7 @@ import { SceancesAdmin } from './components/admin/sceances-admin/sceances-admin'
 import { UsersAdmin } from './components/admin/users-admin/users-admin';
 import { AdminSidebar } from './components/admin/admin-sidebar/admin-sidebar';
 import { AdminHeader } from './components/admin/admin-header/admin-header';
-import { AdminLayout } from './components/admin/admin-layout/admin-layout';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,9 +34,9 @@ import { AdminLayout } from './components/admin/admin-layout/admin-layout';
     UsersAdmin,
     AdminSidebar,
     AdminHeader,
-    AdminLayout,
+    
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule,FormsModule],
   providers: [provideBrowserGlobalErrorListeners()],
   bootstrap: [App],
 })
