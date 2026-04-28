@@ -1,0 +1,128 @@
+/* Décalage global pour éviter que le contenu passe sous le sidebar */
+.main-content {
+  margin-left: 240px;
+}
+
+/* ============================================================
+   CONTENT MAIN
+============================================================ */
+.content-main {
+  background: #F3F3F3;
+  padding-top: 20px;
+  padding-bottom: 60px;
+  min-height: calc(100vh - 80px);
+  width: 100%;
+  position: relative;
+}
+
+.main-content,
+.content-main,
+.dashboard-content {
+  padding-right: 3px;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   TABLEAU / BOÎTE BLANCHE
+============================================================ */
+.users-table {
+  margin: 40px;
+  background: #fff;
+  border: 1px solid #00000063;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+/* FORMULAIRE */
+.form-modern {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+    .form-modern {
+        padding: 15px;
+        gap: 16px;
+    }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #043C5C;
+}
+
+.input-modern,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #C8CDD3;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #FFF;
+  box-sizing: border-box;
+}
+
+.input-modern:focus,
+.form-group textarea:focus {
+  border-color: #043C5C;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(4,60,92,.12);
+}
+
+/* UPLOAD IMAGE */
+.file-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-btn {
+  background-color: #007bff;
+  color: white !important;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.file-btn:hover {
+  background-color: #0069d9;
+}
+
+.file-name {
+  font-size: 14px;
+  color: #666;
+}
+
+/* ACTIONS */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-edit {
+  background-color: #043c5c;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-edit:hover {
+  background-color: #065a85;
+}
