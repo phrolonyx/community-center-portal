@@ -90,7 +90,7 @@
 .slide-up,
 .zoom,
 .pop {
-  opacity: 3;
+  opacity: 0;
   transform: translateY(20px);
   transition: 0.9s ease;
 }
