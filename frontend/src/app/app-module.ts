@@ -28,6 +28,11 @@ import { MessagesParent } from './components/parent/messages-parent/messages-par
 import { ProfilParent } from './components/parent/profil-parent/profil-parent';
 import { AdminSidebar } from './components/admin/admin-sidebar/admin-sidebar';
 import { AdminHeader } from './components/admin/admin-header/admin-header';
+import { EnfantsAnimateur } from './components/animateur/enfants-animateur/enfants-animateur';
+import { SceancesAnimateur } from './components/animateur/sceances-animateur/sceances-animateur';
+import { AnimateurSidebar } from './components/animateur/animateur-sidebar/animateur-sidebar';
+import { AnimateurHeader } from './components/animateur/animateur-header/animateur-header';
+import { SceancesDetailsAnimateur } from './components/animateur/sceances-details-animateur/sceances-details-animateur';
 
 @NgModule({
   declarations: [
@@ -55,6 +60,11 @@ import { AdminHeader } from './components/admin/admin-header/admin-header';
     ProfilParent,
     AdminSidebar,
     AdminHeader,
+    EnfantsAnimateur,
+    SceancesAnimateur,
+    AnimateurSidebar,
+    AnimateurHeader,
+    SceancesDetailsAnimateur,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [provideBrowserGlobalErrorListeners(), provideHttpClient()],

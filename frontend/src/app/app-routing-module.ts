@@ -17,6 +17,9 @@ import { ActivitesAdmin } from './components/admin/activites-admin/activites-adm
 import { SceancesAdmin } from './components/admin/sceances-admin/sceances-admin';
 import { FormActiviteAdmin } from './components/admin/form-activite-admin/form-activite-admin';
 import { FormSceanceAdmin } from './components/admin/form-sceance-admin/form-sceance-admin';
+import { EnfantsAnimateur } from './components/animateur/enfants-animateur/enfants-animateur';
+import { SceancesAnimateur } from './components/animateur/sceances-animateur/sceances-animateur';
+import { SceancesDetailsAnimateur } from './components/animateur/sceances-details-animateur/sceances-details-animateur';
 
 
 const routes: Routes = [
@@ -37,7 +40,9 @@ const routes: Routes = [
   { path: 'admin/sceances', component: SceancesAdmin },
   { path: 'admin/form-activite-admin', component: FormActiviteAdmin },
   { path: 'admin/form-sceances-admin', component: FormSceanceAdmin },
-
+  { path: 'animateur/enfants', component: EnfantsAnimateur},
+  { path: 'animateur/sceances', component: SceancesAnimateur},
+  { path: 'animateur/sceances/details', component: SceancesDetailsAnimateur}
 ];
 
 @NgModule({
