@@ -1,1 +1,131 @@
-<p>dashboard-admin works!</p>
+<div class="admin-gestion-des">
+
+  <!-- SIDEBAR -->
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <app-admin-header title="Tableau de bord"></app-admin-header>
+
+    <!-- CONTENU SPÉCIFIQUE DASHBOARD -->
+    <div class="content-main">
+
+      <div class="dashboard-content">
+
+        <!-- CARTES STATISTIQUES -->
+        <div class="stats-grid">
+
+          <!-- TOTAL UTILISATEURS -->
+          <div class="stat-card stat-blue">
+            <div class="stat-overlay">
+              <img src="assets/images/courbe_bleu.png" alt="">
+            </div>
+
+            <!-- Valeur dynamique API -->
+            <!-- Remplacer 0 par {{ totalUsers }} -->
+            <h3>{{ totalUsers }}</h3>
+
+            <p>Total utilisateurs</p>
+          </div>
+
+          <!-- TOTAL PARENTS -->
+          <div class="stat-card stat-green">
+            <div class="stat-overlay">
+              <img src="assets/images/courbe_verte.png" alt="">
+            </div>
+
+            <!-- Valeur dynamique API -->
+            <h3>{{ totalParents }}</h3>
+
+            <p>Parents</p>
+          </div>
+
+          <!-- TOTAL ANIMATEURS -->
+          <div class="stat-card stat-orange">
+            <div class="stat-overlay">
+              <img src="assets/images/courbe_jaune.png" alt="">
+            </div>
+
+            <!-- Valeur dynamique API -->
+            <h3>{{ totalAnimateurs }}</h3>
+
+            <p>Animateurs</p>
+          </div>
+
+          <!-- TOTAL COMPTES DÉSACTIVÉS -->
+          <div class="stat-card stat-red">
+            <div class="stat-overlay">
+              <img src="assets/images/courbe_rouge.png" alt="">
+            </div>
+
+            <!-- Valeur dynamique API -->
+            <h3>{{ totalDisabled }}</h3>
+
+            <p>Comptes désactivés</p>
+          </div>
+
+        </div>
+
+        <!-- NOUVELLES INSCRIPTIONS À APPROUVER -->
+        <section class="pending-users-section">
+          <h2>Nouvelles inscriptions à approuver</h2>
+
+          <table class="pending-users-table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Inscrit le</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <!-- BOUCLE DYNAMIQUE API -->
+              <!-- Remplacer par *ngFor="let user of pendingUsers" -->
+              <tr *ngFor="let user of pendingUsers">
+
+                <!-- Nom complet -->
+                <!-- <td>{{ user.firstName }} {{ user.lastName }}</td> -->
+
+                <!-- Email -->
+                <!-- <td>{{ user.email }}</td> -->
+
+                <!-- Rôle -->
+                <!-- <td>{{ user.role }}</td> -->
+
+                <!-- Date formatée -->
+                <!-- À brancher plus tard avec date pipe : {{ user.createdAt | date:'dd/MM/yyyy' }} -->
+                <!-- <td>{{ user.createdAt | date:'dd/MM/yyyy' }}</td> -->
+
+                <td>
+
+                  <!-- Approuver -->
+                  <!-- À brancher plus tard avec un service API -->
+                  <!-- <button class="approve-btn" (click)="approveUser(user.id)"> -->
+                    Accepter
+                  <!-- </button> -->
+
+                  <!-- Refuser -->
+                  <!-- <button class="reject-btn" (click)="rejectUser(user.id)"> -->
+                    Refuser
+                  <!-- </button> -->
+
+                </td>
+
+              </tr>
+
+            </tbody>
+          </table>
+        </section>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+

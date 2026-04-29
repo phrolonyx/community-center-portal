@@ -1,1 +1,95 @@
-<p>enfants-admin works!</p>
+<div class="admin-gestion-des">
+
+  <!-- SIDEBAR -->
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <app-admin-header title="Gestion des enfants"></app-admin-header>
+
+    <div class="content-main">
+
+      <!-- BARRE DE RECHERCHE -->
+      <form class="content-searchbar" (submit)="searchChildren()">
+
+        <img class="filter" src="assets/images/icons8-filter-96.png" alt="Filtrer" />
+
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Rechercher un enfant..."
+          [(ngModel)]="searchValue"
+          name="search"
+        />
+
+        <button type="submit" class="search-btn">
+          <img class="search" src="assets/images/icons8-search-150.png" alt="Rechercher" />
+        </button>
+
+      </form>
+
+      <!-- TABLEAU ENFANTS -->
+      <section class="users-table">
+        <table class="users-table-grid">
+          <thead>
+            <tr>
+              <th>Nom complet</th>
+              <th>Parent(s)</th>
+              <th>Date de naissance</th>
+              <th>Âge</th>
+              <th>Conditions médicales</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <!-- BOUCLE DYNAMIQUE API -->
+            <!-- Remplacer par *ngFor="let child of children" -->
+            <tr *ngFor="let child of children">
+
+              <!-- Nom complet -->
+              <!-- <td>{{ child.fullName }}</td> -->
+
+              <!-- Parents -->
+              <td>
+                <!-- Liste dynamique API -->
+                <!-- <span *ngFor="let link of child.parentLinks" style="display:block;">
+                  {{ link.parentName }}
+                </span> -->
+              </td>
+
+              <!-- Date de naissance -->
+              <!-- <td>{{ child.dateOfBirth | date:'dd/MM/yyyy' }}</td> -->
+
+              <!-- Âge -->
+              <!-- <td>{{ child.age }}</td> -->
+
+              <!-- Conditions médicales -->
+              <td>
+                <!-- <span *ngIf="child.medicalConditions.length === 0">Aucune</span> -->
+
+                <!-- <span *ngFor="let cond of child.medicalConditions" style="display:block;">
+                  {{ cond }}
+                </span> -->
+              </td>
+
+              <!-- Actions -->
+              <td>
+                <!-- <button class="btn-delete" (click)="deleteChild(child.id)">
+                  Supprimer
+                </button> -->
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+  </main>
+</div>
+

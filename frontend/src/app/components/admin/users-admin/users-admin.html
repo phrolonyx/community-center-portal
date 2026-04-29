@@ -1,1 +1,192 @@
-<p>users-admin works!</p>
+<div class="admin-gestion-des">
+
+  <!-- SIDEBAR -->
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <app-admin-header title="Gestion des utilisateurs"></app-admin-header>
+
+    <div class="content-main">
+
+      <!-- FORMULAIRE DE RECHERCHE -->
+      <form class="content-searchbar" (submit)="searchUsers()">
+
+        <img class="filter" src="assets/images/icons8-filter-96.png" alt="Filtrer" />
+
+        <!-- Valeur dynamique API -->
+        <!-- Remplacer searchValue par la valeur du formulaire -->
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Rechercher un utilisateur..."
+          [(ngModel)]="searchValue"
+          name="search"
+        />
+
+        <button type="submit" class="search-btn">
+          <img class="search" src="assets/images/icons8-search-150.png" alt="Rechercher" />
+        </button>
+
+      </form>
+
+      <!-- TABLEAU UTILISATEURS -->
+      <section class="users-table">
+        <table class="users-table-grid">
+          <thead>
+            <tr>
+              <th>Prénom</th>
+              <th>Nom</th>
+              <th>Rôle</th>
+              <th>Email</th>
+              <th>Actif</th>
+              <th>Dernière connexion</th>
+              <th>Création</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <!-- BOUCLE DYNAMIQUE API -->
+            <!-- Remplacer par *ngFor="let user of users" -->
+            <tr *ngFor="let user of users">
+
+              <!-- <td>{{ user.firstName }}</td>
+              <td>{{ user.lastName }}</td>
+              <td>{{ user.role }}</td>
+              <td>{{ user.email }}</td> -->
+
+              <!-- Actif / Inactif -->
+              <!-- <td>{{ user.enabled ? 'oui' : 'non' }}</td> -->
+
+              <!-- Dernière connexion -->
+              <!-- <td>{{ user.lastLogin ? (user.lastLogin | date:'dd/MM/yyyy') : '-' }}</td> -->
+
+              <!-- Création -->
+              <!-- <td>{{ user.createdAt | date:'dd/MM/yyyy' }}</td> -->
+
+              <td>
+
+                <!-- ADMIN : bouton désactivé -->
+                <!-- <button
+                  class="btn-deactivate disabled-btn-admin"
+                  *ngIf="user.role === 'ADMIN'"
+                  disabled>
+                  Désactiver
+                </button> -->
+
+                <!-- Utilisateur actif -->
+                <!-- <button
+                  class="btn-deactivate reject-btn"
+                  *ngIf="user.enabled && user.role !== 'ADMIN'"
+                  (click)="disableUser(user.id)">
+                  Désactiver
+                </button> -->
+
+                <!-- Utilisateur inactif -->
+                <!-- <button
+                  class="btn-activate"
+                  *ngIf="!user.enabled"
+                  (click)="enableUser(user.id)">
+                  Activer
+                </button> -->
+
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+
+    <!-- BOUTON MESSAGE -->
+    <div style="padding: 0 24px 24px;">
+      <button
+        (click)="openMessageModal()"
+        style="background:#043C5C; color:#FFF; border:none; padding:12px 24px; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer;">
+        Envoyer un message
+      </button>
+    </div>
+
+    <!-- ALERTE SUCCÈS -->
+    <!-- À brancher plus tard avec un flag Angular -->
+    <div *ngIf="messageSent"
+         style="margin:0 24px 16px; background:#D1FAE5; color:#065F46; border:1px solid #A7F3D0; border-radius:8px; padding:12px 18px; font-size:14px; font-weight:600;">
+      Message envoyé avec succès !
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL MESSAGE -->
+<div *ngIf="modalOpen"
+     style="position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:300; display:flex; justify-content:center; align-items:flex-start; padding:80px 20px;">
+
+  <div style="background:#FFF; border-radius:14px; padding:28px; width:100%; max-width:500px;">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h2 style="margin:0; font-size:20px; font-weight:800; color:#043C5C;">Nouveau message</h2>
+
+      <button (click)="closeMessageModal()"
+              style="width:34px; height:34px; background:none; border:2px solid #C8CDD3; border-radius:50%; font-size:18px; color:#6B7280; cursor:pointer;">
+        X
+      </button>
+    </div>
+
+    <!-- FORMULAIRE MESSAGE -->
+    <!-- À brancher plus tard avec un service API -->
+    <form (submit)="sendMessage()">
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Destinataire</label>
+
+        <select [(ngModel)]="messageRecipient" name="recipientId"
+                style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px;">
+          <option value="">Tous les parents</option>
+
+          <!-- Liste dynamique API -->
+          <!-- <option *ngFor="let user of users" [value]="user.id" *ngIf="user.role === 'PARENT'">
+            {{ user.firstName }} {{ user.lastName }}
+          </option> -->
+        </select>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Type</label>
+
+        <select [(ngModel)]="messageType" name="type"
+                style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px;">
+          <option value="ANNONCE">Annonce</option>
+          <option value="RAPPEL">Rappel</option>
+          <option value="ANNULATION">Annulation</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Sujet</label>
+        <input type="text" [(ngModel)]="messageSubject" name="subject" required
+               placeholder="Ex: Annulation du cours de danse"
+               style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px;">
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Message</label>
+        <textarea rows="4" [(ngModel)]="messageContent" name="content" required
+                  placeholder="Écrivez votre message ici..."
+                  style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px; resize:vertical;"></textarea>
+      </div>
+
+      <button type="submit"
+              style="background:#E8BB08; color:#043C5C; border:none; padding:12px 24px; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; width:100%;">
+        Envoyer
+      </button>
+
+    </form>
+  </div>
+</div>
+

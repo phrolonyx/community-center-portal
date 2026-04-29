@@ -12,6 +12,12 @@ import { ActivitesParent } from './components/parent/activites-parent/activites-
 import { EnfantsParent } from './components/parent/enfants-parent/enfants-parent';
 import { MessagesParent } from './components/parent/messages-parent/messages-parent';
 import { ProfilParent } from './components/parent/profil-parent/profil-parent';
+import { EnfantsAdmin } from './components/admin/enfants-admin/enfants-admin';
+import { ActivitesAdmin } from './components/admin/activites-admin/activites-admin';
+import { SceancesAdmin } from './components/admin/sceances-admin/sceances-admin';
+import { FormActiviteAdmin } from './components/admin/form-activite-admin/form-activite-admin';
+import { FormSceanceAdmin } from './components/admin/form-sceance-admin/form-sceance-admin';
+
 
 const routes: Routes = [
   { path: '', component: Accueil },
@@ -24,8 +30,14 @@ const routes: Routes = [
   { path: 'dashboard-parent/inscriptions', component: InscriptionParent },
   { path: 'dashboard-parent/messages', component: MessagesParent },
   { path: 'dashboard-parent/profil', component: ProfilParent },
-  { path: 'admin', component: DashboardAdmin },
   { path: 'admin/users', component: UsersAdmin },
+  { path: 'admin/dashboard', component: DashboardAdmin },
+  { path: 'admin/enfants', component: EnfantsAdmin },
+  { path: 'admin/activites', component: ActivitesAdmin },
+  { path: 'admin/sceances', component: SceancesAdmin },
+  { path: 'admin/form-activite-admin', component: FormActiviteAdmin },
+  { path: 'admin/form-sceances-admin', component: FormSceanceAdmin },
+
 ];
 
 @NgModule({

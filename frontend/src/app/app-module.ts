@@ -26,6 +26,8 @@ import { ActivitesParent } from './components/parent/activites-parent/activites-
 import { EnfantsParent } from './components/parent/enfants-parent/enfants-parent';
 import { MessagesParent } from './components/parent/messages-parent/messages-parent';
 import { ProfilParent } from './components/parent/profil-parent/profil-parent';
+import { AdminSidebar } from './components/admin/admin-sidebar/admin-sidebar';
+import { AdminHeader } from './components/admin/admin-header/admin-header';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { ProfilParent } from './components/parent/profil-parent/profil-parent';
     EnfantsParent,
     MessagesParent,
     ProfilParent,
+    AdminSidebar,
+    AdminHeader,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [provideBrowserGlobalErrorListeners(), provideHttpClient()],
