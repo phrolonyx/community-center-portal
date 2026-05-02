@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /*
@@ -125,7 +126,6 @@ public class UserService {
         );
         user.setPending(true);
         emailService.envoyerBienvenue(dto.getEmail(), dto.getPrenom());
-
         return userRepository.save(user);
     }
 
