@@ -1,4 +1,4 @@
-package com.manara.backend.controller.REST;
+package com.manara.backend.controller.rest;
 
 import com.manara.backend.dto.ActivityRegistrationResponseDto;
 import com.manara.backend.dto.RegistrationRequest;
