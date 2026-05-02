@@ -17,7 +17,7 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+@Controller("adminMvcController")
 @RequestMapping("/mvc")
 public class AdminController {
 
