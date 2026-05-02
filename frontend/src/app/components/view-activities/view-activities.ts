@@ -1,11 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-
-interface Activite {
-  id: number;
-  name: string;
-  description: string | null;
-  activityImagePath: string | null;
-}
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { Activity } from '../../models/activity.model';
+import {ActivityService} from '../../apiServices/activity-service';
 
 // Composant Angular dynamique - transformation depuis vue Thymeleaf
 @Component({
@@ -15,17 +10,21 @@ interface Activite {
   styleUrl: './view-activities.css',
 })
 export class ViewActivities implements OnInit {
-  activites: Activite[] = [];
+  activites: Activity[] = [];
   recherche = '';
   aucunResultat = false;
 
+  constructor(private activityService: ActivityService, private cd: ChangeDetectorRef) { }
+
   ngOnInit(): void {
-    // Communication avec Spring Boot via API REST (à brancher)
-    this.activites = [
-      { id: 1, name: 'Soccer Junior', description: 'Initiation au soccer pour 6-12 ans.', activityImagePath: null },
-      { id: 2, name: 'Cours de musique', description: 'Découverte des instruments.', activityImagePath: null },
-      { id: 3, name: 'Atelier peinture', description: 'Exprimer sa créativité.', activityImagePath: null },
-    ];
+    this.getActivities();
+  }
+
+  getActivities() {
+    this.activityService.getActivities().subscribe(data => {
+      this.activites = data;
+      this.cd.detectChanges();
+    })
   }
 
   filtrer(): void {
@@ -34,13 +33,15 @@ export class ViewActivities implements OnInit {
     this.aucunResultat = visibles === 0 && this.activites.length > 0;
   }
 
-  correspond(a: Activite): boolean {
-    return a.name.toLowerCase().includes(this.recherche.toLowerCase());
+  correspond(a: Activity): boolean {
+    if (!this.recherche || this.recherche.trim() === '') return true;
+    return a.name.toLowerCase().includes(this.recherche.toLowerCase().trim());
   }
 
-  getImage(a: Activite): string {
+
+  getImage(a: Activity): string {
     return a.activityImagePath
-      ? 'http://localhost:8080' + a.activityImagePath
+      ? 'http://localhost:8080/api' + a.activityImagePath
       : 'assets/images/default-activity.jpg';
   }
 }

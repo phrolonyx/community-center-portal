@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .toUri()
                 .toString();
 
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations(baseLocation);
+        registry.addResourceHandler("/uploads/**", "/images/**")
+                .addResourceLocations(baseLocation, "classpath:/static/images/");
     }
 }
