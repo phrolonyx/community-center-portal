@@ -53,7 +53,7 @@ public class SecurityConfig {
                         // Routes publiques
                         .requestMatchers("/auth/login", "/auth/register",
                                 "/auth/check-email", "/activities/**",
-                                "/uploads/**").permitAll()
+                                "/uploads/**", "/images/**").permitAll()
                         // Routes admin
                         .requestMatchers("/admin/**", "/users/**",
                                 "/sessions/**").hasAuthority("ADMIN")
@@ -126,7 +126,7 @@ public class SecurityConfig {
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
     // Exposer le AuthenticationManager pour l'utiliser dans le controller REST
