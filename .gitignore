@@ -46,3 +46,13 @@ docker-compose.yml
 
 # Keep wrapper configs but ignore the binaries if preferred
 .mvn/wrapper/maven-wrapper.jar
+
+# --- Editeurs / outils locaux ---
+.claude/
+.claude-memory.md
+.claude-*
+CLAUDE.md
+.cursor/
+.aider*
+.copilot/
+
