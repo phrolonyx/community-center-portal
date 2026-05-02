@@ -1,4 +1,4 @@
-package com.manara.backend.controller;
+package com.manara.backend.controller.mvc;
 
 import com.manara.backend.dto.RegisterRequest;
 import com.manara.backend.model.User;

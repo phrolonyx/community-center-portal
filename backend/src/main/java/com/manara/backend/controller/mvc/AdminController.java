@@ -1,12 +1,10 @@
-package com.manara.backend.controller;
+package com.manara.backend.controller.mvc;
 
 import com.manara.backend.model.Activity;
 import com.manara.backend.model.ActivitySession;
 import com.manara.backend.model.Child;
 import com.manara.backend.model.User;
 import com.manara.backend.model.security.CustomUserDetails;
-import com.manara.backend.repository.ActivityRepository;
-import com.manara.backend.repository.ChildRepository;
 import com.manara.backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/MVC")
+@RequestMapping("/mvc")
 public class AdminController {
 
     @Autowired
