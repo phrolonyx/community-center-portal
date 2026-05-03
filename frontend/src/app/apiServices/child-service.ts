@@ -27,7 +27,7 @@ export class ChildService {
 
   // Récupérer tous les enfants (admin seulement)
   getAllChildren(): Observable<Child[]> {
-    return this.http.get<Child[]>(`${this.apiUrl}/all`, { withCredentials: true });
+    return this.http.get<Child[]>(`${this.apiUrl}`, { withCredentials: true });
   }
 
   // Créer un nouvel enfant

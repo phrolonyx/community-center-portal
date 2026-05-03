@@ -14,6 +14,8 @@ export interface ActivitySession {
   locationName: string;
   hostId: number;
   hostFullName: string;
+  minAge: number;
+  maxAge: number;
 }
 
 @Injectable({
