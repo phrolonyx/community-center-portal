@@ -26,8 +26,9 @@
          src="assets/images/icons8-admin-settings-male-64.png"
          alt="Admin"
          (click)="toggleLogout()" />
-
-    <span class="text-wrapper-6">{{ adminName }}</span>
+    <span class="text-wrapper-6">
+      {{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}
+    </span>
   </div>
 
   <div id="logout-popup" class="logout-popup" [style.display]="logoutOpen ? 'block' : 'none'">

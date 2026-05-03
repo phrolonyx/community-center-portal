@@ -1,8 +1,8 @@
-import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { NgModule, provideBrowserGlobalErrorListeners, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideHttpClient } from '@angular/common/http';
-
+ 
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { Accueil } from './components/accueil/accueil';
@@ -33,7 +33,17 @@ import { SceancesAnimateur } from './components/animateur/sceances-animateur/sce
 import { AnimateurSidebar } from './components/animateur/animateur-sidebar/animateur-sidebar';
 import { AnimateurHeader } from './components/animateur/animateur-header/animateur-header';
 import { SceancesDetailsAnimateur } from './components/animateur/sceances-details-animateur/sceances-details-animateur';
-
+import { AuthService } from './apiServices/auth.service';
+import { catchError, of } from 'rxjs';
+ 
+// Fonction exécutée avant le démarrage du routing — attend que me() soit résolu
+function initAuth(authService: AuthService) {
+  return () => authService.me().pipe(
+    // Ignorer l'erreur 401 (pas de session) — l'app démarre quand même
+    catchError(() => of(null))
+  );
+}
+ 
 @NgModule({
   declarations: [
     App,
@@ -66,8 +76,24 @@ import { SceancesDetailsAnimateur } from './components/animateur/sceances-detail
     AnimateurHeader,
     SceancesDetailsAnimateur,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule],
-  providers: [provideBrowserGlobalErrorListeners(), provideHttpClient()],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideHttpClient(),
+    {
+      // APP_INITIALIZER bloque le démarrage du routing jusqu'à ce que me() soit résolu.
+      // Ainsi les guards ont toujours accès à currentUser au moment de la navigation.
+      provide: APP_INITIALIZER,
+      useFactory: initAuth,
+      deps: [AuthService],
+      multi: true
+    }
+  ],
   bootstrap: [App],
 })
 export class AppModule {}

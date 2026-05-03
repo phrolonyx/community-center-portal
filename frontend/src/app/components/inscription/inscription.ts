@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { Router } from '@angular/router';
+import { AuthService } from '../../apiServices/auth.service';
+ 
 interface Formulaire {
   prenom: string;
   nom: string;
@@ -17,8 +18,7 @@ interface Formulaire {
   urgenceRelation: string;
   urgenceTel: string;
 }
-
-// Composant Angular dynamique
+ 
 @Component({
   selector: 'app-inscription',
   standalone: false,
@@ -35,32 +35,30 @@ export class Inscription {
   showConfirm = false;
   serverError = '';
   clientError = false;
-
-  constructor(private router: Router, private route: ActivatedRoute) {
-    this.route.queryParams.subscribe(params => {
-      if (params['erreur']) {
-        this.serverError = params['erreur'];
-      }
-    });
-  }
-
+  isLoading = false;
+ 
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
+ 
   toggleMdp(champ: string) {
     if (champ === 'mdp') this.showMdp = !this.showMdp;
     else this.showConfirm = !this.showConfirm;
   }
-
+ 
   emailOk(v: string) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
   }
-
+ 
   telOk(v: string) {
     return /^\d{3}-\d{3}-\d{4}$/.test(v.trim());
   }
-
+ 
   postalOk(v: string) {
     return /^[A-Za-z]\d[A-Za-z][\s-]?\d[A-Za-z]\d$/.test(v.trim());
   }
-
+ 
   formulaireValide() {
     return this.form.prenom.trim().length >= 2
       && this.form.nom.trim().length >= 2
@@ -74,13 +72,46 @@ export class Inscription {
       && this.postalOk(this.form.codePostal)
       && this.form.role.length > 0;
   }
-
-  // Communication avec Spring Boot via API REST
+ 
   onSubmit() {
     if (!this.formulaireValide()) {
       this.clientError = true;
       return;
     }
-    this.router.navigate(['/connexion'], { queryParams: { inscrit: '1' } });
+ 
+    this.clientError = false;
+    this.serverError = '';
+    this.isLoading = true;
+ 
+    // Payload aligné exactement sur les champs de RegisterRequest.java
+    const payload = {
+      prenom: this.form.prenom.trim(),
+      nom: this.form.nom.trim(),
+      email: this.form.email.trim(),
+      password: this.form.mdp,
+      confirmPassword: this.form.confirm,
+      telephone: this.form.tel.trim(),
+      adresse: this.form.adresse.trim(),
+      ville: this.form.ville.trim(),
+      province: this.form.province.trim(),
+      postalCode: this.form.codePostal.trim(),
+      role: this.form.role,
+      urgenceNom: this.form.urgenceNom.trim() || null,
+      urgenceRelation: this.form.urgenceRelation.trim() || null,
+      urgenceTel: this.form.urgenceTel.trim() || null,
+    };
+ 
+    this.authService.register(payload).subscribe({
+      next: () => {
+        // Inscription réussie — rediriger vers connexion avec message de confirmation
+        this.isLoading = false;
+        this.router.navigate(['/connexion'], { queryParams: { inscrit: '1' } });
+      },
+      error: (err) => {
+        // Afficher le message d'erreur retourné par le backend
+        this.isLoading = false;
+        this.serverError = err?.error?.message || 'Une erreur est survenue. Veuillez réessayer.';
+      }
+    });
   }
 }
