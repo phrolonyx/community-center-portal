@@ -1,55 +1,57 @@
 <app-header></app-header>
 
 <main class="dashboard-main">
-    <div class="activites-header">
-        <h1 class="activites-title">Nos Activités</h1>
-        <p class="activites-subtitle">Explorez et inscrivez vos enfants aux activités du Centre Manara</p>
-    </div>
+  <div class="activites-header">
+    <h1 class="activites-title">Nos Activités</h1>
+    <p class="activites-subtitle">Explorez et inscrivez vos enfants aux activités du Centre Manara</p>
+  </div>
 
-    <div class="search-bar">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input type="text" id="searchInput" placeholder="Rechercher une activité..." [(ngModel)]="recherche" (keyup)="filtrer()">
-    </div>
+  <div class="search-bar">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text"
+           placeholder="Rechercher une activité..."
+           [value]="recherche()"
+           (input)="onRecherche($any($event.target).value)">
+  </div>
 
-    <div class="activites-grid">
-      <div *ngIf="activites.length === 0" style="grid-column:1/-1">
-            <p style="text-align:center;color:#666;padding:2rem;">Aucune activité disponible pour le moment.</p>
+  <div class="activites-grid">
+
+    @if (activites().length === 0) {
+      <p style="grid-column:1/-1;text-align:center;color:#666;padding:2rem;">
+        Aucune activité disponible pour le moment.
+      </p>
+    }
+
+    @for (a of activitesFiltrees(); track a.id) {
+      <div class="activite-card">
+        <div class="card-image">
+          <img [src]="getImage(a)" [alt]="a.name">
         </div>
-
-        <div *ngFor="let a of activites"
-             [hidden]="!correspond(a)"
-             class="activite-card"
-             [attr.data-name]="a.name.toLowerCase()"
-             [attr.data-id]="a.id">
-            <div class="card-image">
-                <img [src]="getImage(a)" [alt]="a.name">
-            </div>
-            <div class="card-body">
-                <div class="card-top">
-                    <h3 class="card-name">{{ a.name }}</h3>
-                </div>
-                <p class="card-desc">{{ a.description || 'Aucune description disponible.' }}</p>
-                <div class="card-footer">
-                    <a routerLink="/inscription"
-                       class="btn-inscrire-guest"
-                       [attr.data-activity-id]="a.id"
-                       [attr.data-activity-name]="a.name">
-                        Créer un compte
-                    </a>
-                    <a routerLink="/connexion"
-                       class="btn-connexion-guest"
-                       [attr.data-activity-id]="a.id"
-                       [attr.data-activity-name]="a.name">
-                        Me connecter
-                    </a>
-                </div>
-            </div>
+        <div class="card-body">
+          <div class="card-top">
+            <h3 class="card-name">{{ a.name }}</h3>
+          </div>
+          <p class="card-desc">{{ a.description || 'Aucune description disponible.' }}</p>
+          <div class="card-footer">
+            <a routerLink="/inscription" class="btn-inscrire-guest">
+              Créer un compte
+            </a>
+            <a routerLink="/connexion" class="btn-connexion-guest">
+              Me connecter
+            </a>
+          </div>
         </div>
-    </div>
+      </div>
+    }
 
-    <div class="no-results" *ngIf="aucunResultat" style="display:block">Aucune activité trouvée.</div>
+  </div>
+
+  @if (aucunResultat()) {
+    <div class="no-results" style="display:block">Aucune activité trouvée.</div>
+  }
+
 </main>
 
 <app-footer></app-footer>

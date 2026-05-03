@@ -1,47 +1,55 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { Component, OnInit, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { Activity } from '../../models/activity.model';
-import {ActivityService} from '../../apiServices/activity-service';
+import { ActivityService } from '../../apiServices/activity-service';
+import { environment } from '../../../environments/environment';
 
-// Composant Angular dynamique - transformation depuis vue Thymeleaf
 @Component({
   selector: 'app-view-activities',
   standalone: false,
   templateUrl: './view-activities.html',
   styleUrl: './view-activities.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ViewActivities implements OnInit {
-  activites: Activity[] = [];
-  recherche = '';
-  aucunResultat = false;
 
-  constructor(private activityService: ActivityService, private cd: ChangeDetectorRef) { }
+  // Signal pour la liste complète des activités
+  activites = signal<Activity[]>([]);
+
+  // Signal pour le filtre de recherche
+  recherche = signal('');
+
+  // Activités filtrées calculées automatiquement depuis les deux signals
+  activitesFiltrees = computed(() => {
+    const q = this.recherche().toLowerCase().trim();
+    if (!q) return this.activites();
+    return this.activites().filter(a => a.name.toLowerCase().includes(q));
+  });
+
+  // Vrai si une recherche est active mais aucun résultat trouvé
+  aucunResultat = computed(() =>
+    this.recherche().trim().length > 0 &&
+    this.activitesFiltrees().length === 0
+  );
+
+  constructor(private activityService: ActivityService) {}
 
   ngOnInit(): void {
-    this.getActivities();
+    // Charger toutes les activités publiques au démarrage
+    this.activityService.getActivities().subscribe({
+      next: data => this.activites.set(data),
+      error: () => this.activites.set([])
+    });
   }
 
-  getActivities() {
-    this.activityService.getActivities().subscribe(data => {
-      this.activites = data;
-      this.cd.detectChanges();
-    })
+  // Mise à jour du signal de recherche depuis le template
+  onRecherche(valeur: string): void {
+    this.recherche.set(valeur);
   }
 
-  filtrer(): void {
-    const q = this.recherche.toLowerCase();
-    const visibles = this.activites.filter(a => a.name.toLowerCase().includes(q)).length;
-    this.aucunResultat = visibles === 0 && this.activites.length > 0;
-  }
-
-  correspond(a: Activity): boolean {
-    if (!this.recherche || this.recherche.trim() === '') return true;
-    return a.name.toLowerCase().includes(this.recherche.toLowerCase().trim());
-  }
-
-
+  // Construire l'URL de l'image via le proxy au lieu de localhost en dur
   getImage(a: Activity): string {
     return a.activityImagePath
-      ? 'http://localhost:8080/api' + a.activityImagePath
+      ? `${environment.apiUrl}${a.activityImagePath}`
       : 'assets/images/default-activity.jpg';
   }
 }
