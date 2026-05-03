@@ -1,1 +1,83 @@
-<p>form-activite-admin works!</p>
+<div class="admin-gestion-des">
+
+  <!-- SIDEBAR -->
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <app-admin-header [title]="formTitle"></app-admin-header>
+
+    <div class="content-main">
+
+      <!-- BOÎTE BLANCHE -->
+      <section class="users-table">
+
+        <form
+          class="admin-form form-modern"
+          (submit)="saveActivity()"
+          enctype="multipart/form-data">
+
+          <!-- ID (si édition) -->
+          <!-- À remplir automatiquement via API -->
+          <input type="hidden" [(ngModel)]="activity.id" name="id" />
+
+          <!-- NOM -->
+          <div class="form-group">
+            <label>Nom de l'activité</label>
+            <input
+              type="text"
+              class="input-modern"
+              required
+              [(ngModel)]="activity.name"
+              name="name"
+            />
+          </div>
+
+          <!-- DESCRIPTION -->
+          <div class="form-group">
+            <label>Description</label>
+            <textarea
+              class="input-modern"
+              rows="4"
+              [(ngModel)]="activity.description"
+              name="description">
+            </textarea>
+          </div>
+
+          <!-- IMAGE UPLOAD -->
+          <div class="form-group">
+            <label>Image de l'activité</label>
+
+            <div class="file-upload-wrapper">
+              <input
+                type="file"
+                id="imageFile"
+                class="file-input"
+                accept="image/*"
+                (change)="onFileSelected($event)"
+              />
+
+              <label for="imageFile" class="file-btn">Choisir une image</label>
+
+              <!-- Nom du fichier -->
+              <span class="file-name">
+                {{ selectedFileName || 'Aucun fichier choisi' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- BOUTONS -->
+          <div class="form-actions">
+            <a routerLink="/admin/activites" class="btn-edit">Annuler</a>
+            <button type="submit" class="btn-edit">Enregistrer</button>
+          </div>
+
+        </form>
+
+      </section>
+
+    </div>
+  </main>
+</div>

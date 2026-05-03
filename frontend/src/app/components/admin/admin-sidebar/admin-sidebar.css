@@ -1,0 +1,121 @@
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar-container {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background: #043c5c;
+}
+
+.text-wrapper {
+  position: absolute;
+  top: 5px;
+  left: 15px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.nav-menu {
+  margin-top: 110px;
+  padding-left: 0;
+}
+
+.nav-menu li {
+  list-style: none;
+}
+
+.sidebar-users,
+.sidebar-activities,
+.sidebar-location,
+.sidebar-children,
+.sidebar-sessions {
+  width: 240px;
+  height: 45px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-users a,
+.sidebar-activities a,
+.sidebar-location a,
+.sidebar-children a,
+.sidebar-sessions a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding-left: 20px;
+  line-height: 45px;
+  color: #000;
+  font-weight: 700;
+}
+
+.nav-menu a:hover {
+  background: #F3F3F3;
+}
+
+/* Footer admin */
+.settings-footer {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings {
+  width: 24px;
+  height: 24px;
+}
+
+.text-wrapper-6 {
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+}
+
+/* ============================================================
+   POPUP DECONNEXION
+============================================================ */
+.logout-popup {
+  position: absolute;
+  bottom: 45px;
+  left: 10px;
+
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+
+  display: none;
+  z-index: 9999;
+  width: auto;
+  box-shadow: none;
+}
+
+.logout-btn {
+  width: 130px;
+  background: #D9534F;
+  color: white;
+  border: none;
+  padding: 8px 0;
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.logout-btn:hover {
+  background: #c64541;
+}
+
+#admin-icon {
+  cursor: pointer;
+}

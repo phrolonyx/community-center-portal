@@ -1,0 +1,126 @@
+.main-content {
+  margin-left: 240px;
+  padding: 0;
+}
+
+.main-content,
+.content-main {
+  padding-right: 3px;
+  box-sizing: border-box;
+}
+
+/* FORMULAIRE READONLY MODERNE */
+.form-modern {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 colonnes */
+  gap: 20px 40px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #00000063;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+  border-radius: 8px;
+}
+
+.content-main {
+  background: #FFF8E1;
+}
+
+/* Groupe label + valeur */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Label */
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+  font-size: 15px;
+}
+
+/* Valeur affichée (readonly) */
+.form-value {
+  background: #F3F3F3;
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #000;
+  user-select: text;
+}
+
+/* Responsive : 1 colonne sur mobile */
+@media (max-width: 900px) {
+  .form-modern {
+    grid-template-columns: 1fr;
+  }
+
+  .details-container {
+    flex-direction: column;
+  }
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* --- CONTAINER GLOBAL --- */
+.details-container {
+  width: 100%;
+  padding: 20px 40px;
+  box-sizing: border-box;
+  background-color: #FFF8E1;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  gap: 2.5rem;          /* un peu plus d’espace entre les colonnes */
+  align-items: flex-start;
+}
+
+/* Left column takes more space */
+.left-column {
+ flex: 1;
+}
+
+/* Right column takes less space */
+.right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cartes génériques */
+.details-card {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #00000063;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  padding: 16px 18px;   /* espace interne pour le tableau */
+  box-sizing: border-box;
+}
+
+.details-container {
+  display: flex;   /* centre horizontalement */
+  width: 100%;
+}
+
+.left-column {
+  max-width: 600px;          /* largeur max pour rester responsive */
+  width: 100%;
+}
+
+.details-card label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.info-row {
+  margin-bottom: 14px;
+}

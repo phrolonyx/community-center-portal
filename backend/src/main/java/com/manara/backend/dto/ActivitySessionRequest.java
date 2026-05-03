@@ -4,6 +4,7 @@ import com.manara.backend.model.Activity;
 import com.manara.backend.model.ActivitySession;
 import com.manara.backend.model.Location;
 import com.manara.backend.model.User;
+import com.manara.backend.validation.ValidAgeActivitySession;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@ValidAgeActivitySession
 public class ActivitySessionRequest {
 
     @NotNull
@@ -34,9 +36,11 @@ public class ActivitySessionRequest {
     private LocalDateTime dateTimeEnd;
 
     @Positive
+    @NotNull
     private Integer minAge;
 
     @Positive
+    @NotNull
     private Integer maxAge;
 
     public ActivitySession toActivitySession(){

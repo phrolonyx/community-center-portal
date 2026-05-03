@@ -1,73 +1,371 @@
+/* ---------------- HERO ---------------- */
 
-/*-------------------Accueil css--------------------------------*/
-
-/* HERO */
 .hero {
-    position: relative;
-    height: 330px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 
-/* VIDÉO */
+.hero {
+  padding-top: 125px; /* hauteur du header */
+}
+
+/* Vidéo */
 .hero-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.75) saturate(0.9);
-    z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.75) saturate(0.9);
+  z-index: 1;
 }
 
-/* CONTENU */
+/* Contenu */
 .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: var(--max-width);
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    padding: 0 40px;
+  position: relative;
+  z-index: 2;
+  max-width: var(--max-width);
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 40px;
 }
 
-/* BOÎTE BLEUE */
+/* Overlay bleu */
 .hero-overlay {
-    background: rgba(28, 62, 98, 0.70);
-    padding: 2.5rem 3rem;
-    border-radius: var(--radius-lg);
-    color: white;
-    width: 550px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+  background: rgba(28, 62, 98, 0.70);
+  padding: 2rem 3rem;
+  border-radius: var(--radius-lg);
+  color: white;
+  width: 550px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-/* TITRES DU HERO */
+
+/* TITRES DU HERO*/
 .hero-overlay h2 {
-    margin: 0;
-    font-size: 2.2rem;
-    line-height: 1.3;
+  margin: 0;
+  font-size: 2.2rem;
+  line-height: 1.3;
 }
 
 .hero-overlay h6 {
-    margin: 0;
-    font-weight: 400;
-    line-height: 1.45;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.45;
 }
 
 /* NOTE */
 .hero-note {
-    font-size: 1rem;
-    opacity: 0.95;
+  font-size: 1rem;
+  opacity: 0.95;
 }
 
-/* Ajustement hauteur hero */
-.hero {
-    height: 380px;
+/* TEXTE HERO */
+.hero-text {
+    color: white;
+    font-size: 26px;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+    line-height: 1.4;
+} 
+
+.hero-buttons {
+  display: flex;
+  gap: 10px; /* espace entre les deux boutons */
+}
+
+/* ---------------- ANIMATIONS (UNIQUEMENT ACCUEIL) ---------------- */
+
+.fade,
+.slide-up,
+.zoom,
+.pop {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.9s ease;
+}
+
+.zoom {
+  transform: scale(1.03);
+}
+
+.pop {
+  transform: scale(0.96);
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ---------------- MISSION ---------------- */
+
+.mission {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+}
+
+.mission-box {
+  background: #ffffff;
+  padding: 30px 35px;
+  border-radius: 20px;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+  max-width: 520px;
+  position: relative;
+  top: 2px;
+}
+
+.mission-box h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.mission-box p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.mission-img {
+  border-radius: 200px;
+  animation: floatUpDown 3s ease-in-out infinite;
+}
+
+.mission-text p {
+    color: var(--text-muted);
+}
+
+.mission-visual .card {
+    height: 220px;
+    border-radius: var(--radius-lg);
+    background: #fff;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* TAILLE MAX DES ILLUSTRATIONS */
+.hero-img,
+.mission-img,
+.how-img {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+
+/* Animation flottante */
+@keyframes floatUpDown {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+/* ---------------- PROGRAMMES ---------------- */
+
+.programs {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.program-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.program-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-light);
+  padding: 20px;
+  text-align: left;
+  transition: var(--transition);
+}
+
+.program-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-soft);
+}
+
+/* .program-img {
+  height: 140px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #ffe6b3, #cfe4ff);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #555;
+} */
+
+/* Images des programmes : ne pas forcer width:100% */
+.program-img {
+  width: 160px;          /* taille naturelle */
+  height: 180px;
+  /* border-radius: var(--radius-md); */
+  object-fit: cover;     /* évite l’écrasement */
+  margin-bottom: 16px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---------------- HOW IT WORKS ---------------- */
+
+.how-it-works {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.steps {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.step {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-light);
+  text-align: left;
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* ---------------- CTA ---------------- */
+
+.cta {
+  padding-bottom: 100px;
+}
+
+.cta-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  background: linear-gradient(135deg, #ffe6b3, #ffd1f2);
+  border-radius: var(--radius-lg);
+  padding: 40px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+}
+
+.cta-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media (max-width: 900px) {
+    .hero-content,
+  .mission {
+    grid-template-columns: 1fr;
+  }
+
+    .hero-visual {
+        order: -1;
+    }
+
+  .program-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .program-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* BOUTONS */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #000;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-light);
+}
+
+.btn-secondary {
+    background: #fff;
+    color: var(--text-main);
+    border: 1px solid #eee;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-light);
+}
+
+.btn-outline2 {
+    background: transparent;
+    border: 1px solid #000;
+    color: #000;
+}
+
+.btn-outline2:hover {
+    background: #000;
+    color: #fff;
 }
 
 /* BOUTON JAUNE */
@@ -82,90 +380,14 @@
     cursor: pointer;
 }
 
-/* TEXTE HERO */
-.hero-text {
-    color: white;
-    font-size: 26px;
-    font-weight: 600;
-    margin: 0;
-    text-align: center;
-    line-height: 1.4;
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 600px) {
+    .program-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-text h1 {
+        font-size: 2.1rem;
+    }
 }
-
-/* BOÎTE BLANCHE FLOTTANTE */
-.mission-box {
-    background: #ffffff;
-    padding: 30px 35px;
-    border-radius: 20px;
-    box-shadow: 0 18px 45px rgba(0,0,0,0.18);
-    max-width: 520px;
-    position: relative;
-    top: 2px;
-}
-
-/* TITRE MISSION */
-.mission-box h2 {
-    margin: 0;
-    font-size: 26px;
-    font-weight: 700;
-}
-
-/* TEXTE MISSION */
-.mission-box p {
-    margin: 0;
-    font-size: 18px;
-    line-height: 1.6;
-    color: #333;
-}
-
-/* TITRE DE SECTION ACTIVITÉS */
-.activities-title {
-    background: #15A63B;
-    color: white;
-    font-size: 28px;
-    font-weight: 700;
-    text-align: center;
-    padding: 18px 0;
-    width: 50%;
-    margin: 10px auto;
-    border-radius: 0;
-    cursor: pointer;
-}
-
-/* CONTENEUR DES 3 ACTIVITÉS */
-.activities {
-    display: flex;
-    justify-content: space-around;
-    padding: 40px 60px;
-    gap: 40px;
-}
-
-/* UNE ACTIVITÉ */
-.activity {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* IMAGE D’ACTIVITÉ */
-.activity img {
-    height: 330px;
-    width: auto;
-    object-fit: contain;
-    margin-bottom: 0;
-    display: block;
-}
-
-/* TAG COULEUR SOUS L’IMAGE */
-.tag {
-    margin-top: 0;
-    padding: 14px 0;
-    width: 100%;
-    text-align: center;
-    font-size: 24px;
-    font-weight: 700;
-    color: white;
-    border-radius: 0;
-}
-
-

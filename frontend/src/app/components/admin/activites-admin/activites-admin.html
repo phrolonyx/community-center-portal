@@ -1,1 +1,74 @@
-<p>activites-admin works!</p>
+<div class="admin-gestion-des">
+
+  <!-- SIDEBAR -->
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <app-admin-header title="Gestion des activités"></app-admin-header>
+
+    <div class="content-main">
+
+      <!-- BOUTON AJOUTER ACTIVITÉ -->
+      <div class="content-header-actions">
+        <!-- Lien dynamique API -->
+        <a routerLink="/admin/form-activite-admin" class="btn-primary">
+          Ajouter une activité
+        </a>
+      </div>
+
+      <!-- TABLEAU ACTIVITÉS -->
+      <section class="users-table">
+        <table class="users-table-grid">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <!-- BOUCLE DYNAMIQUE API -->
+            <!-- Remplacer par *ngFor="let activity of activities" -->
+            <tr *ngFor="let activity of activities">
+
+              <!-- Nom -->
+              <!-- <td>{{ activity.name }}</td> -->
+
+              <!-- Description -->
+              <!-- <td>{{ activity.description }}</td> -->
+
+              <!-- Actions -->
+              <td>
+                <div class="action-buttons">
+
+                  <!-- Modifier -->
+                  <!-- <a [routerLink]="['/admin/activities/edit', activity.id]"
+                     class="btn-edit">
+                    Modifier
+                  </a> -->
+
+                  <!-- Supprimer -->
+                  <!-- <button class="btn-delete"
+                          (click)="deleteActivity(activity.id)">
+                    Supprimer
+                  </button> -->
+
+                </div>
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+

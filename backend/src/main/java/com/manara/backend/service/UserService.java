@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /*
@@ -127,7 +128,6 @@ public class UserService {
         );
         user.setPending(true);
         emailService.envoyerBienvenue(dto.getEmail(), dto.getPrenom());
-
         return userRepository.save(user);
     }
 

@@ -1,46 +1,55 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Activity } from '../../models/activity.model';
+import { ActivityService } from '../../apiServices/activity-service';
+import { environment } from '../../../environments/environment';
 
-interface Activite {
-  id: number;
-  name: string;
-  description: string | null;
-  activityImagePath: string | null;
-}
-
-// Composant Angular dynamique - transformation depuis vue Thymeleaf
 @Component({
   selector: 'app-view-activities',
   standalone: false,
   templateUrl: './view-activities.html',
   styleUrl: './view-activities.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ViewActivities implements OnInit {
-  activites: Activite[] = [];
-  recherche = '';
-  aucunResultat = false;
+
+  // Signal pour la liste complète des activités
+  activites = signal<Activity[]>([]);
+
+  // Signal pour le filtre de recherche
+  recherche = signal('');
+
+  // Activités filtrées calculées automatiquement depuis les deux signals
+  activitesFiltrees = computed(() => {
+    const q = this.recherche().toLowerCase().trim();
+    if (!q) return this.activites();
+    return this.activites().filter(a => a.name.toLowerCase().includes(q));
+  });
+
+  // Vrai si une recherche est active mais aucun résultat trouvé
+  aucunResultat = computed(() =>
+    this.recherche().trim().length > 0 &&
+    this.activitesFiltrees().length === 0
+  );
+
+  constructor(private activityService: ActivityService) {}
 
   ngOnInit(): void {
-    // Communication avec Spring Boot via API REST (à brancher)
-    this.activites = [
-      { id: 1, name: 'Soccer Junior', description: 'Initiation au soccer pour 6-12 ans.', activityImagePath: null },
-      { id: 2, name: 'Cours de musique', description: 'Découverte des instruments.', activityImagePath: null },
-      { id: 3, name: 'Atelier peinture', description: 'Exprimer sa créativité.', activityImagePath: null },
-    ];
+    // Charger toutes les activités publiques au démarrage
+    this.activityService.getActivities().subscribe({
+      next: data => this.activites.set(data),
+      error: () => this.activites.set([])
+    });
   }
 
-  filtrer(): void {
-    const q = this.recherche.toLowerCase();
-    const visibles = this.activites.filter(a => a.name.toLowerCase().includes(q)).length;
-    this.aucunResultat = visibles === 0 && this.activites.length > 0;
+  // Mise à jour du signal de recherche depuis le template
+  onRecherche(valeur: string): void {
+    this.recherche.set(valeur);
   }
 
-  correspond(a: Activite): boolean {
-    return a.name.toLowerCase().includes(this.recherche.toLowerCase());
-  }
-
-  getImage(a: Activite): string {
+  // Construire l'URL de l'image via le proxy au lieu de localhost en dur
+  getImage(a: Activity): string {
     return a.activityImagePath
-      ? 'http://localhost:8080' + a.activityImagePath
+      ? `${environment.apiUrl}${a.activityImagePath}`
       : 'assets/images/default-activity.jpg';
   }
 }

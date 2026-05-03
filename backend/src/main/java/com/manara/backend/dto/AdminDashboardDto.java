@@ -6,14 +6,14 @@ import java.util.List;
 
 @Data
 public class AdminDashboardDto {
-    private Integer totalUsers;
-    private Integer totalParents;
-    private Integer totalAnimateurs;
-    private Integer totalDisabled;
+    private Long totalUsers;
+    private Long totalParents;
+    private Long totalAnimateurs;
+    private Long totalDisabled;
     private List<UserResponseDto> pendingUsers;
 
-    public static AdminDashboardDto from(Integer totalUsers, Integer totalParents,
-                                         Integer totalAnimateurs, Integer totalDisabled,
+    public static AdminDashboardDto from(Long totalUsers, Long totalParents,
+                                         Long totalAnimateurs, Long totalDisabled,
                                          List<UserResponseDto> pendingUsers) {
         AdminDashboardDto dto = new AdminDashboardDto();
         dto.setTotalUsers(totalUsers);

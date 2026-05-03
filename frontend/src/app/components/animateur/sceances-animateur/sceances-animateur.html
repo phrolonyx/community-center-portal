@@ -1,0 +1,79 @@
+<div class="admin-gestion-des">
+
+  <!-- SIDEBAR -->
+  <app-animateur-sidebar></app-animateur-sidebar>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <app-animateur-header title="Mes séances"></app-animateur-header>
+
+    <div class="content-main">
+
+      <!-- BOUTON AJOUTER
+      <div class="content-header-actions">
+        <a routerLink="/admin/form-sceances-admin" class="btn-primary">
+          Ajouter une séance
+        </a>
+      </div> -->
+
+      <!-- TABLEAU -->
+      <section class="users-table">
+
+        <table class="users-table-grid">
+          <thead>
+            <tr>
+              <th>Activité</th>
+              <th>Lieu</th>
+              <th>Capacité</th>
+              <th>Date début</th>
+              <th>Date fin</th>
+              <th>Détails</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <button class="btn-delete" routerLink="/animateur/sceances/details">
+                  Détails
+            </button>
+
+            <!-- BOUCLE DYNAMIQUE API -->
+            <!-- Remplacer par *ngFor="let session of sessions" -->
+            <tr *ngFor="let session of sessions">
+
+              <!-- <td>{{ session.activityName }}</td>
+              <td>{{ session.hostName }}</td>
+              <td>{{ session.locationName }}</td>
+              <td>{{ session.capacity }}</td> -->
+
+              <!-- Dates formatées -->
+              <!-- <td>{{ session.dateTimeStart | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ session.dateTimeEnd | date:'dd/MM/yyyy HH:mm' }}</td> -->
+
+              <td class="action-buttons">
+
+                <!-- Modifier -->
+                <!-- <a [routerLink]="['/admin/sessions/edit', session.id]"
+                   class="btn-edit">
+                  Modifier
+                </a> -->
+
+                <!-- Supprimer -->
+                <!-- <button class="btn-delete"
+                        (click)="deleteSession(session.id)">
+                  Supprimer
+                </button> -->
+
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+
+      </section>
+
+    </div>
+  </main>
+</div>

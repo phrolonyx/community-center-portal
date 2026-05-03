@@ -1,0 +1,168 @@
+/* ============================================================
+   CONTENT MAIN
+============================================================ */
+
+.main-content {
+  margin-left: 240px;
+}
+
+.admin-gestion-des {
+    background: #fff;
+    width: 100%;
+    min-width: 1100px;
+    min-height: 100vh;
+    position: relative;
+}
+
+
+.content-main {
+  background: #F3F3F3;
+  padding-top: 20px;
+  padding-bottom: 60px;
+  min-height: calc(100vh - 80px);
+  width: 100%;
+  position: relative;
+}
+
+.main-content,
+.content-main,
+.dashboard-content {
+  padding-right: 3px;
+  box-sizing: border-box;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+
+  padding: 0 20px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+/* Carte stat avec overlay PNG */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.stat-card h3 {
+  font-size: 22px;
+  margin: 0 0 3px;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* Couleurs des cartes */
+.stat-blue { background: #4A90E2; }
+.stat-green { background: #2ECC71; }
+.stat-orange { background: #F5A623; }
+.stat-red { background: #E74C3C; }
+
+/* Ajustements individuels des PNG selon la carte */
+.stat-blue .stat-overlay img,
+.stat-green .stat-overlay img{
+    width: 70%;
+    bottom: -5px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.9;
+}
+
+.stat-red .stat-overlay img {
+    width: 45%;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0.9;
+}
+
+.stat-orange .stat-overlay img {
+    width: 70%;
+    bottom: -1px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.9;
+}
+
+/* Overlay PNG */
+.stat-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.stat-overlay img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/* ============================================================
+   DASHBOARD — NOUVELLES INSCRIPTIONS À APPROUVER
+============================================================ */
+
+.pending-users-section {
+  margin-left: 20px;
+  margin-top: 30px;
+  padding: 10px 0;
+}
+
+.pending-users-section h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.pending-users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.pending-users-table th,
+.pending-users-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.pending-users-table th {
+  background: #f5f5f5;
+  text-align: left;
+  font-weight: 600;
+}
+
+.approve-btn,
+.reject-btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.approve-btn { background: #148530; }
+
+.reject-btn { background: #E74C3C; }

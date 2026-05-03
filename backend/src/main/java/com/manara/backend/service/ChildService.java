@@ -1,5 +1,6 @@
 package com.manara.backend.service;
 
+import com.manara.backend.dto.ChildRequest;
 import com.manara.backend.model.*;
 import com.manara.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,8 +35,25 @@ public class ChildService {
         childParentRepository.save(childParent);
     }
 
-    public Child save(Child child) {
-        return childRepository.save(child);
+    @Transactional
+    public Child createChild(ChildRequest childRequest) {
+        Child child = childRequest.toChild();
+        ParentProfile parentProfile = parentProfileRepository.findById(childRequest.getParentId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Parent Profile Non trouve"));
+        ChildParent childParent = new ChildParent(child, parentProfile);
+        childParent.setRelationship(childRequest.getRelationship());
+
+        childRepository.save(child);
+        childParentRepository.save(childParent);
+
+        if (childRequest.getMedical() != null && !childRequest.getMedical().isBlank()) {
+            ChildMedical medical = new ChildMedical();
+            medical.setChild(child);
+            medical.setCondition(childRequest.getMedical());
+            medical.setUpdatedAt(LocalDateTime.now());
+            childMedicalRepository.save(medical);
+        }
+
+        return child;
     }
 
     public Child findById(Integer id) {
@@ -52,6 +71,32 @@ public class ChildService {
     @Transactional
     public void updateChild(Child child) {
         childRepository.save(child);
+    }
+
+    @Transactional
+    public Child updateChild(Integer id, ChildRequest childRequest) {
+        Child child = findById(id);
+
+        child.setFirstName(childRequest.getFirstName());
+        child.setLastName(childRequest.getLastName());
+        child.setDateOfBirth(childRequest.getDateOfBirth());
+        child.setUpdatedAt(LocalDateTime.now());
+        childRepository.save(child);
+
+        if (childRequest.getMedical() != null && !childRequest.getMedical().isBlank()) {
+            ChildMedical medical = childMedicalRepository.findChildMedicalByChild(child);
+
+            if (medical == null) {
+                medical = new ChildMedical();
+                medical.setChild(child);
+            }
+
+            medical.setCondition(childRequest.getMedical());
+            medical.setUpdatedAt(LocalDateTime.now());
+            childMedicalRepository.save(medical);
+        }
+
+        return child;
     }
 
     @Transactional

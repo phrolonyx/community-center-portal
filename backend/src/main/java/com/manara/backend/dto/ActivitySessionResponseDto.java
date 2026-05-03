@@ -20,12 +20,17 @@ public class ActivitySessionResponseDto {
     private Integer hostId;
     private String hostFullName;
 
+    private Integer minAge;
+    private Integer maxAge;
+
     public static ActivitySessionResponseDto from(ActivitySession activitySession) {
         ActivitySessionResponseDto dto = new ActivitySessionResponseDto();
         dto.setId(activitySession.getId());
         dto.setDateTimeStart(activitySession.getDateTimeStart());
         dto.setDateTimeEnd(activitySession.getDateTimeEnd());
         dto.setCapacity(activitySession.getCapacity());
+        dto.setMinAge(activitySession.getMinAge());
+        dto.setMaxAge(activitySession.getMaxAge());
 
         if (activitySession.getActivity() != null) {
             dto.setActivityId(activitySession.getActivity().getId());
