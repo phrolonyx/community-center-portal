@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
+// Correspond exactement à ActivitySessionResponseDto.java
 export interface ActivitySession {
   id: number;
   dateTimeStart: string;
@@ -14,6 +15,17 @@ export interface ActivitySession {
   locationName: string;
   hostId: number;
   hostFullName: string;
+  minAge: number | null;
+  maxAge: number | null;
+}
+
+export interface ActivitySessionRequest {
+  activityId: number;
+  hostId: number;
+  locationId: number;
+  capacity: number;
+  dateTimeStart: string;
+  dateTimeEnd: string;
 }
 
 @Injectable({
@@ -30,21 +42,18 @@ export class ActivitySessionService {
     return this.http.get<ActivitySession[]>(this.apiUrl, { withCredentials: true });
   }
 
-  // Récupérer les séances d'une activité spécifique
-  getSessionsByActivity(activityId: number): Observable<ActivitySession[]> {
-    return this.http.get<ActivitySession[]>(
-      `${this.apiUrl}/activity/${activityId}`,
-      { withCredentials: true }
-    );
+  // Récupérer une séance par son id (admin)
+  getById(id: number): Observable<ActivitySession> {
+    return this.http.get<ActivitySession>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
   // Créer une nouvelle séance (admin)
-  createSession(data: any): Observable<ActivitySession> {
+  createSession(data: ActivitySessionRequest): Observable<ActivitySession> {
     return this.http.post<ActivitySession>(this.apiUrl, data, { withCredentials: true });
   }
 
   // Modifier une séance existante (admin)
-  updateSession(id: number, data: any): Observable<ActivitySession> {
+  updateSession(id: number, data: ActivitySessionRequest): Observable<ActivitySession> {
     return this.http.put<ActivitySession>(`${this.apiUrl}/${id}`, data, { withCredentials: true });
   }
 
