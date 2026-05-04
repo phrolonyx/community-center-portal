@@ -21,12 +21,18 @@ export class FormSceanceAdmin implements OnInit {
     private activityService: ActivityService,
     private userService: UserService,
     private locationService: LocationService
-  ) {}
+  ) {
+  }
+
+  // Loader
+  loading = signal(true);
+
+  loadingActivities = signal(true);
 
   // Titre dynamique
   formTitle = signal("Nouvelle séance");
 
-  // Objet simple pour le formulaire
+  // FORMULAIRE SIMPLE
   form = {
     id: -1,
     activityId: 0,
@@ -39,25 +45,33 @@ export class FormSceanceAdmin implements OnInit {
     dateTimeEnd: ""
   };
 
-  // Listes dynamiques
+  // Listes
   activities: any[] = [];
   hosts: any[] = [];
   locations: any[] = [];
 
   ngOnInit() {
+    const id = this.route.snapshot.paramMap.get("id");
+
+    // Charger les listes
     this.loadLists();
 
-    const id = this.route.snapshot.paramMap.get("id");
+    // Charger séance si édition
     if (id) {
       this.formTitle.set("Modifier une séance");
       this.loadSession(+id);
+    } else {
+      this.loading.set(false);
     }
   }
 
   // Charger les listes (activités, animateurs, lieux)
   loadLists() {
     this.activityService.getActivities().subscribe({
-      next: data => this.activities = data
+      next: data => {
+        this.activities = data;
+        this.loadingActivities.set(false); // <-- ACTIVITÉS PRÊTES
+      }
     });
 
     this.userService.getUsersByRole('ANIMATEUR').subscribe({
@@ -69,12 +83,16 @@ export class FormSceanceAdmin implements OnInit {
     });
   }
 
+
   // Charger séance si édition
   loadSession(id: number) {
     this.sessionService.getAllSessions().subscribe({
       next: sessions => {
         const s = sessions.find(x => x.id === id);
-        if (!s) return;
+        if (!s) {
+          this.loading.set(false);
+          return;
+        }
 
         this.form = {
           id: s.id,
@@ -87,6 +105,8 @@ export class FormSceanceAdmin implements OnInit {
           dateTimeStart: s.dateTimeStart,
           dateTimeEnd: s.dateTimeEnd
         };
+
+        this.loading.set(false);
       }
     });
   }
