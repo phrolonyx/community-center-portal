@@ -36,7 +36,7 @@
           <thead>
             <tr>
               <th>Nom complet</th>
-              <th>Parent(s)</th>
+<!--         <th>Parent(s)</th>-->
               <th>Date de naissance</th>
               <th>Âge</th>
               <th>Conditions médicales</th>
@@ -48,43 +48,38 @@
 
             <!-- BOUCLE DYNAMIQUE API -->
             <!-- Remplacer par *ngFor="let child of children" -->
-            <tr *ngFor="let child of children">
+              @for (child of searchChildren(); track child.id) {
+                <tr>
 
-              <!-- Nom complet -->
-              <!-- <td>{{ child.fullName }}</td> -->
+                  <td>{{ child.firstName }} {{ child.lastName }}</td>
 
-              <!-- Parents -->
-              <td>
-                <!-- Liste dynamique API -->
-                <!-- <span *ngFor="let link of child.parentLinks" style="display:block;">
-                  {{ link.parentName }}
-                </span> -->
-              </td>
+<!--                  <td>-->
+<!--                    @for (link of child.parentLinks; track link.parentId) {-->
+<!--                      <span style="display:block;">{{ link.parentName }}</span>-->
+<!--                    }-->
+<!--                  </td>-->
 
-              <!-- Date de naissance -->
-              <!-- <td>{{ child.dateOfBirth | date:'dd/MM/yyyy' }}</td> -->
+                  <td>{{ child.dateOfBirth | date:'dd/MM/yyyy' }}</td>
 
-              <!-- Âge -->
-              <!-- <td>{{ child.age }}</td> -->
+                  <td>{{ child.age }}</td>
 
-              <!-- Conditions médicales -->
-              <td>
-                <!-- <span *ngIf="child.medicalConditions.length === 0">Aucune</span> -->
+                  <td>
+                    @if (child.medicalConditions === undefined) {
+                      <span>Aucune</span>
+                    }
+                    @for (cond of child.medicalConditions; track cond) {
+                      <span style="display:block;">{{ cond.condition}}</span>
+                    }
+                  </td>
 
-                <!-- <span *ngFor="let cond of child.medicalConditions" style="display:block;">
-                  {{ cond }}
-                </span> -->
-              </td>
+                  <td>
+                    <button class="btn-delete" (click)="deleteChild(child.id)">
+                      Supprimer
+                    </button>
+                  </td>
 
-              <!-- Actions -->
-              <td>
-                <!-- <button class="btn-delete" (click)="deleteChild(child.id)">
-                  Supprimer
-                </button> -->
-              </td>
-
-            </tr>
-
+                </tr>
+              }
           </tbody>
         </table>
       </section>

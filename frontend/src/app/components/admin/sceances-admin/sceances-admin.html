@@ -38,35 +38,37 @@
 
             <!-- BOUCLE DYNAMIQUE API -->
             <!-- Remplacer par *ngFor="let session of sessions" -->
-            <tr *ngFor="let session of sessions">
+              @for (session of sessions(); track session.id) {
+                <tr>
 
-              <!-- <td>{{ session.activityName }}</td>
-              <td>{{ session.hostName }}</td>
-              <td>{{ session.locationName }}</td>
-              <td>{{ session.capacity }}</td> -->
+                  <td>{{ session.activityName }}</td>
+                  <td>{{ session.hostFullName }}</td>
+                  <td>{{ session.locationName }}</td>
+                  <td>{{ session.capacity }}</td>
 
-              <!-- Dates formatées -->
-              <!-- <td>{{ session.dateTimeStart | date:'dd/MM/yyyy HH:mm' }}</td>
-              <td>{{ session.dateTimeEnd | date:'dd/MM/yyyy HH:mm' }}</td> -->
+                  <td>{{ session.dateTimeStart | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ session.dateTimeEnd | date:'dd/MM/yyyy HH:mm' }}</td>
 
-              <td class="action-buttons">
+                  <td>
+                    <div class="action-buttons">
 
-                <!-- Modifier -->
-                <!-- <a [routerLink]="['/admin/sessions/edit', session.id]"
-                   class="btn-edit">
-                  Modifier
-                </a> -->
+                      <a
+                        [routerLink]="['/admin/form-sceances-admin', session.id]"
+                        class="btn-edit">
+                        Modifier
+                      </a>
 
-                <!-- Supprimer -->
-                <!-- <button class="btn-delete"
+                      <button
+                        class="btn-delete"
                         (click)="deleteSession(session.id)">
-                  Supprimer
-                </button> -->
+                        Supprimer
+                      </button>
 
-              </td>
+                    </div>
+                  </td>
 
-            </tr>
-
+                </tr>
+              }
           </tbody>
         </table>
 

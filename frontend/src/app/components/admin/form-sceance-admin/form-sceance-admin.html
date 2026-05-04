@@ -16,7 +16,7 @@
         <form class="admin-form form-modern" (submit)="saveSession()">
 
           <!-- ID (si édition) -->
-          <input type="hidden" [(ngModel)]="session.id" name="id" />
+          <input type="hidden" [(ngModel)]="form.id" name="id" />
 
           <!-- ACTIVITÉ -->
           <div class="form-group">
@@ -24,16 +24,17 @@
 
             <select
               class="input-modern"
-              [(ngModel)]="session.activityId"
+              [(ngModel)]="form.activityId"
               name="activityId"
               required>
 
               <option value="">-- Choisir une activité --</option>
 
-              <!-- Liste dynamique API -->
-              <!-- <option *ngFor="let a of activities" [value]="a.id">
-                {{ a.name }}
-              </option> -->
+              @for (a of activities; track a.id) {
+                <option [value]="a.id">
+                  {{ a.name }}
+                </option>
+              }
 
             </select>
           </div>
@@ -44,15 +45,17 @@
 
             <select
               class="input-modern"
-              [(ngModel)]="session.hostId"
+              [(ngModel)]="form.hostId"
               name="hostId"
               required>
 
               <option value="">-- Choisir un animateur --</option>
-<!-- 
-              <option *ngFor="let h of hosts" [value]="h.id">
-                {{ h.fullName }}
-              </option> -->
+
+              @for (h of hosts; track h.id) {
+                <option [value]="h.id">
+                  {{ h.firstName }} {{ h.lastName}}
+                </option>
+              }
 
             </select>
           </div>
@@ -63,15 +66,17 @@
 
             <select
               class="input-modern"
-              [(ngModel)]="session.locationId"
+              [(ngModel)]="form.locationId"
               name="locationId"
               required>
 
               <option value="">-- Choisir un lieu --</option>
-<!-- 
-              <option *ngFor="let l of locations" [value]="l.id">
-                {{ l.name }}
-              </option> -->
+
+              @for (l of locations; track l.id) {
+                <option [value]="l.id">
+                  {{ l.name }}
+                </option>
+              }
 
             </select>
           </div>
@@ -83,7 +88,7 @@
               type="number"
               class="input-modern"
               min="1"
-              [(ngModel)]="session.capacity"
+              [(ngModel)]="form.capacity"
               name="capacity"
               required
             />
@@ -97,7 +102,7 @@
               class="input-modern"
               min="0"
               max="18"
-              [(ngModel)]="session.minAge"
+              [(ngModel)]="form.minAge"
               name="minAge"
               placeholder="Ex: 4"
             />
@@ -111,7 +116,7 @@
               class="input-modern"
               min="0"
               max="18"
-              [(ngModel)]="session.maxAge"
+              [(ngModel)]="form.maxAge"
               name="maxAge"
               placeholder="Ex: 12"
             />
@@ -123,7 +128,7 @@
             <input
               type="datetime-local"
               class="input-modern"
-              [(ngModel)]="session.dateTimeStart"
+              [(ngModel)]="form.dateTimeStart"
               name="dateTimeStart"
               required
             />
@@ -135,7 +140,7 @@
             <input
               type="datetime-local"
               class="input-modern"
-              [(ngModel)]="session.dateTimeEnd"
+              [(ngModel)]="form.dateTimeEnd"
               name="dateTimeEnd"
               required
             />

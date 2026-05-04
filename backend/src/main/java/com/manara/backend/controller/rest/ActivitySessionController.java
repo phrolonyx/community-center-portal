@@ -89,6 +89,8 @@ public class ActivitySessionController {
         session.setCapacity(dto.getCapacity());
         session.setDateTimeStart(dto.getDateTimeStart());
         session.setDateTimeEnd((dto.getDateTimeEnd()));
+         session.setMinAge(dto.getMinAge());
+         session.setMaxAge(dto.getMaxAge());
         return session;
     }
 }
