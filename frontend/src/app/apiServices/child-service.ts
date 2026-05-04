@@ -37,11 +37,11 @@ export class ChildService {
 
   constructor(private http: HttpClient) {}
 
-  // // Récupérer les enfants — admin reçoit tous, parent reçoit les siens
-  // getChildren(search?: string): Observable<Child[]> {
-  //   const params = search ? { search } : {};
-  //   return this.http.get<Child[]>(this.apiUrl, { params, withCredentials: true });
-  // }
+  // Récupérer les enfants — admin reçoit tous, parent reçoit les siens
+  getChildren(search?: string): Observable<Child[]> {
+    const params: any = search ? { search } : {};
+    return this.http.get<Child[]>(this.apiUrl, { params, withCredentials: true });
+  }
 
 
   // Récupérer tous les enfants (admin seulement)

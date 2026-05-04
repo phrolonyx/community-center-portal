@@ -120,7 +120,7 @@ export class EnfantsParent implements OnInit {
       firstName: e.firstName,
       lastName: e.lastName,
       dateOfBirth: e.dateOfBirth ? e.dateOfBirth.split('T')[0] : '',
-      relationship: '',
+      relationship: 'Père',
       medical: e.medicalConditions[0]?.condition || '',
     };
     this.modalOuvert = true;
@@ -143,7 +143,7 @@ export class EnfantsParent implements OnInit {
       lastName: this.formulaire.lastName,
       dateOfBirth: dateIso,
       medical: this.formulaire.medical || undefined,
-      relationship: this.formulaire.relationship || 'Parent',
+      relationship: this.formulaire.relationship || 'Père',
       parentId: 0
     };
 
