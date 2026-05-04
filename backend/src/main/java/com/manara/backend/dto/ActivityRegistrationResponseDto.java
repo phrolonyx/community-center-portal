@@ -21,6 +21,7 @@ public class ActivityRegistrationResponseDto {
     private String activityName;
     private LocalDateTime sessionStart;
     private String locationName;
+    private String hostFullName;
 
     private Integer parentProfileId;
 
@@ -43,6 +44,8 @@ public class ActivityRegistrationResponseDto {
                 dto.setActivityName(activityRegistration.getActivitySession().getActivity().getName());
             if (activityRegistration.getActivitySession().getLocation() != null)
                 dto.setLocationName(activityRegistration.getActivitySession().getLocation().getName());
+            if (activityRegistration.getActivitySession().getHost() != null)
+                dto.setHostFullName(activityRegistration.getActivitySession().getHost().getFullName());
         }
         if (activityRegistration.getParentProfile() != null) {
             dto.setParentProfileId(activityRegistration.getParentProfile().getId());

@@ -59,12 +59,60 @@
         </thead>
         <tbody>
           <tr *ngFor="let semaine of semaines">
-            <td *ngFor="let jour of semaine">{{ jour }}</td>
+            <td *ngFor="let jour of semaine"
+                [class.jour-aujourdhui]="estAujourdhui(jour)"
+                [class.jour-cliquable]="inscriptionsDuJour(jour).length > 0"
+                [title]="inscriptionsDuJour(jour).length ? 'Cliquez pour voir les details' : ''"
+                (click)="ouvrirJour(jour)">
+              <span class="jour-num">{{ jour }}</span>
+              <div *ngIf="inscriptionsDuJour(jour).length" class="jour-pastilles">
+                <span *ngFor="let i of inscriptionsDuJour(jour)"
+                      class="pastille"
+                      [style.background]="couleurEnfant(i.childId)"></span>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
+
+      <!-- Legende des couleurs : 1 couleur par enfant -->
+      <div class="calendar-legend" *ngIf="enfants.length">
+        <div class="legend-item" *ngFor="let e of enfants">
+          <span class="legend-dot" [style.background]="couleurEnfant(e.id)"></span>
+          {{ e.firstName }}
+        </div>
+      </div>
     </div>
   </main>
+</div>
+
+<!-- Modal de details : ouvert au click sur une case du calendrier -->
+<div class="modal-overlay" [class.open]="modalOuvert" (click)="fermerModal($event)">
+  <div class="modal-jour" (click)="$event.stopPropagation()">
+    <div class="modal-jour-header">
+      <h2>Séances du {{ jourModalLibelle() }}</h2>
+      <button class="modal-close" type="button" (click)="fermerModal()">&times;</button>
+    </div>
+    <div class="modal-jour-list">
+      <div *ngFor="let i of inscriptionsDuJour(jourSelectionne)" class="modal-seance-item">
+        <span class="modal-seance-pastille" [style.background]="couleurEnfant(i.childId)"></span>
+        <div class="modal-seance-info">
+          <strong>{{ i.activityName }}</strong>
+          <div class="modal-seance-meta">
+            <span>{{ i.childFullName }}</span>
+            <span>{{ i.sessionStart | date:'HH\'h\'mm' }}</span>
+            <span *ngIf="i.locationName">📍 {{ i.locationName }}</span>
+            <span *ngIf="i.hostFullName">👤 {{ i.hostFullName }}</span>
+          </div>
+          <span class="modal-seance-statut"
+                [class.confirmed]="i.status === 'CONFIRMÉ' || i.status === 'Confirmé'"
+                [class.pending]="i.status === 'EN_ATTENTE' || i.status === 'En attente'">
+            {{ i.status === 'EN_ATTENTE' || i.status === 'En attente' ? 'EN ATTENTE' : 'CONFIRMÉ' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <app-footer></app-footer>

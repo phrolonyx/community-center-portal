@@ -38,7 +38,7 @@
             <span class="inscription-statut"
                   [class.confirmed]="estConfirme(i.status)"
                   [class.pending]="estEnAttente(i.status)"
-                  [class.cancelled]="estAnnule(i.status)">{{ i.status }}</span>
+                  [class.cancelled]="estAnnule(i.status)">{{ formatStatus(i.status) }}</span>
 
             <h3 class="inscription-nom">{{ i.activitySession.activity.name }}</h3>
 
@@ -46,6 +46,8 @@
               <span>{{ i.activitySession.dateTimeStart | date:'dd MMM yyyy' }}</span>
               <br>
               <span *ngIf="i.activitySession.location">📍 {{ i.activitySession.location.name }}</span>
+              <br *ngIf="i.activitySession.hostFullName">
+              <span *ngIf="i.activitySession.hostFullName">👤 Animateur : {{ i.activitySession.hostFullName }}</span>
             </p>
 
             <div class="inscription-actions">

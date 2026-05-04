@@ -1,3 +1,6 @@
+/* LAYOUT */
+.dashboard-main { background: #FFF3D6; padding: 40px; display: flex; flex-direction: column; gap: 24px; min-height: calc(100vh - 90px); }
+
 /* EN-TÊTE */
 .activites-header { margin-bottom: 8px; }
 .activites-title { font-size: 30px; font-weight: 900; color: #043C5C; margin: 0 0 6px; }
@@ -38,6 +41,7 @@
     width: 100%;
 }
 
+.card-age { background: #043C5C; color: #FFF; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
 .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 .badge.age { background: #043C5C; color: #FFF; }
 .badge.date { background: transparent; color: #6B7280; border: 1px solid #C8CDD3; }

@@ -26,7 +26,8 @@ export class FormActiviteAdmin implements OnInit {
     name: "",
     description: "",
     activityImagePath: "",
-    imageFile: undefined
+    imageFile: undefined,
+    sessions: []
   });
 
   // Objet simple pour le formulaire (compatible ngModel)
@@ -93,10 +94,7 @@ export class FormActiviteAdmin implements OnInit {
         }
 
         // Sinon upload image séparément
-        const fd = new FormData();
-        fd.append("imageFile", this.form.imageFile);
-
-        this.activityService.uploadImage(savedActivity.id, fd).subscribe({
+        this.activityService.uploadImage(savedActivity.id, this.form.imageFile).subscribe({
           next: () => this.router.navigate(['/admin/activites']),
           error: err => console.error("Erreur upload image :", err)
         });

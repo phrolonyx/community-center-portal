@@ -39,7 +39,7 @@ export class ChildService {
 
   // Récupérer les enfants — admin reçoit tous, parent reçoit les siens
   getChildren(search?: string): Observable<Child[]> {
-    const params = search ? { search } : {};
+    const params: Record<string, string> = search ? { search } : {};
     return this.http.get<Child[]>(this.apiUrl, { params, withCredentials: true });
   }
 

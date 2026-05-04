@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ChildService, Child } from '../../../apiServices/child-service';
+import { ActivitySessionService, ActivitySession as SessionDto } from '../../../apiServices/activity-session-service';
+import { RegistrationService, ActivityRegistration } from '../../../apiServices/registration-service';
 
 interface Enfant {
   id: number;
@@ -15,10 +18,10 @@ interface Inscription {
     dateTimeStart: string;
     location?: { name: string };
     activity: { name: string };
+    hostFullName?: string | null;
   };
 }
 
-// Composant Angular dynamique
 @Component({
   selector: 'app-inscription-parent',
   standalone: false,
@@ -28,19 +31,64 @@ interface Inscription {
 export class InscriptionParent implements OnInit {
   enfants: Enfant[] = [];
   inscriptions: Inscription[] = [];
+
+  seancesDisponibles: SessionDto[] = [];
+  enfantSelectionne: number | null = null;
+  seanceSelectionnee: number | null = null;
+
   messageInscrit = false;
   messageAnnule = false;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private childService: ChildService,
+    private sessionService: ActivitySessionService,
+    private registrationService: RegistrationService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(p => {
       this.messageInscrit = p['inscrit'] !== undefined;
       this.messageAnnule = p['annule'] !== undefined;
     });
-    // Communication avec Spring Boot via API REST
-    this.enfants = [];
-    this.inscriptions = [];
+    this.chargerDonnees();
+  }
+
+  chargerDonnees(): void {
+    this.childService.getChildren().subscribe(data => {
+      this.enfants = data.map(c => ({ id: c.id, firstName: c.firstName, lastName: c.lastName }));
+      this.cd.detectChanges();
+    });
+
+    this.sessionService.getAllSessions().subscribe(data => {
+      this.seancesDisponibles = data;
+      this.cd.detectChanges();
+    });
+
+    this.chargerInscriptions();
+  }
+
+  // Liaison Enfant-Seance
+  chargerInscriptions(): void {
+    this.registrationService.getMyRegistrations().subscribe((data: ActivityRegistration[]) => {
+      this.inscriptions = data.map(r => ({
+        id: r.id,
+        status: r.status,
+        child: {
+          id: r.childId,
+          firstName: r.childFullName.split(' ')[0] || '',
+          lastName: r.childFullName.split(' ').slice(1).join(' ') || ''
+        },
+        activitySession: {
+          dateTimeStart: r.sessionStart,
+          location: { name: r.locationName },
+          activity: { name: r.activityName },
+          hostFullName: r.hostFullName
+        }
+      }));
+      this.cd.detectChanges();
+    });
   }
 
   toggleSidebar(): void {
@@ -48,27 +96,47 @@ export class InscriptionParent implements OnInit {
     document.querySelector('.sidebar-overlay')?.classList.toggle('open');
   }
 
-  inscriptionsParEnfant(enfant: Enfant): Inscription[] {
-    return this.inscriptions.filter(i =>
-      i.child && i.child.id === enfant.id &&
-      i.status !== 'Annulé' && i.status !== 'ANNULÉ'
-    );
+  inscriptionsParEnfant(e: Enfant): Inscription[] {
+    return this.inscriptions.filter(i => i.child && i.child.id === e.id && !this.estAnnule(i.status));
   }
 
-  estConfirme(status: string): boolean {
-    return status === 'CONFIRMÉ' || status === 'Confirmé';
+  estConfirme(s: string): boolean { return s === 'CONFIRMÉ' || s === 'Confirmé' || s === 'CONFIRMÃ‰'; }
+  estEnAttente(s: string): boolean { return s === 'EN_ATTENTE' || s === 'En attente'; }
+  estAnnule(s: string): boolean { return s === 'ANNULÉ' || s === 'Annulé' || s === 'AnnulÃ©'; }
+
+  formatStatus(s: string): string {
+    if (this.estConfirme(s)) return 'CONFIRMÉ';
+    if (this.estEnAttente(s)) return 'EN ATTENTE';
+    if (this.estAnnule(s)) return 'ANNULÉ';
+    return s;
   }
 
-  estEnAttente(status: string): boolean {
-    return status === 'EN_ATTENTE' || status === 'En attente';
+  // Inscription seance
+  inscrire(): void {
+    if (!this.enfantSelectionne || !this.seanceSelectionnee) {
+      alert('Veuillez choisir un enfant et une seance');
+      return;
+    }
+    this.registrationService.register({ childId: this.enfantSelectionne, activitySessionId: this.seanceSelectionnee }).subscribe({
+      next: () => {
+        this.messageInscrit = true;
+        this.enfantSelectionne = null;
+        this.seanceSelectionnee = null;
+        this.chargerInscriptions();
+      },
+      error: (err) => alert('Erreur inscription : ' + (err.error?.message || err.message))
+    });
   }
 
-  estAnnule(status: string): boolean {
-    return status === 'ANNULÉ' || status === 'Annulé';
-  }
-
+  // Annulation seance
   annulerInscription(id: number): void {
     if (!confirm('Voulez-vous vraiment annuler cette inscription ?')) return;
-    console.log('Annuler inscription', id);
+    this.registrationService.cancel(id).subscribe({
+      next: () => {
+        this.messageAnnule = true;
+        this.chargerInscriptions();
+      },
+      error: (err) => alert('Erreur annulation : ' + (err.error?.message || err.message))
+    });
   }
 }

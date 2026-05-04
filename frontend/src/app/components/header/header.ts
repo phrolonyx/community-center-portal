@@ -7,11 +7,9 @@ import { AuthService } from '../../apiServices/auth.service';
   standalone: false,
   templateUrl: './header.html',
   styleUrl: './header.css',
-  // OnPush permet au template de réagir aux changements de signals
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Header {
-
   menuOuvert = false;
 
   constructor(
@@ -19,7 +17,12 @@ export class Header {
     private router: Router
   ) {}
 
-  // Rediriger vers le dashboard correspondant au rôle de l'utilisateur
+  // Lien Nos activites selon le role
+  lienActivites(): string {
+    if (this.authService.hasRole('PARENT')) return '/dashboard-parent/activites';
+    return '/view-activities';
+  }
+
   allerAuDashboard(): void {
     if (this.authService.hasRole('ADMIN')) {
       this.router.navigate(['/admin/dashboard']);
@@ -30,7 +33,6 @@ export class Header {
     }
   }
 
-  // Déconnexion — vide le signal currentUser et redirige vers connexion
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
@@ -38,7 +40,6 @@ export class Header {
         this.router.navigate(['/connexion'], { queryParams: { logout: '1' } });
       },
       error: () => {
-        // Forcer la déconnexion locale même si le serveur ne répond pas
         this.router.navigate(['/connexion']);
       }
     });

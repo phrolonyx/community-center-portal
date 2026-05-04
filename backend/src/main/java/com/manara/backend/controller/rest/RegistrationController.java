@@ -64,6 +64,27 @@ public class RegistrationController {
         Child child = childService.findById(dto.getChildId());
         ActivitySession session = sessionService.findById(dto.getActivitySessionId());
 
+        // Verification : l'enfant doit appartenir au parent connecte
+        List<Child> mesEnfants = childService.findByParentProfileId(profile.getId());
+        boolean estMonEnfant = mesEnfants.stream().anyMatch(c -> c.getId().equals(child.getId()));
+        if (!estMonEnfant) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Verification anti-doublon : enfant pas deja inscrit a cette seance
+        if (activityService.isAlreadyRegistered(dto.getChildId(), dto.getActivitySessionId())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+        // Verification de l'age : l'enfant doit etre dans l'intervalle exige par la seance
+        Integer ageEnfant = child.getAge();
+        if (session.getMinAge() != null && ageEnfant < session.getMinAge()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        if (session.getMaxAge() != null && ageEnfant > session.getMaxAge()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         ActivityRegistration registration = new ActivityRegistration();
         registration.setParentProfile(profile);
         registration.setChild(child);

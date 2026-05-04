@@ -14,6 +14,6 @@ export class MedicalInfo {
     public id?: number,
     public condition?: string,
     public severity?: string,
-    public notes?: string
+    public notes?: string | null
   ) {}
 }

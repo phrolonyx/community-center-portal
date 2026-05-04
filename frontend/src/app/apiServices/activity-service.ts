@@ -88,11 +88,6 @@ export class ActivityService {
     });
   }
 
-  uploadImage(id: number, formData: FormData) {
-    return this.http.post(`${this.apiUrl}/${id}/image`, formData, {
-      withCredentials: true
-    });
-  }
 
 
 

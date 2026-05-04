@@ -82,8 +82,8 @@ export class FormSceanceAdmin implements OnInit {
           hostId: s.hostId,
           locationId: s.locationId,
           capacity: s.capacity,
-          minAge: s.minAge,
-          maxAge: s.maxAge,
+          minAge: s.minAge ?? 0,
+          maxAge: s.maxAge ?? 0,
           dateTimeStart: s.dateTimeStart,
           dateTimeEnd: s.dateTimeEnd
         };

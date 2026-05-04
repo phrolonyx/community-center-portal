@@ -23,6 +23,8 @@ public class ActivityResponseDto {
         private Integer capacity;
         private String locationName;
         private String hostFullName;
+        private Integer minAge;
+        private Integer maxAge;
     }
 
     public static ActivityResponseDto from(Activity activity) {
@@ -42,6 +44,8 @@ public class ActivityResponseDto {
                         sessionInfo.setCapacity(session.getCapacity());
                         if (session.getLocation() != null) sessionInfo.setLocationName(session.getLocation().getName());
                         if (session.getHost() != null)     sessionInfo.setHostFullName(session.getHost().getFullName());
+                        sessionInfo.setMinAge(session.getMinAge());
+                        sessionInfo.setMaxAge(session.getMaxAge());
                         return sessionInfo;
                     }).toList()
             );

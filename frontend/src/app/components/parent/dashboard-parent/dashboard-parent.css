@@ -94,3 +94,40 @@ body { margin: 0; font-family: Arial, sans-serif; }
     .welcome-card { padding: 24px; }
     .calendar-legend { flex-wrap: wrap; gap: 12px; }
 }
+
+/* Calendrier : jours avec inscriptions */
+.calendar-table td { position: relative; vertical-align: top; height: 64px; transition: background .15s, transform .15s; }
+.jour-num { display: block; font-weight: 600; }
+.jour-pastilles { display: flex; gap: 4px; justify-content: center; margin-top: 6px; flex-wrap: wrap; }
+.pastille { width: 10px; height: 10px; border-radius: 50%; background: #9CA3AF; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
+
+/* Aujourd'hui : bordure doree + texte gras */
+.jour-aujourdhui { background: #FFFBEB; border: 2px solid #E8BB08; border-radius: 6px; }
+.jour-aujourdhui .jour-num { color: #E8BB08; font-weight: 800; }
+
+/* Cases avec inscriptions : cliquables */
+.jour-cliquable { cursor: pointer; }
+.jour-cliquable:hover { background: #FEF3C7; transform: scale(1.04); }
+
+/* Legende : 1 ligne par enfant avec sa couleur */
+.calendar-legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #F0F0F0; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #043C5C; font-weight: 600; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+/* Modal de details au click sur un jour */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1000; display: none; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal-jour { background: #FFF; border-radius: 12px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,.2); }
+.modal-jour-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #F0F0F0; }
+.modal-jour-header h2 { margin: 0; font-size: 18px; color: #043C5C; }
+.modal-close { background: none; border: none; font-size: 28px; cursor: pointer; color: #6B7280; line-height: 1; padding: 0 8px; }
+.modal-close:hover { color: #043C5C; }
+.modal-jour-list { display: flex; flex-direction: column; gap: 12px; }
+.modal-seance-item { display: flex; gap: 12px; padding: 12px; background: #F9FAFB; border-radius: 8px; align-items: flex-start; }
+.modal-seance-pastille { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.modal-seance-info { flex: 1; }
+.modal-seance-info strong { display: block; color: #043C5C; font-size: 15px; margin-bottom: 4px; }
+.modal-seance-meta { display: flex; gap: 12px; font-size: 12px; color: #6B7280; flex-wrap: wrap; margin-bottom: 6px; }
+.modal-seance-statut { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+.modal-seance-statut.confirmed { background: #15A63B; color: #FFF; }
+.modal-seance-statut.pending { background: #E8BB08; color: #043C5C; }

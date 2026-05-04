@@ -1,16 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Activity, SessionInfo } from '../../../models/activity.model';
+import { ActivityService } from '../../../apiServices/activity-service';
+import { ChildService, Child } from '../../../apiServices/child-service';
+import { RegistrationService, ActivityRegistration } from '../../../apiServices/registration-service';
+import { environment } from '../../../../environments/environment';
 
-interface Seance {
-  id: number;
-  dateTimeStart: string;
-  dateTimeEnd: string;
-  minAge: number | null;
-  maxAge: number | null;
-  activity: { id: number; name: string; description: string | null; activityImagePath: string | null; };
-  location?: { name: string };
-  host?: { firstName: string; lastName: string };
-}
 interface Enfant {
   id: number;
   firstName: string;
@@ -18,7 +13,6 @@ interface Enfant {
   age: number;
 }
 
-// Composant Angular dynamique
 @Component({
   selector: 'app-activites-parent',
   standalone: false,
@@ -26,7 +20,7 @@ interface Enfant {
   styleUrl: './activites-parent.css',
 })
 export class ActivitesParent implements OnInit {
-  seances: Seance[] = [];
+  activites: Activity[] = [];
   enfants: Enfant[] = [];
   inscriptions = new Set<string>();
 
@@ -34,23 +28,55 @@ export class ActivitesParent implements OnInit {
   aucunResultat = false;
 
   modalOuvert = false;
-  seanceChoisie: Seance | null = null;
+  activiteChoisie: Activity | null = null;
+  seanceChoisie: SessionInfo | null = null;
 
   doublonParam = false;
-  erreurAgeParam = false;
   inscritParam = false;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private activityService: ActivityService,
+    private childService: ChildService,
+    private registrationService: RegistrationService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(p => {
       this.doublonParam = p['doublon'] !== undefined;
-      this.erreurAgeParam = p['erreurAge'] !== undefined;
       this.inscritParam = p['inscrit'] !== undefined;
     });
-    // Communication avec Spring Boot via API REST
-    this.seances = [];
-    this.enfants = [];
+    this.chargerDonnees();
+  }
+
+  chargerDonnees(): void {
+    this.activityService.getActivities().subscribe({
+      next: (data: Activity[]) => {
+        this.activites = data;
+        this.cd.detectChanges();
+      },
+      error: (err) => console.error('Erreur chargement activites', err)
+    });
+
+    this.childService.getChildren().subscribe({
+      next: (data: Child[]) => {
+        this.enfants = data.map(c => ({ id: c.id, firstName: c.firstName, lastName: c.lastName, age: c.age }));
+        this.cd.detectChanges();
+      },
+      error: (err) => console.error('Erreur chargement enfants', err)
+    });
+
+    // Couples (enfant, seance) deja inscrits pour bloquer doublons
+    this.registrationService.getMyRegistrations().subscribe({
+      next: (data: ActivityRegistration[]) => {
+        this.inscriptions = new Set(
+          data.filter(r => !this.estAnnule(r.status))
+              .map(r => `${r.childId}-${r.activitySessionId}`)
+        );
+        this.cd.detectChanges();
+      }
+    });
   }
 
   toggleSidebar(): void {
@@ -58,23 +84,38 @@ export class ActivitesParent implements OnInit {
     document.querySelector('.sidebar-overlay')?.classList.toggle('open');
   }
 
-  matchRecherche(s: Seance): boolean {
-    return s.activity.name.toLowerCase().includes(this.recherche.toLowerCase());
+  matchRecherche(a: Activity): boolean {
+    return a.name.toLowerCase().includes(this.recherche.toLowerCase());
   }
 
   onRecherche(): void {
-    const visibles = this.seances.filter(s => this.matchRecherche(s)).length;
-    this.aucunResultat = this.seances.length > 0 && visibles === 0;
+    const visibles = this.activites.filter(a => this.matchRecherche(a)).length;
+    this.aucunResultat = this.activites.length > 0 && visibles === 0;
   }
 
-  getImage(s: Seance): string {
-    return s.activity.activityImagePath
-      ? 'http://localhost:8080' + s.activity.activityImagePath
+  getImage(a: Activity): string {
+    return a.activityImagePath
+      ? `${environment.apiUrl}${a.activityImagePath}`
       : 'assets/images/default-activity.jpg';
   }
 
-  ouvrirModal(s: Seance): void {
-    this.seanceChoisie = s;
+  // Intervalle d'age toutes seances confondues
+  intervalleAge(a: Activity): string {
+    if (!a.sessions || a.sessions.length === 0) return 'Tous ages';
+    const mins = a.sessions.map(s => s.minAge).filter((v): v is number => v != null);
+    const maxs = a.sessions.map(s => s.maxAge).filter((v): v is number => v != null);
+    if (mins.length === 0 && maxs.length === 0) return 'Tous ages';
+    const min = mins.length ? Math.min(...mins) : null;
+    const max = maxs.length ? Math.max(...maxs) : null;
+    if (min !== null && max !== null) return `${min} - ${max} ans`;
+    if (min !== null) return `${min}+ ans`;
+    if (max !== null) return `Jusqu'a ${max} ans`;
+    return 'Tous ages';
+  }
+
+  ouvrirModal(a: Activity): void {
+    this.activiteChoisie = a;
+    this.seanceChoisie = null;
     this.modalOuvert = true;
     document.body.style.overflow = 'hidden';
   }
@@ -82,31 +123,43 @@ export class ActivitesParent implements OnInit {
   fermerModal(event?: MouseEvent): void {
     if (event && event.target !== event.currentTarget) return;
     this.modalOuvert = false;
+    this.activiteChoisie = null;
     this.seanceChoisie = null;
     document.body.style.overflow = '';
   }
 
-  estEligible(enfant: Enfant): { ok: boolean; raison: string } {
-    if (!this.seanceChoisie) return { ok: false, raison: '' };
-    const sId = this.seanceChoisie.id;
-    if (this.inscriptions.has(`${enfant.id}-${sId}`)) {
-      return { ok: false, raison: 'Ce profil est déjà inscrit à cette activité' };
-    }
-    const min = this.seanceChoisie.minAge;
-    const max = this.seanceChoisie.maxAge;
-    if ((min !== null && enfant.age < min) || (max !== null && enfant.age > max)) {
-      return { ok: false, raison: `Âge requis : ${min}-${max} ans` };
-    }
-    return { ok: true, raison: '' };
+  estDejaInscritSeance(e: Enfant, s: SessionInfo): boolean {
+    return this.inscriptions.has(`${e.id}-${s.id}`);
   }
 
-  inscrire(enfant: Enfant): void {
-    if (!this.seanceChoisie) return;
-    // Consommation API REST via HttpClient
-    console.log('Inscrire', enfant.id, 'à séance', this.seanceChoisie.id);
+  ageOk(e: Enfant, s: SessionInfo): boolean {
+    if (s.minAge != null && e.age < s.minAge) return false;
+    if (s.maxAge != null && e.age > s.maxAge) return false;
+    return true;
   }
 
-  initiale(nom: string): string {
-    return nom.charAt(0).toUpperCase();
+  raisonAgeKo(s: SessionInfo): string {
+    return `Age requis : ${s.minAge ?? '?'}-${s.maxAge ?? '?'} ans`;
+  }
+
+  estAnnule(status: string): boolean {
+    return status === 'ANNULÉ' || status === 'Annulé' || status === 'AnnulÃ©';
+  }
+
+  // Inscription directe enfant + seance
+  inscrireDirect(e: Enfant, s: SessionInfo): void {
+    if (!this.ageOk(e, s)) {
+      alert(this.raisonAgeKo(s));
+      return;
+    }
+    this.registrationService.register({ childId: e.id, activitySessionId: s.id }).subscribe({
+      next: () => {
+        this.inscriptions.add(`${e.id}-${s.id}`);
+        this.inscritParam = true;
+        this.fermerModal();
+        this.cd.detectChanges();
+      },
+      error: (err) => alert('Erreur inscription : ' + (err.error?.message || err.message))
+    });
   }
 }

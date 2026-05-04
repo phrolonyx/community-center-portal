@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ParentService, ParentProfile } from '../../../apiServices/parent-service';
+import { AuthService } from '../../../apiServices/auth.service';
 
 interface Profil {
   prenom: string;
@@ -14,7 +16,6 @@ interface Profil {
   urgenceTelephone: string;
 }
 
-// Composant Angular dynamique pour le profil du parent
 @Component({
   selector: 'app-profil-parent',
   standalone: false,
@@ -23,41 +24,53 @@ interface Profil {
 })
 export class ProfilParent implements OnInit {
   profil: Profil = {
-    prenom: '',
-    nom: '',
-    courriel: '',
-    telephone: '',
-    adresse: '',
-    ville: '',
-    province: '',
-    urgenceNom: '',
-    urgenceRelation: '',
-    urgenceTelephone: '',
+    prenom: '', nom: '', courriel: '',
+    telephone: '', adresse: '', ville: '', province: '',
+    urgenceNom: '', urgenceRelation: '', urgenceTelephone: ''
   };
 
+  private profilId: number | null = null;
   sauvegarde: Profil | null = null;
   enModeEdition = false;
   modifReussie = false;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private parentService: ParentService,
+    private authService: AuthService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((p) => {
+    this.route.queryParams.subscribe(p => {
       this.modifReussie = p['modif'] !== undefined;
     });
+    this.chargerProfil();
+  }
 
-    this.profil = {
-      prenom: 'Aymane',
-      nom: 'Chaki',
-      courriel: 'aymanechaki10@gmail.com',
-      telephone: '',
-      adresse: '',
-      ville: '',
-      province: '',
-      urgenceNom: '',
-      urgenceRelation: '',
-      urgenceTelephone: '',
-    };
+  // Profil parent
+  chargerProfil(): void {
+    const u = this.authService.currentUser();
+    if (u) {
+      this.profil.prenom = u.firstName;
+      this.profil.nom = u.lastName;
+      this.profil.courriel = u.email;
+    }
+
+    this.parentService.getProfile().subscribe({
+      next: (data: ParentProfile) => {
+        this.profilId = data.id;
+        this.profil.telephone = data.phoneNumber || '';
+        this.profil.adresse = data.addressLine1 || '';
+        this.profil.ville = data.city || '';
+        this.profil.province = data.province || '';
+        this.profil.urgenceNom = data.emergencyName || '';
+        this.profil.urgenceRelation = data.emergencyRelationship || '';
+        this.profil.urgenceTelephone = data.emergencyPhone || '';
+        this.cd.detectChanges();
+      },
+      error: (err) => console.error('Erreur chargement profil', err)
+    });
   }
 
   toggleSidebar(): void {
@@ -65,8 +78,8 @@ export class ProfilParent implements OnInit {
     document.querySelector('.sidebar-overlay')?.classList.toggle('open');
   }
 
-  afficher(valeur: string): string {
-    return valeur && valeur.length > 0 ? valeur : 'Non renseigné';
+  afficher(v: string): string {
+    return v && v.length > 0 ? v : 'Non renseigné';
   }
 
   modifier(): void {
@@ -75,15 +88,27 @@ export class ProfilParent implements OnInit {
   }
 
   annuler(): void {
-    if (this.sauvegarde) {
-      this.profil = { ...this.sauvegarde };
-    }
+    if (this.sauvegarde) this.profil = { ...this.sauvegarde };
     this.enModeEdition = false;
   }
 
-  // Communication avec Spring Boot via API REST
   enregistrer(): void {
-    console.log('Profil enregistré', this.profil);
-    this.enModeEdition = false;
+    const data = {
+      phoneNumber: this.profil.telephone,
+      addressLine1: this.profil.adresse,
+      city: this.profil.ville,
+      province: this.profil.province,
+      emergencyName: this.profil.urgenceNom,
+      emergencyPhone: this.profil.urgenceTelephone,
+      emergencyRelationship: this.profil.urgenceRelation
+    };
+
+    this.parentService.updateProfile(data).subscribe({
+      next: () => {
+        this.modifReussie = true;
+        this.enModeEdition = false;
+      },
+      error: (err) => alert('Erreur lors de la modification : ' + (err.error?.message || err.message))
+    });
   }
 }

@@ -15,6 +15,7 @@ export interface ActivityRegistration {
   activityName: string;
   sessionStart: string;
   locationName: string;
+  hostFullName: string | null;
   parentProfileId: number;
 }
 
