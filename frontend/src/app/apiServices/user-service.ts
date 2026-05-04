@@ -63,4 +63,9 @@ export class UserService {
       `${this.apiUrl}/${id}/reject`, {}, { withCredentials: true }
     );
   }
+  getAdminDashboard() {
+    return this.http.get<any>('/api/admin/dashboard', {
+      withCredentials: true
+    });
+  }
 }
