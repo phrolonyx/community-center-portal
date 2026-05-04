@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {ActivitySession, ActivitySessionService} from '../../../apiServices/activity-session-service';
 
 @Component({
@@ -6,6 +6,7 @@ import {ActivitySession, ActivitySessionService} from '../../../apiServices/acti
   standalone: false,
   templateUrl: './sceances-admin.html',
   styleUrl: './sceances-admin.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SceancesAdmin {
   constructor(private sessionService: ActivitySessionService) {}
