@@ -36,12 +36,48 @@ export class ViewActivities implements OnInit {
   onRecherche(v: string): void {
     this.recherche.set(v);
   }
-
   getImage(a: Activity): string {
-    return a.activityImagePath
-      ? `${environment.apiUrl}${a.activityImagePath}`
-      : 'assets/images/default-activity.jpg';
+    const path = a.activityImagePath;
+
+    if (!path || path.trim() === '') {
+      return 'assets/images/default-activity.jpg';
+    }
+
+    // Images API
+    if (path.startsWith('/images/')) {
+      return `${environment.apiUrl}${path}`;
+    }
+
+    // Images admin → juste un nom de fichier
+    return `${environment.apiUrl}/uploads/${path}`;
   }
+
+
+  getAdminImage(a: Activity): string {
+    const path = a.activityImagePath;
+
+    // Pas d'image → image par défaut
+    if (!path || path.trim() === '') {
+      return 'assets/images/default-activity.jpg';
+    }
+
+    // Cas des images admin cassées → "/apiXXXX.jpg"
+    if (path.startsWith('/api') && !path.startsWith('/api/')) {
+      const fixed = '/api/' + path.substring(4); // ajoute le "/" manquant
+      return `${environment.apiUrl}${fixed}`;
+    }
+
+    // Si jamais c'est un chemin complet
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+
+    // Sinon → fallback
+    return 'assets/images/default-activity.jpg';
+  }
+
+
+
 
   // Intervalle d'age toutes seances confondues
   intervalleAge(a: Activity): string {
