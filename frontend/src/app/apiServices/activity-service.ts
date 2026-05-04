@@ -43,16 +43,16 @@ export class ActivityService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
 
-  // // Uploader une image pour une activité (admin)
-  // uploadImage(id: number, file: File): Observable<{ imagePath: string }> {
-  //   const formData = new FormData();
-  //   formData.append('imageFile', file);
-  //   return this.http.post<{ imagePath: string }>(
-  //     `${this.apiUrl}/${id}/image`,
-  //     formData,
-  //     { withCredentials: true }
-  //   );
-  // }
+  // Uploader une image pour une activité (admin)
+  uploadImage(id: number, file: File): Observable<{ imagePath: string }> {
+    const formData = new FormData();
+    formData.append('imageFile', file);
+    return this.http.post<{ imagePath: string }>(
+      `${this.apiUrl}/${id}/image`,
+      formData,
+      { withCredentials: true }
+    );
+  }
 
   // Supprimer une séance (admin)
   deleteActivities(id: number): Observable<void> {

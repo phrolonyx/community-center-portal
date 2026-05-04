@@ -43,6 +43,11 @@ export class ChildService {
   //   return this.http.get<Child[]>(this.apiUrl, { params, withCredentials: true });
   // }
 
+  getChildren(search?: string): Observable<Child[]> {
+    const params: any = search ? { search } : {};
+    return this.http.get<Child[]>(this.apiUrl, { params, withCredentials: true });
+  }
+
 
   // Récupérer tous les enfants (admin seulement)
   getAllChildren(): Observable<Child[]> {

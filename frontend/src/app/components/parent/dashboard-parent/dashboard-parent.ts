@@ -18,7 +18,7 @@ interface Enfant {
   id: number;
   firstName: string;
   lastName: string;
-  dateOfBirth: string | null;
+  dateOfBirth?: string;
 }
 
 interface Utilisateur {
