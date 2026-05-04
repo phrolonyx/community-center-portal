@@ -1,4 +1,4 @@
-import {Component, computed, OnInit, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, OnInit, signal} from '@angular/core';
 import {ChildService} from '../../../apiServices/child-service';
 import {Child} from '../../../models/child.model';
 
@@ -7,6 +7,7 @@ import {Child} from '../../../models/child.model';
   standalone: false,
   templateUrl: './enfants-admin.html',
   styleUrl: './enfants-admin.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EnfantsAdmin implements OnInit {
 

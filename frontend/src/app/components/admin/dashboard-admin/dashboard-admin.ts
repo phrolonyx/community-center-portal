@@ -1,44 +1,50 @@
-import { Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
+import {UserService} from '../../../apiServices/user-service';
 
 @Component({
   selector: 'app-dashboard-admin',
   standalone: false,
   templateUrl: './dashboard-admin.html',
   styleUrl: './dashboard-admin.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardAdmin {
-  //  Valeurs statiques pour l'instant
-  //  À remplacer par des valeurs venant de ton API Spring Boot
-  totalUsers = 0;
-  totalParents = 0;
-  totalAnimateurs = 0;
-  totalDisabled = 0;
+export class DashboardAdmin implements OnInit {
 
-  //  Liste des utilisateurs en attente
-  //  À remplacer par un appel API
-  pendingUsers = [
-    // Exemple temporaire
-    // {
-    //   id: 1,
-    //   firstName: 'Jean',
-    //   lastName: 'Dupont',
-    //   email: 'jean@example.com',
-    //   role: 'PARENT',
-    //   createdAt: new Date()
-    // }
-  ];
+  totalUsers = signal(0);
+  totalParents = signal(0);
+  totalAnimateurs = signal(0);
+  totalDisabled = signal(0);
 
-  //  Méthode pour approuver un utilisateur
-  //  À connecter à ton service API
+  pendingUsers = signal<any[]>([]);
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    this.loadDashboard();
+  }
+
+  loadDashboard() {
+    this.userService.getAdminDashboard().subscribe({
+      next: data => {
+        this.totalUsers.set(data.totalUsers);
+        this.totalParents.set(data.totalParents);
+        this.totalAnimateurs.set(data.totalAnimateurs);
+        this.totalDisabled.set(data.totalDisabled);
+        this.pendingUsers.set(data.pendingUsers);
+      },
+      error: err => console.error("Erreur dashboard admin :", err)
+    });
+  }
+
   approveUser(id: number) {
-    console.log("Approuver utilisateur ID:", id);
-    // TODO: appeler ton endpoint Spring Boot
+    this.userService.approveUser(id).subscribe({
+      next: () => this.loadDashboard()
+    });
   }
 
-  //  Méthode pour refuser un utilisateur
   rejectUser(id: number) {
-    console.log("Refuser utilisateur ID:", id);
-    // TODO: appeler ton endpoint Spring Boot
+    this.userService.rejectUser(id).subscribe({
+      next: () => this.loadDashboard()
+    });
   }
-
 }
