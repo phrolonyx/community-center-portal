@@ -17,10 +17,13 @@ export class FormActiviteAdmin implements OnInit {
     private activityService: ActivityService
   ) {}
 
+  // Loader
+  loading = signal(true);
+
   // Titre dynamique
   formTitle = signal("Nouvelle activité");
 
-  // Signal pour l'activité (sert à savoir si on est en édition)
+  // Activité chargée
   activity = signal<Activity>({
     id: -1,
     name: "",
@@ -30,7 +33,7 @@ export class FormActiviteAdmin implements OnInit {
     sessions: []
   });
 
-  // Objet simple pour le formulaire (compatible ngModel)
+  // FORMULAIRE SIMPLE (compatible ngModel)
   form = {
     name: "",
     description: "",
@@ -45,10 +48,11 @@ export class FormActiviteAdmin implements OnInit {
     if (id) {
       this.formTitle.set("Modifier une activité");
       this.loadActivity(+id);
+    } else {
+      this.loading.set(false);
     }
   }
 
-  // Charger activité si édition
   loadActivity(id: number) {
     this.activityService.getActivityById(id).subscribe({
       next: data => {
@@ -57,12 +61,13 @@ export class FormActiviteAdmin implements OnInit {
         // Remplir le formulaire
         this.form.name = data.name;
         this.form.description = data.description ?? "";
+
+        this.loading.set(false);
       },
       error: err => console.error("Erreur chargement activité :", err)
     });
   }
 
-  // Upload image
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;
@@ -71,7 +76,6 @@ export class FormActiviteAdmin implements OnInit {
     this.selectedFileName.set(file.name);
   }
 
-  // Sauvegarde activité
   saveActivity() {
     const a = this.activity();
 
@@ -85,16 +89,14 @@ export class FormActiviteAdmin implements OnInit {
       : this.activityService.createActivityJson(body);
 
     request.subscribe({
-      next: (savedActivity) => {
+      next: saved => {
 
-        // Si pas d'image → terminé
         if (!this.form.imageFile) {
           this.router.navigate(['/admin/activites']);
           return;
         }
 
-        // Sinon upload image séparément
-        this.activityService.uploadImage(savedActivity.id, this.form.imageFile).subscribe({
+        this.activityService.uploadImage(saved.id, this.form.imageFile).subscribe({
           next: () => this.router.navigate(['/admin/activites']),
           error: err => console.error("Erreur upload image :", err)
         });
@@ -103,40 +105,3 @@ export class FormActiviteAdmin implements OnInit {
     });
   }
 }
-// Titre dynamique (ajout / édition)
-//   formTitle = "Nouvelle activité";
-  // À remplacer par un titre dynamique selon route param
-
-  // Objet activité (à remplacer par API)
-  // activity = {
-  //   id: null,
-  //   name: "",
-  //   description: "",
-  //   imageFile: null
-  // };
-
-  // selectedFileName = "";
-
-  // Upload image
-  // onFileSelected(event: any) {
-  //   const file = event.target.files[0];
-  //   this.activity.imageFile = file;
-  //   this.selectedFileName = file ? file.name : "";
-  // }
-
-  // Sauvegarde activité
-  // saveActivity() {
-  //   console.log("Données envoyées :", this.activity);
-
-    //
-    // const formData = new FormData();
-    // formData.append("id", this.activity.id);
-    // formData.append("name", this.activity.name);
-    // formData.append("description", this.activity.description);
-    // if (this.activity.imageFile) {
-    //   formData.append("imageFile", this.activity.imageFile);
-    // }
-
-    //
-//   }
-// }
