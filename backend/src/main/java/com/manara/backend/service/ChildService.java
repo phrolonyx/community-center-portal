@@ -29,8 +29,16 @@ public class ChildService {
 
     @Transactional
     public void createChild(Child child, Integer parentProfileId) {
+        createChild(child, parentProfileId, null);
+    }
+
+    @Transactional
+    public void createChild(Child child, Integer parentProfileId, String relationship) {
         ParentProfile parentProfile = parentProfileRepository.findById(parentProfileId).orElseThrow();
         ChildParent childParent = new ChildParent(child, parentProfile);
+        if (relationship != null && !relationship.isBlank()) {
+            childParent.setRelationship(relationship);
+        }
         childRepository.save(child);
         childParentRepository.save(childParent);
     }
@@ -71,6 +79,20 @@ public class ChildService {
     @Transactional
     public void updateChild(Child child) {
         childRepository.save(child);
+    }
+
+    // Met a jour la relation Parent-Enfant
+    @Transactional
+    public void updateRelationship(Integer childId, Integer parentProfileId, String relationship) {
+        if (relationship == null || relationship.isBlank()) return;
+        List<ChildParent> liens = childParentRepository.findChildParentsByParentProfile_Id(parentProfileId);
+        for (ChildParent cp : liens) {
+            if (cp.getChild().getId().equals(childId)) {
+                cp.setRelationship(relationship);
+                childParentRepository.save(cp);
+                return;
+            }
+        }
     }
 
     @Transactional

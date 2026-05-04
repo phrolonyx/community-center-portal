@@ -68,7 +68,7 @@ public class ChildController {
         child.setDateOfBirth(dto.getDateOfBirth());
         child.setUpdatedAt(LocalDateTime.now());
 
-        childService.createChild(child, profile.getId());
+        childService.createChild(child, profile.getId(), dto.getRelationship());
 
         if (dto.getMedical() != null && !dto.getMedical().isBlank()) {
             ChildMedical condition = new ChildMedical();
@@ -85,6 +85,7 @@ public class ChildController {
     @PutMapping("/{id}")
     public ResponseEntity<ChildResponseDto> updateChild(
             @PathVariable Integer id,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody ChildRequest dto) {
 
         Child child = childService.findById(id);
@@ -93,6 +94,12 @@ public class ChildController {
         child.setDateOfBirth(dto.getDateOfBirth());
         child.setUpdatedAt(LocalDateTime.now());
         childService.updateChild(child);
+
+        // Mise a jour de la relation Parent-Enfant
+        List<ParentProfile> profilsParent = parentService.findByUserId(userDetails.getUser().getId());
+        if (!profilsParent.isEmpty()) {
+            childService.updateRelationship(id, profilsParent.get(0).getId(), dto.getRelationship());
+        }
 
         if (dto.getMedical() != null && !dto.getMedical().isBlank()) {
             List<ChildMedical> conditions = child.getMedicalConditions();
