@@ -3,6 +3,7 @@ export class Activity {
               public name: string,
               public description?: string,
               public activityImagePath?: string,
+              public imageFile?: File,
               public sessions?: SessionInfo[]
               ) {}
 }

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, computed, OnInit, signal} from '@angular/core';
+import {UserService} from '../../../apiServices/user-service';
+import {User} from '../../../models/user.model';
 
 @Component({
   selector: 'app-users-admin',
@@ -6,64 +8,99 @@ import { Component } from '@angular/core';
   templateUrl: './users-admin.html',
   styleUrl: './users-admin.css',
 })
-export class UsersAdmin {
-  // Recherche
-  searchValue = "";
 
-  // Liste des utilisateurs (à remplacer par API)
-  users = [
-    // Exemple :
-    // { id: 1, firstName: 'Jean', lastName: 'Dupont', role: 'PARENT', email: 'jean@example.com', enabled: true, lastLogin: new Date(), createdAt: new Date() }
-  ];
+export class UsersAdmin implements OnInit{
 
-  // Modal message
-  modalOpen = false;
-  messageSent = false;
+  constructor(private userService : UserService) {}
 
-  messageRecipient = "";
-  messageType = "ANNONCE";
-  messageSubject = "";
-  messageContent = "";
-
-  // Recherche API
-  searchUsers() {
-    console.log("Recherche :", this.searchValue);
-    // TODO: appeler ton API Spring Boot
+  ngOnInit() {
+    this.loadUsers()
   }
+
+  users = signal<User[]>([]);
+
+  searchValue = signal('');
+
+
+  // Charger tous les utilisateurs
+  loadUsers() {
+    this.userService.getAllUsers().subscribe({
+      next: data => this.users.set(data),
+      error: () => this.users.set([])
+    });
+  }
+
+  // 🔍 Recherche locale (nom, prénom, email)
+  searchUsers = computed(() => {
+    const search = this.searchValue().toLowerCase().trim();
+    if (!search) return this.users();
+
+    return this.users().filter(user =>
+      user.firstName.toLowerCase().includes(search) ||
+      user.lastName.toLowerCase().includes(search) ||
+      user.email.toLowerCase().includes(search)
+    );
+  });
 
   // Désactiver utilisateur
   disableUser(id: number) {
-    console.log("Désactiver utilisateur :", id);
-    // TODO: API disable
+    this.userService.disableUser(id).subscribe({
+      next: () => {
+        // Mettre à jour localement
+        const updated = this.users().map(u =>
+          u.id === id ? { ...u, enabled: false } : u
+        );
+        this.users.set(updated);
+      },
+      error: err => console.error("Erreur disable :", err)
+    });
   }
 
-  // Activer utilisateur
+// Activer utilisateur
   enableUser(id: number) {
-    console.log("Activer utilisateur :", id);
-    // TODO: API enable
+    this.userService.enableUser(id).subscribe({
+      next: () => {
+        // Mettre à jour localement
+        const updated = this.users().map(u =>
+          u.id === id ? { ...u, enabled: true } : u
+        );
+        this.users.set(updated);
+      },
+      error: err => console.error("Erreur enable :", err)
+    });
   }
+
+
+  // // Modal message
+  // modalOpen = false;
+  // messageSent = false;
+  //
+  // messageRecipient = "";
+  // messageType = "ANNONCE";
+  // messageSubject = "";
+  // messageContent = "";
+
 
   // Modal
-  openMessageModal() {
-    this.modalOpen = true;
-  }
-
-  closeMessageModal() {
-    this.modalOpen = false;
-  }
+  // openMessageModal() {
+  //   this.modalOpen = true;
+  // }
+  //
+  // closeMessageModal() {
+  //   this.modalOpen = false;
+  // }
 
   // Envoi message API
-  sendMessage() {
-    console.log("Message envoyé :", {
-      recipient: this.messageRecipient,
-      type: this.messageType,
-      subject: this.messageSubject,
-      content: this.messageContent
-    });
+  // sendMessage() {
+  //   console.log("Message envoyé :", {
+  //     recipient: this.messageRecipient,
+  //     type: this.messageType,
+  //     subject: this.messageSubject,
+  //     content: this.messageContent
+  //   });
+  //
+  //   this.messageSent = true;
+  //   this.modalOpen = false;
 
-    this.messageSent = true;
-    this.modalOpen = false;
 
-    // TODO: API send message
   }
-}

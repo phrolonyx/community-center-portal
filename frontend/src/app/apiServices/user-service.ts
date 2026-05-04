@@ -17,11 +17,17 @@ export class UserService {
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl, { withCredentials: true });
   }
+  // Récupérer tous les utilisateurs (admin seulement)
+  getUsersByRole(role: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/role/${role}`,{ withCredentials: true });
+  }
 
   // Approuver un compte en attente
   approveUser(id: number): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}/approve`, {}, { withCredentials: true });
   }
+
+
 
   // Rejeter un compte en attente
   rejectUser(id: number): Observable<void> {

@@ -76,4 +76,13 @@ public class UserController {
         userService.save(user);
         return ResponseEntity.ok(Map.of("message", "Compte rejeté"));
     }
+    @GetMapping("/role/{role}")
+    public ResponseEntity<List<UserResponseDto>> getUsersByRole(@PathVariable String role) {
+
+        List<User> users = userService.findByRoleName(role);
+
+        return ResponseEntity.ok(
+                users.stream().map(UserResponseDto::from).toList()
+        );
+    }
 }
