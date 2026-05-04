@@ -14,6 +14,7 @@ public class ChildResponseDto {
     private String lastName;
     private LocalDateTime dateOfBirth;
     private Integer age;
+    private String relationship;
     private List<MedicalInfo> medicalConditions;
 
     @Data
@@ -31,6 +32,10 @@ public class ChildResponseDto {
         dto.setLastName(child.getLastName());
         dto.setDateOfBirth(child.getDateOfBirth());
         dto.setAge(child.getAge());
+
+        if (child.getParentLinks() != null && !child.getParentLinks().isEmpty()) {
+            dto.setRelationship(child.getParentLinks().get(0).getRelationship());
+        }
 
         if (child.getMedicalConditions() != null) {
             dto.setMedicalConditions(
