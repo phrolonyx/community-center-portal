@@ -103,8 +103,21 @@ const routes: Routes = [
     data: { role: 'ADMIN' }
   },
   {
+    path: 'admin/form-activite-admin/:id',
+    component: FormActiviteAdmin,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'ADMIN' }
+  },
+
+  {
     path: 'admin/sceances',
     component: SceancesAdmin,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'ADMIN' }
+  },
+  {
+    path: 'admin/form-sceances-admin/:id',
+    component: FormSceanceAdmin,
     canActivate: [AuthGuard, RoleGuard],
     data: { role: 'ADMIN' }
   },

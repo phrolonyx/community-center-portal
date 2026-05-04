@@ -8,7 +8,7 @@ export interface MedicalInfo {
   id: number;
   condition: string;
   severity: string;
-  notes: string | null;
+  notes?: string;
 }
 
 // Correspond exactement à ChildResponseDto.java
@@ -16,9 +16,9 @@ export interface Child {
   id: number;
   firstName: string;
   lastName: string;
-  dateOfBirth: string | null;
+  dateOfBirth?: string;
   age: number;
-  medicalConditions: MedicalInfo[];
+  medicalConditions?: MedicalInfo[];
 }
 
 export interface ChildRequest {
@@ -37,11 +37,11 @@ export class ChildService {
 
   constructor(private http: HttpClient) {}
 
-  // Récupérer les enfants — admin reçoit tous, parent reçoit les siens
-  getChildren(search?: string): Observable<Child[]> {
-    const params: Record<string, string> = search ? { search } : {};
-    return this.http.get<Child[]>(this.apiUrl, { params, withCredentials: true });
-  }
+  // // Récupérer les enfants — admin reçoit tous, parent reçoit les siens
+  // getChildren(search?: string): Observable<Child[]> {
+  //   const params = search ? { search } : {};
+  //   return this.http.get<Child[]>(this.apiUrl, { params, withCredentials: true });
+  // }
 
 
   // Récupérer tous les enfants (admin seulement)

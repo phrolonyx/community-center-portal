@@ -15,8 +15,8 @@ export interface ActivitySession {
   locationName: string;
   hostId: number;
   hostFullName: string;
-  minAge: number | null;
-  maxAge: number | null;
+  minAge: number;
+  maxAge: number;
 }
 
 export interface ActivitySessionRequest {

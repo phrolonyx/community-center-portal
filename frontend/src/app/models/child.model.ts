@@ -3,8 +3,8 @@ export class Child {
     public id: number,
     public firstName: string,
     public lastName: string,
-    public dateOfBirth: string | null,
     public age: number,
+    public dateOfBirth?: string,
     public medicalConditions?: MedicalInfo[]
   ) {}
 }
