@@ -94,6 +94,9 @@ export class ProfilParent implements OnInit {
 
   enregistrer(): void {
     const data = {
+      firstName: this.profil.prenom,
+      lastName: this.profil.nom,
+      email: this.profil.courriel,
       phoneNumber: this.profil.telephone,
       addressLine1: this.profil.adresse,
       city: this.profil.ville,
@@ -107,6 +110,8 @@ export class ProfilParent implements OnInit {
       next: () => {
         this.modifReussie = true;
         this.enModeEdition = false;
+        this.chargerProfil();
+        this.cd.detectChanges();
       },
       error: (err) => alert('Erreur lors de la modification : ' + (err.error?.message || err.message))
     });

@@ -18,6 +18,7 @@ export interface Child {
   lastName: string;
   dateOfBirth?: string;
   age: number;
+  relationship?: string;
   medicalConditions?: MedicalInfo[];
 }
 

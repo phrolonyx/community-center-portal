@@ -14,6 +14,7 @@ interface Enfant {
   lastName: string;
   dateOfBirth: string;
   age: number;
+  relationship: string;
   medicalConditions: MedCondition[];
   registrations: Inscription[];
 }
@@ -70,6 +71,7 @@ export class EnfantsParent implements OnInit {
           lastName: c.lastName,
           dateOfBirth: c.dateOfBirth || '',
           age: c.age,
+          relationship: c.relationship || '',
           medicalConditions: (c.medicalConditions || []).map(m => ({ condition: m.condition || '' })),
           registrations: []
         }));
@@ -120,7 +122,7 @@ export class EnfantsParent implements OnInit {
       firstName: e.firstName,
       lastName: e.lastName,
       dateOfBirth: e.dateOfBirth ? e.dateOfBirth.split('T')[0] : '',
-      relationship: 'Père',
+      relationship: e.relationship || 'Père',
       medical: e.medicalConditions[0]?.condition || '',
     };
     this.modalOuvert = true;
@@ -135,6 +137,11 @@ export class EnfantsParent implements OnInit {
 
   // Ajout / modification enfant
   envoyer(): void {
+    if (this.modeAjout === 'add' && !this.formulaire.relationship) {
+      alert('Veuillez sélectionner votre relation avec l\'enfant');
+      return;
+    }
+
     const dateSeule = this.formulaire.dateOfBirth ? this.formulaire.dateOfBirth.split('T')[0] : null;
     const dateIso = dateSeule ? `${dateSeule}T00:00:00` : null;
 
