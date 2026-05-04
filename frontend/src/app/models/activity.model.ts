@@ -4,6 +4,7 @@ export interface Activity {
   name: string;
   description: string | null;
   activityImagePath: string | null;
+  imageFile?: File;
   sessions: SessionInfo[];
 }
 

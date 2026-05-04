@@ -55,8 +55,9 @@ public class SecurityConfig {
                                 "/auth/check-email", "/activities/**",
                                 "/uploads/**", "/images/**").permitAll()
                         // Routes admin
-                        .requestMatchers("/admin/**", "/users/**",
-                                "/sessions/**").hasAuthority("ADMIN")
+                        .requestMatchers("/admin/**", "/users/**").hasAuthority("ADMIN")
+                        // Routes animateurs
+                        .requestMatchers("/sessions/**").hasAnyAuthority("ANIMATEUR", "ADMIN")
                         // Routes parent
                         .requestMatchers("/registrations/**").hasAnyAuthority("PARENT", "ADMIN")
                         // Sécurisation par défaut et de possibles endpoints futurs

@@ -36,7 +36,7 @@ public class ChildController {
         List<Child> children;
         String role = userDetails.getUser().getRole().getName();
 
-        if ("ADMIN".equals(role)) {
+        if ("ADMIN".equals(role) || "ANIMATEUR".equals(role)) {
             children = (search == null || search.isBlank())
                     ? childService.findAll()
                     : childService.searchByName(search.trim());

@@ -6,55 +6,83 @@
   <!-- MAIN -->
   <main class="main-content content-main">
 
-    <app-animateur-header title="Details d'un séance"></app-animateur-header>
+    <app-animateur-header title="Détails d'une séance"></app-animateur-header>
 
     <div class="details-container">
 
-      <!-- CADRE 1 : Activité -->
-      <div class="details-card form-modern">
-        <div class="form-group">
+      @if (session()) {
 
-          <div class="info-row">
-            <label>Activité</label>
-            <div class="value">Yoga détente</div>
+        <!-- CADRE 1 : Activité -->
+        <div class="details-card form-modern">
+          <div class="form-group">
+
+            <div class="info-row">
+              <label>Activité</label>
+              <div class="value">{{ session()!.activityName }}</div>
+            </div>
+
+            <div class="info-row">
+              <label>Lieu</label>
+              <div class="value">{{ session()!.locationName }}</div>
+            </div>
+
+            <div class="info-row">
+              <label>Capacité</label>
+              <div class="value">{{ session()!.capacity }} personnes</div>
+            </div>
           </div>
-
-          <div class="info-row">
-            <label>Lieu</label>
-            <div class="value">Centre sportif – Salle 2</div>
-          </div>
-
-          <div class="info-row">
-            <label>Capacité</label>
-            <div class="value">20 personnes</div>
-          </div>
-
-          <div class="info-row">
-            <label>Âge minimum</label>
-            <div class="value">12 ans</div>
-          </div>
-
-          <div class="info-row">
-            <label>Date de début</label>
-            <div class="value">12/05/2024 – 18:00</div>
-          </div>
-
-          <div class="info-row">
-            <label>Date de fin</label>
-            <div class="value">12/05/2024 – 19:30</div>
-          </div>
-
         </div>
-      </div>
 
+        <!-- CADRE 2 : Informations supplémentaires -->
+        <div class="details-card form-modern">
+          <div class="form-group">
 
-      <!-- CADRE 2 : Enfants inscrits -->
-      <div class="details-card form-modern">
-        <div class="form-group">
-          <label>Enfants Inscrits</label>
-          <div>Emilie Lavoie</div>
+            <div class="info-row">
+              <label>Âge</label>
+              <div class="value">
+                @if (session()!.minAge && session()!.maxAge) {
+                  {{ session()!.minAge }} ans à {{ session()!.maxAge }} ans
+                } @else {
+                  Non spécifié
+                }
+              </div>
+            </div>
+
+            <div class="info-row">
+              <label>Date de début</label>
+              <div class="value">
+                {{ session()!.dateTimeStart | date:'dd/MM/yyyy – HH:mm' }}
+              </div>
+            </div>
+
+            <div class="info-row">
+              <label>Date de fin</label>
+              <div class="value">
+                {{ session()!.dateTimeEnd | date:'dd/MM/yyyy – HH:mm' }}
+              </div>
+            </div>
+
+          </div>
         </div>
-      </div>
+
+        <!-- CADRE 2 : Enfants inscrits -->
+<!--        <div class="details-card form-modern">-->
+<!--          <div class="form-group">-->
+<!--            <label>Enfants Inscrits</label>-->
+
+<!--            &lt;!&ndash; Replace this with real data when ready &ndash;&gt;-->
+<!--            <div>-->
+<!--              Aucun enfant chargé pour le moment-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+      } @else {
+
+        <!-- LOADING STATE -->
+        <p>Chargement des détails...</p>
+
+      }
 
     </div>
 

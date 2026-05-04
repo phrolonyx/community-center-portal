@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, computed, OnInit, signal} from '@angular/core';
+import {ChildService} from '../../../apiServices/child-service';
+import {Child} from '../../../models/child.model';
 
 @Component({
   selector: 'app-enfants-admin',
@@ -6,12 +8,40 @@ import { Component } from '@angular/core';
   templateUrl: './enfants-admin.html',
   styleUrl: './enfants-admin.css',
 })
-export class EnfantsAdmin {
+export class EnfantsAdmin implements OnInit {
+
+  constructor(private childService: ChildService) {}
+
+  ngOnInit() {
+    this.children()
+  }
+
+  childrens = signal<Child[]>([]);
+
+  searchValue = signal('');
+
+  children() {
+    this.childService.getAllChildren().subscribe({
+      next: data => this.childrens.set(data),
+      error: error => this.childrens.set([])
+    })
+  }
+
+  // Recherche API
+  searchChildren = computed(() => {
+    const search = this.searchValue().toLowerCase().trim();
+    if (!search) return this.childrens();
+
+    return this.childrens().filter(child =>
+      child.firstName.toLowerCase().includes(search) ||
+      child.lastName.toLowerCase().includes(search)
+    );
+  });
     // Recherche
-  searchValue = "";
+  // searchValue = "";
 
   // Liste des enfants (à remplacer par API)
-  children = [
+  // children = [
     // Exemple :
     // {
     //   id: 1,
@@ -24,17 +54,25 @@ export class EnfantsAdmin {
     //   ],
     //   medicalConditions: ["Asthme"]
     // }
-  ];
+  // ];
 
   // Recherche API
-  searchChildren() {
-    console.log("Recherche :", this.searchValue);
-    // TODO: appeler ton API Spring Boot
-  }
+  // searchChildren() {
+  //   console.log("Recherche :", this.searchValue);
+  //
+  // }
 
-  // Supprimer enfant
+// Supprimer enfant
   deleteChild(id: number) {
     console.log("Supprimer enfant ID:", id);
-    // TODO: API delete
+
+    this.childService.deleteChild(id).subscribe({
+      next: () => {
+        // Mise à jour locale
+        const updated = this.childrens().filter(c => c.id !== id);
+        this.childrens.set(updated);
+      },
+      error: err => console.error("Erreur suppression enfant :", err)
+    });
   }
 }

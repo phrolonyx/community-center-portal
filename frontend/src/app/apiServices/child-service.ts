@@ -43,6 +43,12 @@ export class ChildService {
     return this.http.get<Child[]>(this.apiUrl, { params, withCredentials: true });
   }
 
+
+  // Récupérer tous les enfants (admin seulement)
+  getAllChildren(): Observable<Child[]> {
+    return this.http.get<Child[]>(`${this.apiUrl}`, { withCredentials: true });
+  }
+
   // Créer un nouvel enfant lié au parent connecté
   createChild(data: ChildRequest): Observable<Child> {
     return this.http.post<Child>(this.apiUrl, data, { withCredentials: true });

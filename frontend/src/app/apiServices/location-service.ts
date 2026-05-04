@@ -20,8 +20,9 @@ export class LocationService {
 
   constructor(private http: HttpClient) {}
 
-  // Récupérer tous les lieux disponibles (pour les formulaires admin)
-  getAll(): Observable<Location[]> {
+  // Récupérer tous les utilisateurs (admin seulement)
+  getAllLocations(): Observable<Location[]> {
     return this.http.get<Location[]>(this.apiUrl, { withCredentials: true });
   }
+
 }

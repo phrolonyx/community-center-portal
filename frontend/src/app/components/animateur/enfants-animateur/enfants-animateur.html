@@ -12,7 +12,7 @@
     <div class="content-main">
 
       <!-- BARRE DE RECHERCHE -->
-      <form class="content-searchbar" (submit)="searchChildren()">
+      <form class="content-searchbar" (submit)="$event.preventDefault()">
 
         <img class="filter" src="assets/images/icons8-filter-96.png" alt="Filtrer" />
 
@@ -20,7 +20,8 @@
           type="text"
           class="search-input"
           placeholder="Rechercher un enfant..."
-          [(ngModel)]="searchValue"
+          [value]="searchValue()"
+          (input)="searchValue.set($any($event.target).value)"
           name="search"
         />
 
@@ -34,56 +35,52 @@
       <section class="users-table">
         <table class="users-table-grid">
           <thead>
-            <tr>
-              <th>Nom complet</th>
-              <th>Parent(s)</th>
-              <th>Date de naissance</th>
-              <th>Âge</th>
-              <th>Conditions médicales</th>
-            </tr>
+          <tr>
+            <th>Nom complet</th>
+<!--            <th>Parent(s)</th>-->
+            <th>Date de naissance</th>
+            <th>Âge</th>
+            <th>Conditions médicales</th>
+<!--            <th></th>-->
+          </tr>
           </thead>
 
           <tbody>
 
+            @for (child of filteredChildren(); track child.id) {
 
-            <!-- BOUCLE DYNAMIQUE API -->
-            <!-- Remplacer par *ngFor="let child of children" -->
-            <tr *ngFor="let child of children">
+              <tr>
 
-              <!-- Nom complet -->
-              <!-- <td>{{ child.fullName }}</td> -->
+                <!-- Nom complet -->
+                <td>{{ child.firstName }} {{ child.lastName }}</td>
 
-              <!-- Parents -->
-              <td>
-                <!-- Liste dynamique API -->
-                <!-- <span *ngFor="let link of child.parentLinks" style="display:block;">
-                  {{ link.parentName }}
-                </span> -->
-              </td>
+                <!-- Parents -->
+<!--                <td>-->
+<!--                  @for (parent of child.parentLinks; track parent.parentId) {-->
+<!--                    <span style="display:block;">{{ parent.parentName }}</span>-->
+<!--                  }-->
+<!--                </td>-->
 
-              <!-- Date de naissance -->
-              <!-- <td>{{ child.dateOfBirth | date:'dd/MM/yyyy' }}</td> -->
+                <!-- Date de naissance -->
+                <td>{{ child.dateOfBirth | date:'dd/MM/yyyy' }}</td>
 
-              <!-- Âge -->
-              <!-- <td>{{ child.age }}</td> -->
+                <!-- Âge -->
+                <td>{{ child.age }}</td>
 
-              <!-- Conditions médicales -->
-              <td>
-                <!-- <span *ngIf="child.medicalConditions.length === 0">Aucune</span> -->
+                <!-- Conditions médicales -->
+                <td>
+                  @if (child.medicalConditions === undefined) {
+                    <span>Aucune</span>
+                  } @else {
+                    @for (cond of child.medicalConditions; track cond) {
+                      <span style="display:block;">{{ cond.condition }}</span>
+                    }
+                  }
+                </td>
 
-                <!-- <span *ngFor="let cond of child.medicalConditions" style="display:block;">
-                  {{ cond }}
-                </span> -->
-              </td>
+              </tr>
 
-              <!-- Actions -->
-              <td>
-                <button class="btn-delete">
-                  Détails
-                </button>
-              </td>
-              
-            </tr>
+            }
 
           </tbody>
         </table>
@@ -92,4 +89,3 @@
     </div>
   </main>
 </div>
-

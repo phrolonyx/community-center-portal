@@ -17,6 +17,10 @@ export class UserService {
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl, { withCredentials: true });
   }
+  // Récupérer tous les utilisateurs (admin seulement)
+  getUsersByRole(role: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/role/${role}`,{ withCredentials: true });
+  }
 
   // Rechercher des utilisateurs par nom ou courriel (admin)
   search(query: string): Observable<User[]> {
@@ -29,6 +33,7 @@ export class UserService {
   // Récupérer un utilisateur par son id (admin)
   getById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`, { withCredentials: true });
+
   }
 
   // Activer un compte désactivé (admin)

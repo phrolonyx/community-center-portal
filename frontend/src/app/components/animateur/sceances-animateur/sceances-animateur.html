@@ -11,13 +11,6 @@
 
     <div class="content-main">
 
-      <!-- BOUTON AJOUTER
-      <div class="content-header-actions">
-        <a routerLink="/admin/form-sceances-admin" class="btn-primary">
-          Ajouter une séance
-        </a>
-      </div> -->
-
       <!-- TABLEAU -->
       <section class="users-table">
 
@@ -34,42 +27,27 @@
           </thead>
 
           <tbody>
-            <button class="btn-delete" routerLink="/animateur/sceances/details">
-                  Détails
-            </button>
 
-            <!-- BOUCLE DYNAMIQUE API -->
-            <!-- Remplacer par *ngFor="let session of sessions" -->
-            <tr *ngFor="let session of sessions">
+            @for (session of sessionsParAnimateur(); track session.id) {
+              <tr>
+                <td>{{ session.activityName }}</td>
+                <td>{{ session.locationName }}</td>
+                <td>{{ session.capacity }}</td>
 
-              <!-- <td>{{ session.activityName }}</td>
-              <td>{{ session.hostName }}</td>
-              <td>{{ session.locationName }}</td>
-              <td>{{ session.capacity }}</td> -->
+                <td>{{ session.dateTimeStart | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ session.dateTimeEnd | date:'dd/MM/yyyy HH:mm' }}</td>
 
-              <!-- Dates formatées -->
-              <!-- <td>{{ session.dateTimeStart | date:'dd/MM/yyyy HH:mm' }}</td>
-              <td>{{ session.dateTimeEnd | date:'dd/MM/yyyy HH:mm' }}</td> -->
-
-              <td class="action-buttons">
-
-                <!-- Modifier -->
-                <!-- <a [routerLink]="['/admin/sessions/edit', session.id]"
-                   class="btn-edit">
-                  Modifier
-                </a> -->
-
-                <!-- Supprimer -->
-                <!-- <button class="btn-delete"
-                        (click)="deleteSession(session.id)">
-                  Supprimer
-                </button> -->
-
-              </td>
-
-            </tr>
+                <td>
+                  <button class="btn-delete"
+                          [routerLink]="['/animateur/sceances/details', session.id]">
+                    Détails
+                  </button>
+                </td>
+              </tr>
+            }
 
           </tbody>
+
         </table>
 
       </section>

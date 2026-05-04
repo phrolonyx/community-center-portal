@@ -61,4 +61,8 @@ export class ActivitySessionService {
   deleteSession(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
   }
+
+  getSessionById(id: number): Observable<ActivitySession> {
+    return this.http.get<ActivitySession>(`${this.apiUrl}/${id}`, { withCredentials: true });
+  }
 }

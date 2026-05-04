@@ -34,34 +34,31 @@
 
             <!-- BOUCLE DYNAMIQUE API -->
             <!-- Remplacer par *ngFor="let activity of activities" -->
-            <tr *ngFor="let activity of activities">
+              @for (activity of activities(); track activity.id) {
+                <tr>
 
-              <!-- Nom -->
-              <!-- <td>{{ activity.name }}</td> -->
+                  <td>{{ activity.name }}</td>
 
-              <!-- Description -->
-              <!-- <td>{{ activity.description }}</td> -->
+                  <td>{{ activity.description }}</td>
 
-              <!-- Actions -->
-              <td>
-                <div class="action-buttons">
+                  <td>
+                    <div class="action-buttons">
 
-                  <!-- Modifier -->
-                  <!-- <a [routerLink]="['/admin/activities/edit', activity.id]"
-                     class="btn-edit">
-                    Modifier
-                  </a> -->
+                      <a [routerLink]="['/admin/activities/edit', activity.id]"
+                         class="btn-edit">
+                        Modifier
+                      </a>
 
-                  <!-- Supprimer -->
-                  <!-- <button class="btn-delete"
-                          (click)="deleteActivity(activity.id)">
-                    Supprimer
-                  </button> -->
+                      <button class="btn-delete"
+                              (click)="deleteActivity(activity.id)">
+                        Supprimer
+                      </button>
 
-                </div>
-              </td>
+                    </div>
+                  </td>
 
-            </tr>
+                </tr>
+              }
 
           </tbody>
         </table>
