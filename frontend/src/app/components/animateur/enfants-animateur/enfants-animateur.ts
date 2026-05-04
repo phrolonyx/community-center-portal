@@ -1,40 +1,42 @@
-import { Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, OnInit, signal} from '@angular/core';
+import {Child} from '../../../models/child.model';
+import {ChildService} from '../../../apiServices/child-service';
 
 @Component({
   selector: 'app-enfants-animateur',
   standalone: false,
   templateUrl: './enfants-animateur.html',
   styleUrl: './enfants-animateur.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EnfantsAnimateur {
-      // Recherche
-  searchValue = "";
+export class EnfantsAnimateur implements OnInit {
 
-  // Liste des enfants (à remplacer par API)
-  children = [
-    // Exemple :
-    // {
-    //   id: 1,
-    //   fullName: "Emma Dupont",
-    //   dateOfBirth: new Date(2020, 4, 12),
-    //   age: 4,
-    //   parentLinks: [
-    //     { parentName: "Jean Dupont" },
-    //     { parentName: "Marie Dupont" }
-    //   ],
-    //   medicalConditions: ["Asthme"]
-    // }
-  ];
+  constructor(private childService: ChildService) {}
+
+  ngOnInit() {
+    this.loadChilds()
+  }
+
+  childrens = signal<Child[]>([]);
+
+  searchValue = signal('');
+
+  loadChilds() {
+    this.childService.getAllChildren().subscribe({
+      next: data => this.childrens.set(data),
+      error: error => this.childrens.set([])
+    })
+  }
 
   // Recherche API
-  searchChildren() {
-    console.log("Recherche :", this.searchValue);
-    // TODO: appeler ton API Spring Boot
-  }
+  filteredChildren = computed(() => {
+    const search = this.searchValue().toLowerCase().trim();
+    if (!search) return this.childrens();
 
-  // Supprimer enfant
-  deleteChild(id: number) {
-    console.log("Supprimer enfant ID:", id);
-    // TODO: API delete
-  }
+    return this.childrens().filter(child =>
+      child.firstName.toLowerCase().includes(search) ||
+      child.lastName.toLowerCase().includes(search)
+    );
+  });
+
 }

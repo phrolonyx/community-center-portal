@@ -135,7 +135,7 @@ const routes: Routes = [
     data: { role: 'ANIMATEUR' }
   },
   {
-    path: 'animateur/sceances/details',
+    path: 'animateur/sceances/details/:id',
     component: SceancesDetailsAnimateur,
     canActivate: [AuthGuard, RoleGuard],
     data: { role: 'ANIMATEUR' }

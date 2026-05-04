@@ -21,7 +21,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sessions")
-@PreAuthorize("hasAuthority('ADMIN')")
 public class ActivitySessionController {
 
     @Autowired
@@ -37,6 +36,7 @@ public class ActivitySessionController {
     private LocationService locationService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ANIMATEUR')")
     public ResponseEntity<List<ActivitySessionResponseDto>> getAll() {
         return ResponseEntity.ok(
                 sessionService.findAll().stream()
@@ -46,11 +46,13 @@ public class ActivitySessionController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ANIMATEUR')")
     public ResponseEntity<ActivitySessionResponseDto> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(ActivitySessionResponseDto.from(sessionService.findById(id)));
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ActivitySessionResponseDto> create(
             @Valid @RequestBody ActivitySessionRequest dto) {
 
@@ -60,6 +62,7 @@ public class ActivitySessionController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ActivitySessionResponseDto> update(
             @PathVariable Integer id,
             @Valid @RequestBody ActivitySessionRequest dto) {
@@ -69,6 +72,7 @@ public class ActivitySessionController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         sessionService.deleteById(id);
         return ResponseEntity.noContent().build();
@@ -85,6 +89,8 @@ public class ActivitySessionController {
         session.setCapacity(dto.getCapacity());
         session.setDateTimeStart(dto.getDateTimeStart());
         session.setDateTimeEnd((dto.getDateTimeEnd()));
+         session.setMinAge(dto.getMinAge());
+         session.setMaxAge(dto.getMaxAge());
         return session;
     }
 }

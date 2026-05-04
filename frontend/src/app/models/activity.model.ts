@@ -1,17 +1,21 @@
-export class Activity {
-  constructor(public id: number,
-              public name: string,
-              public description?: string,
-              public activityImagePath?: string,
-              public sessions?: SessionInfo[]
-              ) {}
+// Correspond exactement à ActivityResponseDto.java
+export interface Activity {
+  id: number;
+  name: string;
+  description: string | null;
+  activityImagePath: string | null;
+  imageFile?: File;
+  sessions: SessionInfo[];
 }
 
-export class SessionInfo {
-  id!: number;
-  dateTimeStart!: string;
-  dateTimeEnd!: string;
-  capacity!: number;
-  locationName?: string;
-  hostFullName?: string;
+// Correspond à ActivityResponseDto.SessionInfo et ActivitySessionResponseDto
+export interface SessionInfo {
+  id: number;
+  dateTimeStart: string;
+  dateTimeEnd: string;
+  capacity: number;
+  locationName: string | null;
+  hostFullName: string | null;
+  minAge: number | null;
+  maxAge: number | null;
 }

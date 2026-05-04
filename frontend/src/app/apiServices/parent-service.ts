@@ -16,6 +16,19 @@ export interface ParentProfile {
   emergencyRelationship: string | null;
 }
 
+export interface UpdateProfileRequest {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phoneNumber?: string;
+  addressLine1?: string;
+  city?: string;
+  province?: string;
+  emergencyName?: string;
+  emergencyRelationship?: string;
+  emergencyPhone?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -30,8 +43,8 @@ export class ParentService {
     return this.http.get<ParentProfile>(this.apiUrl, { withCredentials: true });
   }
 
-  // Mettre à jour le profil du parent connecté
-  updateProfile(data: any): Observable<ParentProfile> {
+  // Mettre à jour le profil du parent connecté — tous les champs sont optionnels
+  updateProfile(data: UpdateProfileRequest): Observable<ParentProfile> {
     return this.http.put<ParentProfile>(this.apiUrl, data, { withCredentials: true });
   }
 }

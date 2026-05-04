@@ -3,7 +3,7 @@ export class Child {
     public id: number,
     public firstName: string,
     public lastName: string,
-    public dateOfBirth: string,
+    public dateOfBirth: string | null,
     public age: number,
     public medicalConditions?: MedicalInfo[]
   ) {}
