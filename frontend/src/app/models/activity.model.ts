@@ -2,10 +2,10 @@
 export interface Activity {
   id: number;
   name: string;
-  description: string | null;
-  activityImagePath: string | null;
+  description?: string;
+  activityImagePath?: string;
   imageFile?: File;
-  sessions: SessionInfo[];
+  sessions?: SessionInfo[];
 }
 
 // Correspond à ActivityResponseDto.SessionInfo et ActivitySessionResponseDto
@@ -14,8 +14,8 @@ export interface SessionInfo {
   dateTimeStart: string;
   dateTimeEnd: string;
   capacity: number;
-  locationName: string | null;
-  hostFullName: string | null;
-  minAge: number | null;
-  maxAge: number | null;
+  locationName?: string;
+  hostFullName?: string;
+  minAge?: number;
+  maxAge?: number;
 }
