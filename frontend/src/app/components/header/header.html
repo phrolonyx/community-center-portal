@@ -25,10 +25,10 @@
 
       <!-- Utilisateur connecté — menu profil -->
       @if (authService.isAuthenticated()) {
-        <div class="profile-container">
+        <div class="profile-container" [class.active]="menuOuvert">
 
           <div class="profile-trigger" (click)="menuOuvert = !menuOuvert">
-            <span>{{ authService.currentUser()?.firstName }}</span>
+            <span>{{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}</span>
             <img src="assets/images/profileIcon.png" alt="Profil" class="profile-icon">
           </div>
 
