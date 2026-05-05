@@ -59,6 +59,19 @@ public class ParentService {
         parentProfileRepository.save(profile);
     }
 
+    // Lorsque créé par un admin
+    @Transactional
+    public void createEmptyProfile(User user) {
+        ParentProfile profile = new ParentProfile(user);
+        profile.setPhoneNumber("");
+        profile.setAddressLine1("");
+        profile.setCity("");
+        profile.setProvince("");
+        profile.setCountry("Canada");
+        profile.setPostalCode("");
+        parentProfileRepository.save(profile);
+    }
+
     // Mettre a jour les infos de l'utilisateur (prenom, nom, email)
     @Transactional
     public void updateUser(User user) {

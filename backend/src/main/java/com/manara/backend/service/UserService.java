@@ -1,5 +1,6 @@
 package com.manara.backend.service;
 
+import com.manara.backend.dto.AdminCreateUserRequest;
 import com.manara.backend.dto.RegisterRequest;
 import com.manara.backend.model.Role;
 import com.manara.backend.model.User;
@@ -12,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /*
@@ -34,6 +34,9 @@ public class UserService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private ParentService parentService;
 
     public void createUser(User user) {
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
@@ -129,6 +132,29 @@ public class UserService {
         user.setPending(true);
         emailService.envoyerBienvenue(dto.getEmail(), dto.getPrenom());
         return userRepository.save(user);
+    }
+    @Transactional
+    public User createUserByAdmin(AdminCreateUserRequest dto) {
+        Role role = roleRepository.findByName(dto.getRole())
+                .orElseThrow(() -> new RuntimeException("Rôle introuvable : " + dto.getRole()));
+
+        User user = new User(
+                role,
+                dto.getEmail(),
+                passwordEncoder.encode(dto.getPassword()),
+                dto.getPrenom(),
+                dto.getNom(),
+                null,
+                true
+        );
+        user.setPending(false);
+        userRepository.save(user);
+
+        if ("PARENT".equals(dto.getRole())) {
+            parentService.createEmptyProfile(user);
+        }
+
+        return user;
     }
 
     // Verifier si un email existe deja dans la BD

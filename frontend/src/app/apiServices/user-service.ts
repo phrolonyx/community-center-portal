@@ -4,6 +4,14 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user.model';
 
+export interface AdminCreateUserRequest {
+  prenom: string;
+  nom: string;
+  email: string;
+  password: string;
+  role: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,7 +19,7 @@ export class UserService {
 
   private apiUrl = `${environment.apiUrl}/users`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Récupérer tous les utilisateurs (admin)
   getAllUsers(): Observable<User[]> {
@@ -19,7 +27,7 @@ export class UserService {
   }
   // Récupérer tous les utilisateurs (admin seulement)
   getUsersByRole(role: string): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/role/${role}`,{ withCredentials: true });
+    return this.http.get<User[]>(`${this.apiUrl}/role/${role}`, { withCredentials: true });
   }
 
   // Rechercher des utilisateurs par nom ou courriel (admin)
@@ -34,6 +42,11 @@ export class UserService {
   getById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`, { withCredentials: true });
 
+  }
+
+  // Créer un utilisateur
+  createUser(data: AdminCreateUserRequest): Observable<User> {
+    return this.http.post<User>(this.apiUrl, data, { withCredentials: true });
   }
 
   // Activer un compte désactivé (admin)

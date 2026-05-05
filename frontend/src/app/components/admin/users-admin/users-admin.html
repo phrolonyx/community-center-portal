@@ -11,26 +11,38 @@
 
     <div class="content-main">
 
-      <!-- FORMULAIRE DE RECHERCHE -->
-      <form class="content-searchbar" (submit)="searchUsers()">
+      <!-- BARRE DE RECHERCHE + BOUTON CRÉER -->
+      <div style="display:flex; align-items:center; gap:16px; margin:20px 40px 0;">
 
-        <img class="filter" src="assets/images/icons8-filter-96.png" alt="Filtrer" />
+        <form class="content-searchbar" style="flex:1; margin:0;"
+              (submit)="$event.preventDefault()">
+          <img class="filter" src="assets/images/icons8-filter-96.png" alt="Filtrer" />
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Rechercher un utilisateur..."
+            [value]="searchValue()"
+            (input)="searchValue.set($any($event.target).value)"
+            name="search"
+          />
+          <button type="submit" class="search-btn">
+            <img class="search" src="assets/images/icons8-search-150.png" alt="Rechercher" />
+          </button>
+        </form>
 
-        <!-- Valeur dynamique API -->
-        <!-- Remplacer searchValue par la valeur du formulaire -->
-        <input
-          type="text"
-          class="search-input"
-          placeholder="Rechercher un utilisateur..."
-          [(ngModel)]="searchValue"
-          name="search"
-        />
-
-        <button type="submit" class="search-btn">
-          <img class="search" src="assets/images/icons8-search-150.png" alt="Rechercher" />
+        <button class="btn-primary" (click)="openModal()"
+                style="white-space:nowrap; padding:12px 22px;">
+          + Créer un utilisateur
         </button>
 
-      </form>
+      </div>
+
+      <!-- MESSAGE DE SUCCÈS -->
+      @if (successMessage()) {
+        <div class="alert-succes" style="margin:16px 40px 0;">
+          {{ successMessage() }}
+        </div>
+      }
 
       <!-- TABLEAU UTILISATEURS -->
       <section class="users-table">
@@ -47,139 +59,170 @@
               <th>Actions</th>
             </tr>
           </thead>
-
           <tbody>
-
-            <!-- BOUCLE DYNAMIQUE API -->
-            <!-- Remplacer par *ngFor="let user of users" -->
-              @for (user of searchUsers(); track user.id) {
-                <tr>
-                  <td>{{ user.firstName }}</td>
-                  <td>{{ user.lastName }}</td>
-                  <td>{{ user.roleName }}</td>
-                  <td>{{ user.email }}</td>
-
-                  <td>{{ user.enabled ? 'oui' : 'non' }}</td>
-
-                  <td>{{ user.lastLogin ? (user.lastLogin | date:'dd/MM/yyyy') : '-' }}</td>
-
-                  <td>{{ user.createdAt | date:'dd/MM/yyyy' }}</td>
-
-                  <td>
-                    <!-- ADMIN : bouton désactivé -->
-                    @if (user.roleName === 'ADMIN') {
-                      <button class="btn-deactivate disabled-btn-admin" disabled>
-                        Désactiver
-                      </button>
-                    }
-
-                    <!-- Utilisateur actif -->
-                    @if (user.enabled && user.roleName !== 'ADMIN') {
-                      <button class="btn-deactivate" (click)="disableUser(user.id)">
-                        Désactiver
-                      </button>
-                    }
-
-                    <!-- Utilisateur inactif -->
-                    @if (!user.enabled) {
-                      <button class="btn-activate" (click)="enableUser(user.id)">
-                        Activer
-                      </button>
-                    }
-                  </td>
-                </tr>
-              }
-
-
+            @for (user of searchUsers(); track user.id) {
+              <tr>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td>{{ user.roleName }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.enabled ? 'Oui' : 'Non' }}</td>
+                <td>{{ user.lastLogin ? (user.lastLogin | date:'dd/MM/yyyy') : '-' }}</td>
+                <td>{{ user.createdAt | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  @if (user.roleName === 'ADMIN') {
+                    <button class="btn-deactivate disabled-btn-admin" disabled>
+                      Désactiver
+                    </button>
+                  }
+                  @if (user.enabled && user.roleName !== 'ADMIN') {
+                    <button class="btn-deactivate" (click)="disableUser(user.id)">
+                      Désactiver
+                    </button>
+                  }
+                  @if (!user.enabled) {
+                    <button class="btn-activate" (click)="enableUser(user.id)">
+                      Activer
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
           </tbody>
         </table>
       </section>
 
     </div>
-
-    <!-- BOUTON MESSAGE -->
-<!--    <div style="padding: 0 24px 24px;">-->
-<!--      <button-->
-<!--        (click)="openMessageModal()"-->
-<!--        style="background:#043C5C; color:#FFF; border:none; padding:12px 24px; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer;">-->
-<!--        Envoyer un message-->
-<!--      </button>-->
-<!--    </div>-->
-
-    <!-- ALERTE SUCCÈS -->
-    <!-- À brancher plus tard avec un flag Angular -->
-<!--    <div *ngIf="messageSent"-->
-<!--         style="margin:0 24px 16px; background:#D1FAE5; color:#065F46; border:1px solid #A7F3D0; border-radius:8px; padding:12px 18px; font-size:14px; font-weight:600;">-->
-<!--      Message envoyé avec succès !-->
-<!--    </div>-->
-
   </main>
 </div>
 
-<!-- MODAL MESSAGE -->
-<!--<div *ngIf="modalOpen"-->
-<!--     style="position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:300; display:flex; justify-content:center; align-items:flex-start; padding:80px 20px;">-->
+<!-- MODAL CRÉATION D'UTILISATEUR -->
+@if (modalOpen()) {
+  <div class="modal-overlay open" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
 
-<!--  <div style="background:#FFF; border-radius:14px; padding:28px; width:100%; max-width:500px;">-->
+      <div class="modal-header">
+        <h2>Créer un utilisateur</h2>
+        <button class="modal-close" (click)="closeModal()">✕</button>
+      </div>
+      <p class="modal-subtitle">Le compte sera actif immédiatement.</p>
 
-<!--    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">-->
-<!--      <h2 style="margin:0; font-size:20px; font-weight:800; color:#043C5C;">Nouveau message</h2>-->
+      <form class="modal-form" (ngSubmit)="onSubmit()" novalidate>
 
-<!--      <button (click)="closeMessageModal()"-->
-<!--              style="width:34px; height:34px; background:none; border:2px solid #C8CDD3; border-radius:50%; font-size:18px; color:#6B7280; cursor:pointer;">-->
-<!--        X-->
-<!--      </button>-->
-<!--    </div>-->
+        <fieldset class="form-section">
+          <legend class="section-legend">Informations personnelles</legend>
 
-    <!-- FORMULAIRE MESSAGE -->
-    <!-- À brancher plus tard avec un service API -->
-<!--    <form (submit)="sendMessage()">-->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Prénom <span class="required">*</span></label>
+              <input type="text" class="form-input" placeholder="Prénom"
+                     [(ngModel)]="form.prenom" name="prenom"
+                     [class.invalid]="form.prenom.length > 0 && form.prenom.trim().length < 2">
+              @if (form.prenom.length > 0 && form.prenom.trim().length < 2) {
+                <span class="field-error">Min. 2 caractères</span>
+              }
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nom <span class="required">*</span></label>
+              <input type="text" class="form-input" placeholder="Nom"
+                     [(ngModel)]="form.nom" name="nom"
+                     [class.invalid]="form.nom.length > 0 && form.nom.trim().length < 2">
+              @if (form.nom.length > 0 && form.nom.trim().length < 2) {
+                <span class="field-error">Min. 2 caractères</span>
+              }
+            </div>
+          </div>
 
-<!--      <div style="margin-bottom:14px;">-->
-<!--        <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Destinataire</label>-->
+          <div class="form-group">
+            <label class="form-label">Adresse courriel <span class="required">*</span></label>
+            <input type="email" class="form-input" placeholder="exemple@courriel.com"
+                   [(ngModel)]="form.email" name="email"
+                   [class.invalid]="form.email.length > 0 && !emailOk(form.email)">
+            @if (form.email.length > 0 && !emailOk(form.email)) {
+              <span class="field-error">Adresse courriel invalide</span>
+            }
+          </div>
 
-<!--        <select [(ngModel)]="messageRecipient" name="recipientId"-->
-<!--                style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px;">-->
-<!--          <option value="">Tous les parents</option>-->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Mot de passe <span class="required">*</span></label>
+              <div class="password-wrapper">
+                <input [type]="showPassword ? 'text' : 'password'" class="form-input"
+                       placeholder="Mot de passe temporaire"
+                       [(ngModel)]="form.password" name="password"
+                       [class.invalid]="form.password.length > 0 && form.password.length < 8">
+                <button type="button" class="toggle-password" (click)="togglePassword('password')">
+                  <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+              @if (form.password.length > 0 && form.password.length < 8) {
+                <span class="field-error">Minimum 8 caractères</span>
+              }
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirmer <span class="required">*</span></label>
+              <div class="password-wrapper">
+                <input [type]="showConfirm ? 'text' : 'password'" class="form-input"
+                       placeholder="Confirmer"
+                       [(ngModel)]="form.confirmPassword" name="confirmPassword"
+                       [class.invalid]="form.confirmPassword.length > 0 && form.confirmPassword !== form.password">
+                <button type="button" class="toggle-password" (click)="togglePassword('confirm')">
+                  <svg *ngIf="!showConfirm" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg *ngIf="showConfirm" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+              </div>
+              @if (form.confirmPassword.length > 0 && form.confirmPassword !== form.password) {
+                <span class="field-error">Les mots de passe ne correspondent pas</span>
+              }
+            </div>
+          </div>
+        </fieldset>
 
-          <!-- Liste dynamique API -->
-          <!-- <option *ngFor="let user of users" [value]="user.id" *ngIf="user.role === 'PARENT'">
-            {{ user.firstName }} {{ user.lastName }}
-          </option> -->
-<!--        </select>-->
-<!--      </div>-->
+        <fieldset class="form-section">
+          <legend class="section-legend">Rôle</legend>
+          <div class="form-group">
+            <label class="form-label">Rôle <span class="required">*</span></label>
+            <div class="select-wrapper">
+              <select class="form-input form-select" [(ngModel)]="form.role" name="role">
+                <option value="" disabled>— Choisir un rôle —</option>
+                <option value="PARENT">Parent</option>
+                <option value="ANIMATEUR">Animateur</option>
+              </select>
+            </div>
+            @if (clientError() && form.role.length === 0) {
+              <span class="field-error">Veuillez sélectionner un rôle</span>
+            }
+          </div>
+        </fieldset>
 
-<!--      <div style="margin-bottom:14px;">-->
-<!--        <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Type</label>-->
+        <!-- ERREUR SERVEUR -->
+        @if (serverError()) {
+          <div class="register-error">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            <span>{{ serverError() }}</span>
+          </div>
+        }
 
-<!--        <select [(ngModel)]="messageType" name="type"-->
-<!--                style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px;">-->
-<!--          <option value="ANNONCE">Annonce</option>-->
-<!--          <option value="RAPPEL">Rappel</option>-->
-<!--          <option value="ANNULATION">Annulation</option>-->
-<!--        </select>-->
-<!--      </div>-->
+        <!-- ERREUR CLIENT -->
+        @if (clientError() && !formulaireValide()) {
+          <div class="register-error">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            <span>Veuillez corriger les erreurs avant de continuer.</span>
+          </div>
+        }
 
-<!--      <div style="margin-bottom:14px;">-->
-<!--        <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Sujet</label>-->
-<!--        <input type="text" [(ngModel)]="messageSubject" name="subject" required-->
-<!--               placeholder="Ex: Annulation du cours de danse"-->
-<!--               style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px;">-->
-<!--      </div>-->
+        <div class="modal-buttons">
+          <button type="button" class="btn-annuler" (click)="closeModal()">
+            Annuler
+          </button>
+          <button type="submit" class="btn-creer" [disabled]="!formulaireValide() || isLoading()">
+            @if (isLoading()) { Création en cours... }
+            @else { Créer le compte }
+          </button>
+        </div>
 
-<!--      <div style="margin-bottom:16px;">-->
-<!--        <label style="display:block; font-size:13px; font-weight:700; color:#043C5C; margin-bottom:6px;">Message</label>-->
-<!--        <textarea rows="4" [(ngModel)]="messageContent" name="content" required-->
-<!--                  placeholder="Écrivez votre message ici..."-->
-<!--                  style="width:100%; padding:10px 14px; border:2px solid #C8CDD3; border-radius:8px; font-size:14px; resize:vertical;"></textarea>-->
-<!--      </div>-->
-
-<!--      <button type="submit"-->
-<!--              style="background:#E8BB08; color:#043C5C; border:none; padding:12px 24px; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; width:100%;">-->
-<!--        Envoyer-->
-<!--      </button>-->
-
-<!--    </form>-->
-<!--  </div>-->
-<!--</div>-->
-
+      </form>
+    </div>
+  </div>
+}
