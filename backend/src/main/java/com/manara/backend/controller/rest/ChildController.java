@@ -56,8 +56,17 @@ public class ChildController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody ChildRequest dto) {
 
+        // test 1
+        System.out.println("=== createChild appelé ===");
+        System.out.println("User ID : " + userDetails.getUser().getId());
+
+
         List<ParentProfile> profiles = parentService.findByUserId(userDetails.getUser().getId());
+        // test 2
+        System.out.println("Profils trouvés : " + profiles.size());
         if (profiles.isEmpty()) {
+            // test 3
+            System.out.println("=== RETOUR 400 : pas de profil parent ===");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         ParentProfile profile = profiles.get(0);

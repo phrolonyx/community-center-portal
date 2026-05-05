@@ -1,9 +1,12 @@
 package com.manara.backend.controller.rest;
 
+import com.manara.backend.dto.AdminCreateUserRequest;
 import com.manara.backend.dto.UserResponseDto;
 import com.manara.backend.model.User;
 import com.manara.backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +38,17 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Integer id) {
         return ResponseEntity.ok(UserResponseDto.from(userService.findById(id)));
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createUser(@Valid @RequestBody AdminCreateUserRequest dto) {
+        if (userService.emailExists(dto.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", "Cette adresse courriel est déjà utilisée"));
+        }
+        User user = userService.createUserByAdmin(dto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(UserResponseDto.from(user));
     }
 
     @PutMapping("/{id}/enable")

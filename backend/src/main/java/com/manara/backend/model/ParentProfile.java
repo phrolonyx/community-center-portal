@@ -1,10 +1,8 @@
 package com.manara.backend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,28 +20,28 @@ public class ParentProfile {
     private User user;
 
     @Column(length = 20)
-    @NotBlank(message = "Le numéro de téléphone ne peut pas être vide")
+    //@NotBlank(message = "Le numéro de téléphone ne peut pas être vide")
     private String phoneNumber;
 
-    @NotBlank(message = "Votre adresse est requise")
+    //@NotBlank(message = "Votre adresse est requise")
     private String addressLine1;
 
     private String addressLine2;
 
     @Column(length = 100)
-    @NotBlank(message = "Ce champ est obligatoire")
+    //@NotBlank(message = "Ce champ est obligatoire")
     private String city;
 
     @Column(length = 100)
-    @NotBlank(message = "Ce champ est obligatoire")
+    //@NotBlank(message = "Ce champ est obligatoire")
     private String province;
 
     @Column(length = 100)
-    @NotBlank(message = "Ce champ est obligatoire")
+    //@NotBlank(message = "Ce champ est obligatoire")
     private String country;
 
     @Column(length = 20)
-    @NotBlank(message = "Ce champ est obligatoire")
+    //@NotBlank(message = "Ce champ est obligatoire")
     private String postalCode;
 
     @Column(length = 200)
