@@ -119,3 +119,21 @@ a {
 #admin-icon {
   cursor: pointer;
 }
+
+/* Badge messages non lus */
+.sidebar-sessions a {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 20px;
+}
+.badge-nonlus {
+  background: #D9534F;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  min-width: 20px;
+  text-align: center;
+}

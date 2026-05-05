@@ -13,6 +13,8 @@ import { ActivitesAdmin } from './components/admin/activites-admin/activites-adm
 import { DashboardAdmin } from './components/admin/dashboard-admin/dashboard-admin';
 import { EnfantsAdmin } from './components/admin/enfants-admin/enfants-admin';
 import { MessagesAdmin } from './components/admin/messages-admin/messages-admin';
+import { InboxAdmin } from './components/admin/inbox-admin/inbox-admin';
+import { MessagesEnvoyesAdmin } from './components/admin/messages-envoyes-admin/messages-envoyes-admin';
 import { FormSceanceAdmin } from './components/admin/form-sceance-admin/form-sceance-admin';
 import { SceancesAdmin } from './components/admin/sceances-admin/sceances-admin';
 import { UsersAdmin } from './components/admin/users-admin/users-admin';
@@ -33,6 +35,9 @@ import { SceancesAnimateur } from './components/animateur/sceances-animateur/sce
 import { AnimateurSidebar } from './components/animateur/animateur-sidebar/animateur-sidebar';
 import { AnimateurHeader } from './components/animateur/animateur-header/animateur-header';
 import { SceancesDetailsAnimateur } from './components/animateur/sceances-details-animateur/sceances-details-animateur';
+import { MessagesAnimateur } from './components/animateur/messages-animateur/messages-animateur';
+import { InboxAnimateur } from './components/animateur/inbox-animateur/inbox-animateur';
+import { MessagesEnvoyesAnimateur } from './components/animateur/messages-envoyes-animateur/messages-envoyes-animateur';
 import { AuthService } from './apiServices/auth.service';
 import { catchError, of } from 'rxjs';
  
@@ -55,6 +60,8 @@ function initAuth(authService: AuthService) {
     DashboardAdmin,
     EnfantsAdmin,
     MessagesAdmin,
+    InboxAdmin,
+    MessagesEnvoyesAdmin,
     FormSceanceAdmin,
     SceancesAdmin,
     UsersAdmin,
@@ -75,6 +82,9 @@ function initAuth(authService: AuthService) {
     AnimateurSidebar,
     AnimateurHeader,
     SceancesDetailsAnimateur,
+    MessagesAnimateur,
+    InboxAnimateur,
+    MessagesEnvoyesAnimateur,
   ],
   imports: [
     BrowserModule,

@@ -7,15 +7,18 @@ import com.manara.backend.model.ActivitySession;
 import com.manara.backend.model.Child;
 import com.manara.backend.model.ParentProfile;
 import com.manara.backend.model.security.CustomUserDetails;
+import com.manara.backend.repository.ActivityRegistrationRepository;
 import com.manara.backend.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +37,12 @@ public class RegistrationController {
 
     @Autowired
     private ParentService parentService;
+
+    @Autowired
+    private ActivityRegistrationRepository registrationRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping
     public ResponseEntity<List<ActivityRegistrationResponseDto>> getMyRegistrations(
@@ -111,5 +120,29 @@ public class RegistrationController {
 
         activityService.cancelRegistration(id);
         return ResponseEntity.ok(Map.of("message", "Inscription annulée"));
+    }
+
+    // Admin confirme une inscription en attente : statut -> CONFIRMÉ + email au parent
+    @PutMapping("/{id}/admin-confirm")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> confirmerAdmin(@PathVariable Integer id) {
+        ActivityRegistration reg = registrationRepository.findById(id)
+                .orElseThrow();
+
+        reg.setStatus("CONFIRMÉ");
+        reg.setConfirmedAt(LocalDateTime.now());
+        registrationRepository.save(reg);
+
+        // Email de confirmation au parent
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy 'à' HH:mm");
+        emailService.envoyerConfirmationAdmin(
+                reg.getParentProfile().getUser().getEmail(),
+                reg.getParentProfile().getUser().getFirstName(),
+                reg.getChild().getFirstName() + " " + reg.getChild().getLastName(),
+                reg.getActivitySession().getActivity().getName(),
+                reg.getActivitySession().getDateTimeStart().format(fmt)
+        );
+
+        return ResponseEntity.ok(Map.of("message", "Inscription confirmée + email envoyé"));
     }
 }

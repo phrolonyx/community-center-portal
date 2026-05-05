@@ -1,0 +1,66 @@
+<div class="admin-gestion-des">
+
+  <app-animateur-sidebar></app-animateur-sidebar>
+
+  <main class="main-content">
+
+    <app-animateur-header title="Boîte de réception"></app-animateur-header>
+
+    <div class="content-main">
+
+      <div class="inbox-card">
+
+        <div class="inbox-header">
+          <h3 class="card-title">Mes messages reçus</h3>
+          <div>
+            <span class="count">{{ messages.length }} message(s)</span>
+            <span *ngIf="unreadCount > 0" class="unread-badge">{{ unreadCount }} non lu(s)</span>
+          </div>
+        </div>
+
+        <div *ngIf="messages.length > 0" class="messages-list">
+          <div *ngFor="let msg of messages"
+               class="message-item"
+               [class.unread]="!msg.isRead"
+               [class.open]="isOpen(msg)"
+               (click)="toggleMessage(msg)">
+
+            <div class="message-top">
+              <div class="sender-avatar">{{ msg.senderInitials }}</div>
+              <div class="message-info">
+                <strong>{{ msg.sender.fullName }}</strong>
+                <span class="type-badge"
+                      [class.annulation]="msg.type === 'ANNULATION'"
+                      [class.rappel]="msg.type === 'RAPPEL'"
+                      [class.annonce]="msg.type !== 'ANNULATION' && msg.type !== 'RAPPEL'">
+                  {{ msg.type }}
+                </span>
+              </div>
+              <div class="message-meta">
+                <span class="message-date">{{ msg.createdAt | date:'dd MMM yyyy HH:mm' }}</span>
+                <span *ngIf="!msg.isRead" class="unread-dot"></span>
+              </div>
+            </div>
+
+            <p class="message-subject">{{ msg.subject }}</p>
+            <p class="message-preview" *ngIf="!isOpen(msg)">{{ msg.content }}</p>
+
+            <div class="message-expanded" *ngIf="isOpen(msg)">
+              <p>{{ msg.content }}</p>
+              <button type="button"
+                      class="btn-delete"
+                      (click)="supprimer(msg); $event.stopPropagation()">
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="messages.length === 0" class="empty">
+          <p>Aucun message reçu.</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>

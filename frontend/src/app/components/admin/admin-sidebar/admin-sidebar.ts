@@ -1,25 +1,46 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../apiServices/auth.service';
+import { MessageService } from '../../../apiServices/message-service';
 
 @Component({
   selector: 'app-admin-sidebar',
   standalone: false,
   templateUrl: './admin-sidebar.html',
   styleUrl: './admin-sidebar.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AdminSidebar {
+export class AdminSidebar implements OnInit, OnDestroy {
 
   logoutOpen = false;
+  nonLus = 0;
+  private intervalId: any;
 
   constructor(
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService,
+    private cdr: ChangeDetectorRef
   ) {}
+
+  ngOnInit(): void {
+    this.charger();
+    this.intervalId = setInterval(() => this.charger(), 15000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.intervalId) clearInterval(this.intervalId);
+  }
+
+  charger(): void {
+    this.messageService.countUnreadAdmin().subscribe({
+      next: (res) => { this.nonLus = res.count; this.cdr.detectChanges(); },
+      error: () => {},
+    });
+  }
 
   toggleLogout(): void {
     this.logoutOpen = !this.logoutOpen;
+    this.cdr.detectChanges();
   }
 
   // Déconnexion via AuthService — vide le signal et redirige

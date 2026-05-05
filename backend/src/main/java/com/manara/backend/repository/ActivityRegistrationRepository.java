@@ -19,4 +19,7 @@ public interface ActivityRegistrationRepository extends JpaRepository<ActivityRe
     List<ActivityRegistration> findByChildId(Integer childId);
 
     boolean existsByChildIdAndActivitySessionIdAndStatusNot(Integer childId, Integer sessionId, String status);
+
+    // Inscriptions liees a une seance (utile pour annulation seance)
+    List<ActivityRegistration> findByActivitySessionId(Integer sessionId);
 }

@@ -39,6 +39,13 @@ public class ActivityRegistration {
 
     private LocalDateTime cancelledAt;
 
+    // Flags pour ne pas envoyer le meme rappel email plusieurs fois
+    @Column(nullable = false)
+    private Boolean reminder24Sent = false;
+
+    @Column(nullable = false)
+    private Boolean reminder2Sent = false;
+
     @OneToMany(
             mappedBy = "registration",
             cascade = CascadeType.ALL,

@@ -1,0 +1,130 @@
+.main-content { margin-left: 240px; }
+
+.admin-gestion-des {
+  background: #fff;
+  width: 100%;
+  min-width: 1100px;
+  min-height: 100vh;
+  position: relative;
+}
+
+.main-content,
+.content-main { padding-right: 3px; box-sizing: border-box; }
+
+/* Fond jaune pâle style animateur */
+.content-main {
+  background: #FFF8E1;
+  padding-top: 20px;
+  padding-bottom: 60px;
+  min-height: calc(100vh - 80px);
+  width: 100%;
+  position: relative;
+}
+
+.historique-card {
+  margin: 40px;
+  background: #fff;
+  border: 1px solid #00000063;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  padding: 30px 40px;
+  max-width: 900px;
+  font-family: "Jost", sans-serif;
+}
+
+.historique-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #043c5c;
+  padding-bottom: 10px;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #043c5c;
+}
+
+.count { font-size: 14px; color: #555; }
+
+.messages-list { display: flex; flex-direction: column; gap: 12px; }
+
+.message-item {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  cursor: pointer;
+  background: #fff;
+  transition: background 0.15s;
+}
+
+.message-item:hover { background: #FFF8E1; }
+.message-item.open { background: #fdf3d0; }
+
+.message-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+
+.message-info { display: flex; align-items: center; gap: 10px; flex: 1; }
+
+.recipient { font-size: 14px; color: #043c5c; }
+
+.type-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.type-badge.annonce { background: #d4edda; color: #155724; }
+.type-badge.rappel { background: #fff3cd; color: #856404; }
+.type-badge.annulation { background: #f8d7da; color: #721c24; }
+
+.message-date { font-size: 12px; color: #777; white-space: nowrap; }
+
+.message-subject { font-weight: 700; margin: 4px 0; color: #000; }
+
+.message-preview {
+  color: #555;
+  font-size: 14px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.message-expanded { margin-top: 10px; }
+
+.message-expanded p {
+  margin: 0 0 8px 0;
+  white-space: pre-wrap;
+  color: #333;
+}
+
+.status-info {
+  font-size: 12px;
+  color: #555;
+  font-style: italic;
+}
+
+.recipients-detail {
+  margin: 8px 0;
+  padding: 8px 12px;
+  background: #FFF8E1;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #333;
+}
+
+.empty {
+  text-align: center;
+  color: #888;
+  padding: 30px;
+}

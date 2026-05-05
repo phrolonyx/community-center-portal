@@ -131,3 +131,79 @@ body { margin: 0; font-family: Arial, sans-serif; }
 .modal-seance-statut { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
 .modal-seance-statut.confirmed { background: #15A63B; color: #FFF; }
 .modal-seance-statut.pending { background: #E8BB08; color: #043C5C; }
+
+/* ============================================================
+   NOTIFICATIONS (lien vers messages)
+============================================================ */
+.notif-badge {
+  display: inline-block;
+  background: #D9534F;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.notif-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 12px;
+  margin-bottom: 8px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  background: #fff;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.notif-item:hover {
+  background: #F9FAFB;
+  border-color: #043C5C;
+}
+
+.notif-item.unread {
+  border-left: 4px solid #043C5C;
+  background: #f8fbff;
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.notif-type {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.notif-type.annonce { background: #d4edda; color: #155724; }
+.notif-type.rappel { background: #fff3cd; color: #856404; }
+.notif-type.annulation { background: #f8d7da; color: #721c24; }
+
+.notif-date {
+  font-size: 11px;
+  color: #6B7280;
+}
+
+.notif-subject {
+  display: block;
+  color: #043C5C;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.notif-preview {
+  margin: 0;
+  font-size: 13px;
+  color: #6B7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

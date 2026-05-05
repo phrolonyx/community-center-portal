@@ -34,11 +34,31 @@
 
       <div class="section-card">
         <div class="section-header">
-          <h2 class="section-title">Notifications</h2>
+          <h2 class="section-title">
+            Notifications
+            <span *ngIf="totalNonLus > 0" class="notif-badge">{{ totalNonLus }}</span>
+          </h2>
           <a routerLink="/dashboard-parent/messages" class="section-link">Voir tout →</a>
         </div>
         <div id="notifsContainer">
-          <p class="empty-msg">Aucune notification pour le moment.</p>
+          <!-- Aucun message -->
+          <p *ngIf="notifications.length === 0" class="empty-msg">Aucune notification pour le moment.</p>
+
+          <!-- Liste des 5 derniers messages -->
+          <a *ngFor="let n of notifications"
+             routerLink="/dashboard-parent/messages"
+             class="notif-item"
+             [class.unread]="!n.isRead">
+            <div class="notif-header">
+              <span class="notif-type"
+                    [class.annonce]="n.type === 'ANNONCE'"
+                    [class.rappel]="n.type === 'RAPPEL'"
+                    [class.annulation]="n.type === 'ANNULATION'">{{ n.type }}</span>
+              <span class="notif-date">{{ n.createdAt | date:'dd MMM HH:mm' }}</span>
+            </div>
+            <strong class="notif-subject">{{ n.subject }}</strong>
+            <p class="notif-preview">{{ n.content }}</p>
+          </a>
         </div>
       </div>
     </div>

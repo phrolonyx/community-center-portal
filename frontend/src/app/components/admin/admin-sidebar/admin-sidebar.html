@@ -18,6 +18,18 @@
     <li class="sidebar-sessions">
       <a routerLink="/admin/sceances">Séances</a>
     </li>
+    <li class="sidebar-messages">
+      <a routerLink="/admin/messages">Envoyer message</a>
+    </li>
+    <li class="sidebar-messages">
+      <a routerLink="/admin/inbox">
+        Boîte de réception
+        <span *ngIf="nonLus > 0" class="badge-nonlus">{{ nonLus }}</span>
+      </a>
+    </li>
+    <li class="sidebar-messages">
+      <a routerLink="/admin/messages-envoyes">Messages envoyés</a>
+    </li>
   </ul>
 
   <div class="settings-footer">

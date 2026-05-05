@@ -58,6 +58,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**", "/users/**").hasAuthority("ADMIN")
                         // Routes animateurs
                         .requestMatchers("/sessions/**").hasAnyAuthority("ANIMATEUR", "ADMIN")
+                        .requestMatchers("/animateur/**").hasAnyAuthority("ANIMATEUR", "ADMIN")
                         // Routes parent
                         .requestMatchers("/registrations/**").hasAnyAuthority("PARENT", "ADMIN")
                         // Sécurisation par défaut et de possibles endpoints futurs

@@ -1,24 +1,45 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from '../../../apiServices/auth.service';
 import {Router} from '@angular/router';
+import {MessageService} from '../../../apiServices/message-service';
 
 @Component({
   selector: 'app-animateur-sidebar',
   standalone: false,
   templateUrl: './animateur-sidebar.html',
   styleUrl: './animateur-sidebar.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnimateurSidebar {
+export class AnimateurSidebar implements OnInit, OnDestroy {
     logoutOpen = false;
+    nonLus = 0;
+    private intervalId: any;
 
   constructor(
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService,
+    private cdr: ChangeDetectorRef
   ) {}
+
+  ngOnInit(): void {
+    this.charger();
+    this.intervalId = setInterval(() => this.charger(), 15000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.intervalId) clearInterval(this.intervalId);
+  }
+
+  charger(): void {
+    this.messageService.countUnreadAnim().subscribe({
+      next: (res) => { this.nonLus = res.count; this.cdr.detectChanges(); },
+      error: () => {},
+    });
+  }
 
     toggleLogout() {
       this.logoutOpen = !this.logoutOpen;
+      this.cdr.detectChanges();
     }
 
   logout(): void {

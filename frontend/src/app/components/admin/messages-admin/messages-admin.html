@@ -1,1 +1,118 @@
-<p>messages-admin works!</p>
+<div class="admin-gestion-des">
+
+  <!-- SIDEBAR -->
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <app-admin-header title="Envoyer un message"></app-admin-header>
+
+    <div class="content-main">
+
+      <div class="message-card">
+
+        <h3 class="card-title">Nouveau message</h3>
+
+        <form (ngSubmit)="envoyer()" #f="ngForm" class="message-form">
+
+          <!-- Choix du type d'envoi -->
+          <div class="champ champ-radio">
+            <label class="radio-label">
+              <input type="radio" name="cible" value="tous-parents" [(ngModel)]="cible" (change)="changerCible()">
+              <span>Tous les parents</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="cible" value="parent" [(ngModel)]="cible" (change)="changerCible()">
+              <span>Un parent</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="cible" value="plusieurs-parents" [(ngModel)]="cible" (change)="changerCible()">
+              <span>Plusieurs parents</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="cible" value="tous-animateurs" [(ngModel)]="cible" (change)="changerCible()">
+              <span>Tous les animateurs</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="cible" value="animateur" [(ngModel)]="cible" (change)="changerCible()">
+              <span>Un animateur</span>
+            </label>
+          </div>
+
+          <!-- Select du parent ciblé -->
+          <div class="champ" *ngIf="cible === 'parent'">
+            <label for="parent">Parent :</label>
+            <select id="parent" name="parent" [(ngModel)]="recipientId">
+              <option [ngValue]="null">-- Choisir un parent --</option>
+              <option *ngFor="let p of parents" [ngValue]="p.id">
+                {{ p.firstName }} {{ p.lastName }} ({{ p.email }})
+              </option>
+            </select>
+          </div>
+
+          <!-- Liste à cocher pour plusieurs parents -->
+          <div class="champ" *ngIf="cible === 'plusieurs-parents'">
+            <label>Parents (cocher 2 ou plus) :</label>
+            <div class="checkbox-list">
+              <label class="checkbox-item" *ngFor="let p of parents">
+                <input type="checkbox"
+                       [value]="p.id"
+                       (change)="toggleParent(p.id, $event)">
+                <span>{{ p.firstName }} {{ p.lastName }} ({{ p.email }})</span>
+              </label>
+            </div>
+            <small class="hint">{{ parentIdsSelectionnes.length }} parent(s) sélectionné(s)</small>
+          </div>
+
+          <!-- Select de l'animateur ciblé -->
+          <div class="champ" *ngIf="cible === 'animateur'">
+            <label for="animateur">Animateur :</label>
+            <select id="animateur" name="animateur" [(ngModel)]="recipientId">
+              <option [ngValue]="null">-- Choisir un animateur --</option>
+              <option *ngFor="let a of animateurs" [ngValue]="a.id">
+                {{ a.firstName }} {{ a.lastName }} ({{ a.email }})
+              </option>
+            </select>
+          </div>
+
+          <!-- Type du message : annonce, rappel ou annulation -->
+          <div class="champ">
+            <label for="type">Type :</label>
+            <select id="type" name="type" [(ngModel)]="type">
+              <option value="ANNONCE">Annonce</option>
+              <option value="RAPPEL">Rappel</option>
+              <option value="ANNULATION">Annulation</option>
+            </select>
+          </div>
+
+          <div class="champ">
+            <label for="sujet">Sujet :</label>
+            <input id="sujet" name="sujet" type="text" [(ngModel)]="sujet" required>
+          </div>
+
+          <div class="champ">
+            <label for="contenu">Message :</label>
+            <textarea id="contenu" name="contenu" rows="7" [(ngModel)]="contenu" required></textarea>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn-envoyer" [disabled]="enCours">
+              {{ enCours ? 'Envoi en cours...' : 'Envoyer' }}
+            </button>
+          </div>
+
+          <p class="erreur" *ngIf="erreur">{{ erreur }}</p>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Toast de confirmation d'envoi (auto-fade) -->
+  <div class="toast-success" *ngIf="messageRetour">
+    <span class="toast-icon">✓</span>
+    <span>{{ messageRetour }}</span>
+  </div>
+</div>

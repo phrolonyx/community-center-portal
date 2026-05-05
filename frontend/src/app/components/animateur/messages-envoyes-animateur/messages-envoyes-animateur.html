@@ -1,0 +1,60 @@
+<div class="admin-gestion-des">
+
+  <app-animateur-sidebar></app-animateur-sidebar>
+
+  <main class="main-content">
+
+    <app-animateur-header title="Messages envoyés"></app-animateur-header>
+
+    <div class="content-main">
+
+      <div class="historique-card">
+
+        <div class="historique-header">
+          <h3 class="card-title">Historique de mes envois</h3>
+          <span class="count">{{ messages.length }} message(s)</span>
+        </div>
+
+        <div *ngIf="messages.length > 0" class="messages-list">
+          <div *ngFor="let m of messages"
+               class="message-item"
+               [class.open]="isOpen(m.id)"
+               (click)="toggle(m.id)">
+
+            <div class="message-top">
+              <div class="message-info">
+                <span class="recipient">
+                  À <strong *ngIf="m.recipientCount > 1">{{ m.recipientCount }} personnes</strong>
+                  <strong *ngIf="m.recipientCount <= 1">{{ m.recipientName }}</strong>
+                </span>
+                <span class="type-badge"
+                      [class.annulation]="m.type === 'ANNULATION'"
+                      [class.rappel]="m.type === 'RAPPEL'"
+                      [class.annonce]="m.type === 'ANNONCE'">{{ m.type }}</span>
+              </div>
+              <span class="message-date">{{ m.createdAt | date:'dd MMM yyyy HH:mm' }}</span>
+            </div>
+
+            <p class="message-subject">{{ m.subject }}</p>
+            <p class="message-preview" *ngIf="!isOpen(m.id)">{{ m.content }}</p>
+
+            <div class="message-expanded" *ngIf="isOpen(m.id)">
+              <p>{{ m.content }}</p>
+              <p class="recipients-detail" *ngIf="m.recipientCount > 1">
+                <strong>Destinataires :</strong> {{ m.recipientName }}
+              </p>
+              <span class="status-info" *ngIf="m.recipientCount === 1">
+                Lu : {{ m.isRead ? 'Oui' : 'Non' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="messages.length === 0" class="empty">
+          <p>Tu n'as encore envoyé aucun message.</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>

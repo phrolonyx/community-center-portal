@@ -89,6 +89,69 @@ public class EmailService {
         envoyerEmail(email, "Annulation - " + nomActivite, html);
     }
 
+    // courriel quand l'admin CONFIRME une inscription en attente
+    public void envoyerConfirmationAdmin(String email, String prenomParent,
+            String nomEnfant, String nomActivite, String dateSeance) {
+        String html = construireTemplate(
+            "Inscription confirmee !",
+            "<p>Bonjour " + prenomParent + ",</p>"
+            + "<p>Bonne nouvelle ! L'inscription de <strong>" + nomEnfant + "</strong> "
+            + "a l'activite <strong>" + nomActivite + "</strong> a ete <strong>confirmee</strong> par l'administration.</p>"
+            + "<p><strong>Date :</strong> " + dateSeance + "</p>"
+            + "<p>A bientot au Centre Manara !</p>"
+        );
+        envoyerEmail(email, "Inscription confirmee - " + nomActivite, html);
+    }
+
+    // courriel quand l'admin ANNULE toute une seance (tous les inscrits sont notifies)
+    public void envoyerAnnulationSeance(String email, String prenomParent,
+            String nomEnfant, String nomActivite, String dateSeance) {
+        String html = construireTemplate(
+            "Seance annulee",
+            "<p>Bonjour " + prenomParent + ",</p>"
+            + "<p>Nous sommes desoles de vous informer que la seance "
+            + "<strong>" + nomActivite + "</strong> du <strong>" + dateSeance + "</strong> "
+            + "a laquelle <strong>" + nomEnfant + "</strong> etait inscrit a ete annulee.</p>"
+            + "<p>Pour plus d'informations, contactez l'administration du Centre Manara.</p>"
+        );
+        envoyerEmail(email, "Seance annulee - " + nomActivite, html);
+    }
+
+    // rappel 24h avant la seance
+    public void envoyerRappel24h(String email, String prenomParent,
+            String nomEnfant, String nomActivite, String dateSeance, String lieu) {
+        String html = construireTemplate(
+            "Rappel : activite demain",
+            "<p>Bonjour " + prenomParent + ",</p>"
+            + "<p>Petit rappel : <strong>" + nomEnfant + "</strong> participe demain a "
+            + "<strong>" + nomActivite + "</strong>.</p>"
+            + "<table style=\"width:100%; border-collapse:collapse; margin:16px 0;\">"
+            + "<tr><td style=\"padding:10px 14px; background:#F0F4F8; font-weight:700; color:#043C5C;\">Activite</td>"
+            + "<td style=\"padding:10px 14px; background:#F0F4F8;\">" + nomActivite + "</td></tr>"
+            + "<tr><td style=\"padding:10px 14px; font-weight:700; color:#043C5C;\">Date</td>"
+            + "<td style=\"padding:10px 14px;\">" + dateSeance + "</td></tr>"
+            + "<tr><td style=\"padding:10px 14px; background:#F0F4F8; font-weight:700; color:#043C5C;\">Lieu</td>"
+            + "<td style=\"padding:10px 14px; background:#F0F4F8;\">" + lieu + "</td></tr>"
+            + "</table>"
+            + "<p>A demain au Centre Manara !</p>"
+        );
+        envoyerEmail(email, "Rappel demain - " + nomActivite, html);
+    }
+
+    // rappel 2h avant la seance
+    public void envoyerRappel2h(String email, String prenomParent,
+            String nomEnfant, String nomActivite, String dateSeance, String lieu) {
+        String html = construireTemplate(
+            "Rappel : activite dans 2 heures !",
+            "<p>Bonjour " + prenomParent + ",</p>"
+            + "<p>L'activite <strong>" + nomActivite + "</strong> commence dans <strong>2 heures</strong>.</p>"
+            + "<p><strong>" + nomEnfant + "</strong> est attendu a <strong>" + dateSeance + "</strong> "
+            + "au lieu suivant : <strong>" + lieu + "</strong>.</p>"
+            + "<p>A tout de suite au Centre Manara !</p>"
+        );
+        envoyerEmail(email, "Activite dans 2h - " + nomActivite, html);
+    }
+
     // genere le HTML du courriel avec le header bleu + barre jaune Manara
     private String construireTemplate(String titre, String contenu) {
         return "<!DOCTYPE html>"

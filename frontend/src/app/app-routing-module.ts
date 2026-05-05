@@ -26,11 +26,17 @@ import { ActivitesAdmin } from './components/admin/activites-admin/activites-adm
 import { SceancesAdmin } from './components/admin/sceances-admin/sceances-admin';
 import { FormActiviteAdmin } from './components/admin/form-activite-admin/form-activite-admin';
 import { FormSceanceAdmin } from './components/admin/form-sceance-admin/form-sceance-admin';
+import { MessagesAdmin } from './components/admin/messages-admin/messages-admin';
+import { InboxAdmin } from './components/admin/inbox-admin/inbox-admin';
+import { MessagesEnvoyesAdmin } from './components/admin/messages-envoyes-admin/messages-envoyes-admin';
 
 // Composants animateur
 import { EnfantsAnimateur } from './components/animateur/enfants-animateur/enfants-animateur';
 import { SceancesAnimateur } from './components/animateur/sceances-animateur/sceances-animateur';
 import { SceancesDetailsAnimateur } from './components/animateur/sceances-details-animateur/sceances-details-animateur';
+import { MessagesAnimateur } from './components/animateur/messages-animateur/messages-animateur';
+import { InboxAnimateur } from './components/animateur/inbox-animateur/inbox-animateur';
+import { MessagesEnvoyesAnimateur } from './components/animateur/messages-envoyes-animateur/messages-envoyes-animateur';
 
 const routes: Routes = [
   // Pages publiques — accessibles sans connexion
@@ -133,6 +139,24 @@ const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard],
     data: { role: 'ADMIN' }
   },
+  {
+    path: 'admin/messages',
+    component: MessagesAdmin,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'ADMIN' }
+  },
+  {
+    path: 'admin/inbox',
+    component: InboxAdmin,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'ADMIN' }
+  },
+  {
+    path: 'admin/messages-envoyes',
+    component: MessagesEnvoyesAdmin,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'ADMIN' }
+  },
 
   // Pages animateur — AuthGuard vérifie la connexion, RoleGuard vérifie le rôle ANIMATEUR
   {
@@ -150,6 +174,24 @@ const routes: Routes = [
   {
     path: 'animateur/sceances/details/:id',
     component: SceancesDetailsAnimateur,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'ANIMATEUR' }
+  },
+  {
+    path: 'animateur/messages',
+    component: MessagesAnimateur,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'ANIMATEUR' }
+  },
+  {
+    path: 'animateur/inbox',
+    component: InboxAnimateur,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { role: 'ANIMATEUR' }
+  },
+  {
+    path: 'animateur/messages-envoyes',
+    component: MessagesEnvoyesAnimateur,
     canActivate: [AuthGuard, RoleGuard],
     data: { role: 'ANIMATEUR' }
   },

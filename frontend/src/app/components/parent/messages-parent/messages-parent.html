@@ -46,6 +46,13 @@
                   class="btn-mark-read"
                   (click)="markAsRead(msg); $event.stopPropagation()"
                   style="margin-top:12px;">Marquer comme lu</button>
+          <!-- Bouton supprimer le message -->
+          <button type="button"
+                  class="btn-delete"
+                  (click)="supprimer(msg); $event.stopPropagation()"
+                  style="margin-top:12px; margin-left:8px; background:#D9534F; color:#fff; border:none; padding:8px 14px; border-radius:5px; cursor:pointer; font-weight:700;">
+            Supprimer
+          </button>
         </div>
       </div>
     </div>

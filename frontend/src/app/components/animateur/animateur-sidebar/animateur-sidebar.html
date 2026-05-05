@@ -9,6 +9,18 @@
     <li class="sidebar-sessions">
       <a routerLink="/animateur/sceances">Séances</a>
     </li>
+    <li class="sidebar-sessions">
+      <a routerLink="/animateur/messages">Envoyer message</a>
+    </li>
+    <li class="sidebar-sessions">
+      <a routerLink="/animateur/inbox">
+        Boîte de réception
+        <span *ngIf="nonLus > 0" class="badge-nonlus">{{ nonLus }}</span>
+      </a>
+    </li>
+    <li class="sidebar-sessions">
+      <a routerLink="/animateur/messages-envoyes">Messages envoyés</a>
+    </li>
   </ul>
 
   <div class="settings-footer">

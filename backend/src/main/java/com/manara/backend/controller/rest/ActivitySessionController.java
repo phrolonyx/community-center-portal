@@ -3,11 +3,14 @@ package com.manara.backend.controller.rest;
 import com.manara.backend.dto.ActivitySessionRequest;
 import com.manara.backend.dto.ActivitySessionResponseDto;
 import com.manara.backend.model.Activity;
+import com.manara.backend.model.ActivityRegistration;
 import com.manara.backend.model.ActivitySession;
 import com.manara.backend.model.Location;
 import com.manara.backend.model.User;
+import com.manara.backend.repository.ActivityRegistrationRepository;
 import com.manara.backend.service.ActivityService;
 import com.manara.backend.service.ActivitySessionService;
+import com.manara.backend.service.EmailService;
 import com.manara.backend.service.LocationService;
 import com.manara.backend.service.UserService;
 import jakarta.validation.Valid;
@@ -17,7 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/sessions")
@@ -34,6 +40,12 @@ public class ActivitySessionController {
 
     @Autowired
     private LocationService locationService;
+
+    @Autowired
+    private ActivityRegistrationRepository registrationRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ANIMATEUR')")
@@ -76,6 +88,43 @@ public class ActivitySessionController {
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         sessionService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Admin annule une séance entière : marque toutes les inscriptions ANNULÉ + email à chaque parent
+    @PutMapping("/{id}/cancel")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> cancelSession(@PathVariable Integer id) {
+        ActivitySession session = sessionService.findById(id);
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy 'à' HH:mm");
+        String dateStr = session.getDateTimeStart().format(fmt);
+        String activiteName = session.getActivity().getName();
+
+        List<ActivityRegistration> regs = registrationRepository.findByActivitySessionId(id);
+        int notifies = 0;
+
+        for (ActivityRegistration r : regs) {
+            // Skipper celles deja annulees
+            if (r.getCancelledAt() != null) continue;
+
+            r.setStatus("ANNULÉ");
+            r.setCancelledAt(LocalDateTime.now());
+            registrationRepository.save(r);
+
+            // Email a chaque parent inscrit
+            emailService.envoyerAnnulationSeance(
+                    r.getParentProfile().getUser().getEmail(),
+                    r.getParentProfile().getUser().getFirstName(),
+                    r.getChild().getFirstName() + " " + r.getChild().getLastName(),
+                    activiteName,
+                    dateStr
+            );
+            notifies++;
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "message", "Séance annulée",
+                "notifies", notifies
+        ));
     }
 
     private ActivitySession buildSession(ActivitySession session, ActivitySessionRequest dto) {

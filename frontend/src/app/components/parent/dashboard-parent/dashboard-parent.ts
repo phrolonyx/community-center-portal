@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ChildService, Child } from '../../../apiServices/child-service';
 import { AuthService } from '../../../apiServices/auth.service';
 import { RegistrationService, ActivityRegistration } from '../../../apiServices/registration-service';
+import { MessageService, MessageDto } from '../../../apiServices/message-service';
 
 interface InscJour {
   id: number;
@@ -32,7 +33,8 @@ interface Utilisateur {
   templateUrl: './dashboard-parent.html',
   styleUrl: './dashboard-parent.css',
 })
-export class DashboardParent implements OnInit {
+export class DashboardParent implements OnInit, OnDestroy {
+  private notifIntervalId: any;
   utilisateur: Utilisateur = { firstName: 'Parent', lastName: '' };
   enfants: Enfant[] = [];
 
@@ -42,6 +44,10 @@ export class DashboardParent implements OnInit {
   semaines: (number | null)[][] = [];
 
   inscriptionsParJour = new Map<number, InscJour[]>();
+
+  // Notifications affichées sur le dashboard (5 dernières)
+  notifications: MessageDto[] = [];
+  totalNonLus = 0;
 
   modalOuvert = false;
   jourSelectionne: number | null = null;
@@ -53,6 +59,7 @@ export class DashboardParent implements OnInit {
     private childService: ChildService,
     private authService: AuthService,
     private registrationService: RegistrationService,
+    private messageService: MessageService,
     private cd: ChangeDetectorRef
   ) {}
 
@@ -61,6 +68,25 @@ export class DashboardParent implements OnInit {
     this.chargerEnfants();
     this.genererCalendrier();
     this.chargerInscriptionsCalendrier();
+    this.chargerNotifications();
+    // Polling temps réel : nouvelles notifications toutes les 15s
+    this.notifIntervalId = setInterval(() => this.chargerNotifications(), 15000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.notifIntervalId) clearInterval(this.notifIntervalId);
+  }
+
+  // Charger les 5 derniers messages pour la section Notifications
+  chargerNotifications(): void {
+    this.messageService.getMesMessages().subscribe({
+      next: (data) => {
+        this.notifications = data.slice(0, 5);
+        this.totalNonLus = data.filter(m => !m.isRead).length;
+        this.cd.detectChanges();
+      },
+      error: (err) => console.error('Erreur chargement notifications', err),
+    });
   }
 
   // Inscriptions du mois affiche
