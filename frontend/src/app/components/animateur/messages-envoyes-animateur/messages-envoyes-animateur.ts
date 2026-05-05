@@ -20,7 +20,7 @@ export class MessagesEnvoyesAnimateur implements OnInit {
   ngOnInit(): void {
     this.messageService.getMessagesEnvoyesAnim().subscribe({
       next: (data) => { this.messages = data; this.cdr.detectChanges(); },
-      error: (err) => console.error('Erreur chargement historique animateur', err),
+      error: () => {},
     });
   }
 

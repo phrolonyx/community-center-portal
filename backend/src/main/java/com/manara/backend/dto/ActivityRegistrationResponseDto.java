@@ -20,6 +20,7 @@ public class ActivityRegistrationResponseDto {
     private Integer activitySessionId;
     private String activityName;
     private LocalDateTime sessionStart;
+    private LocalDateTime sessionEnd;
     private String locationName;
     private String hostFullName;
 
@@ -40,6 +41,7 @@ public class ActivityRegistrationResponseDto {
         if (activityRegistration.getActivitySession() != null) {
             dto.setActivitySessionId(activityRegistration.getActivitySession().getId());
             dto.setSessionStart(activityRegistration.getActivitySession().getDateTimeStart());
+            dto.setSessionEnd(activityRegistration.getActivitySession().getDateTimeEnd());
             if (activityRegistration.getActivitySession().getActivity() != null)
                 dto.setActivityName(activityRegistration.getActivitySession().getActivity().getName());
             if (activityRegistration.getActivitySession().getLocation() != null)

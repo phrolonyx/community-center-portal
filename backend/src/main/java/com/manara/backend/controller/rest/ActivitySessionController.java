@@ -52,7 +52,10 @@ public class ActivitySessionController {
     public ResponseEntity<List<ActivitySessionResponseDto>> getAll() {
         return ResponseEntity.ok(
                 sessionService.findAll().stream()
-                        .map(ActivitySessionResponseDto::from)
+                        .map(s -> ActivitySessionResponseDto.from(
+                                s,
+                                (int) registrationRepository.countByActivitySessionIdAndStatus(s.getId(), "CONFIRMÉ")
+                        ))
                         .toList()
         );
     }

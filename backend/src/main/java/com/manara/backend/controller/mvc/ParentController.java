@@ -248,12 +248,13 @@ public class ParentController {
 
         activityService.cancelRegistration(registrationId);
 
-        // courriel pour informer le parent de l'annulation
+        // courriel pour informer le parent de l'annulation (pas de motif côté parent)
         emailService.envoyerAnnulation(
             userDetails.getUser().getEmail(),
             userDetails.getUser().getFirstName(),
             nomEnfant,
-            nomActivite
+            nomActivite,
+            null
         );
 
         return "redirect:/dashboardParent/inscriptions?annule";

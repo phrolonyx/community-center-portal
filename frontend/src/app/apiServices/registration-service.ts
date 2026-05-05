@@ -14,6 +14,7 @@ export interface ActivityRegistration {
   activitySessionId: number;
   activityName: string;
   sessionStart: string;
+  sessionEnd: string;
   locationName: string;
   hostFullName: string | null;
   parentProfileId: number;
@@ -43,10 +44,31 @@ export class RegistrationService {
     return this.http.post<ActivityRegistration>(this.apiUrl, data, { withCredentials: true });
   }
 
-  // Annuler une inscription existante
+  // Annuler une inscription existante (côté parent)
   cancel(id: number): Observable<{ message: string }> {
     return this.http.put<{ message: string }>(
       `${this.apiUrl}/${id}/cancel`, {}, { withCredentials: true }
+    );
+  }
+
+  // Récupérer toutes les inscriptions EN_ATTENTE (admin)
+  getPending(): Observable<ActivityRegistration[]> {
+    return this.http.get<ActivityRegistration[]>(`${this.apiUrl}/pending`, { withCredentials: true });
+  }
+
+  // Admin confirme une inscription -> envoie un email au parent
+  adminConfirm(id: number): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(
+      `${this.apiUrl}/${id}/admin-confirm`, {}, { withCredentials: true }
+    );
+  }
+
+  // Admin annule une inscription -> envoie un email au parent (avec motif optionnel)
+  adminCancel(id: number, motif?: string): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(
+      `${this.apiUrl}/${id}/admin-cancel`,
+      { motif: motif || '' },
+      { withCredentials: true }
     );
   }
 }

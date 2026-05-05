@@ -1,18 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MessageService, MessageDto } from '../../../apiServices/message-service';
+import { MessageDto, MessageService } from '../../../apiServices/message-service';
 
-interface Sender { fullName: string; }
-
-interface Message {
-  id: number;
-  subject: string;
-  content: string;
-  isRead: boolean;
-  type: string;
-  senderInitials: string;
-  sender: Sender;
-  createdAt: string;
-}
+const POLLING_DELAY_MS = 15_000;
 
 @Component({
   selector: 'app-inbox-animateur',
@@ -21,7 +10,8 @@ interface Message {
   styleUrl: './inbox-animateur.css',
 })
 export class InboxAnimateur implements OnInit, OnDestroy {
-  messages: Message[] = [];
+
+  messages: MessageDto[] = [];
   messagesOuverts = new Set<number>();
   private intervalId: any;
 
@@ -32,25 +22,18 @@ export class InboxAnimateur implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.charger();
-    this.intervalId = setInterval(() => this.charger(), 15000);
+    this.intervalId = setInterval(() => this.charger(), POLLING_DELAY_MS);
   }
 
   ngOnDestroy(): void {
     if (this.intervalId) clearInterval(this.intervalId);
   }
 
-  private charger(): void {
-    this.messageService.getMesMessagesAnim().subscribe({
-      next: (data: MessageDto[]) => { this.messages = data; this.cdr.detectChanges(); },
-      error: (err) => console.error('Erreur chargement messages animateur', err),
-    });
-  }
-
   get unreadCount(): number {
     return this.messages.filter(m => !m.isRead).length;
   }
 
-  toggleMessage(msg: Message): void {
+  toggleMessage(msg: MessageDto): void {
     if (this.messagesOuverts.has(msg.id)) {
       this.messagesOuverts.delete(msg.id);
     } else {
@@ -59,18 +42,18 @@ export class InboxAnimateur implements OnInit, OnDestroy {
     }
   }
 
-  isOpen(msg: Message): boolean {
+  isOpen(msg: MessageDto): boolean {
     return this.messagesOuverts.has(msg.id);
   }
 
-  markAsRead(msg: Message): void {
+  markAsRead(msg: MessageDto): void {
     this.messageService.marquerLuAnim(msg.id).subscribe({
       next: () => { msg.isRead = true; this.cdr.detectChanges(); },
-      error: (err) => console.error(err),
+      error: () => {},
     });
   }
 
-  supprimer(msg: Message): void {
+  supprimer(msg: MessageDto): void {
     if (!confirm('Supprimer ce message ?')) return;
     this.messageService.supprimerAnim(msg.id).subscribe({
       next: () => {
@@ -79,6 +62,13 @@ export class InboxAnimateur implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       },
       error: () => alert('Impossible de supprimer ce message'),
+    });
+  }
+
+  private charger(): void {
+    this.messageService.getMesMessagesAnim().subscribe({
+      next: (data) => { this.messages = data; this.cdr.detectChanges(); },
+      error: () => {},
     });
   }
 }

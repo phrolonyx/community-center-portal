@@ -17,6 +17,7 @@ export interface ActivitySession {
   hostFullName: string;
   minAge: number;
   maxAge: number;
+  confirmedCount: number; // nombre d'enfants confirmés
 }
 
 export interface ActivitySessionRequest {
@@ -60,6 +61,13 @@ export class ActivitySessionService {
   // Supprimer une séance (admin)
   deleteSession(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { withCredentials: true });
+  }
+
+  // Annuler une séance (admin) — notifie tous les parents inscrits par email
+  cancelSession(id: number): Observable<{ message: string; notifies: number }> {
+    return this.http.put<{ message: string; notifies: number }>(
+      `${this.apiUrl}/${id}/cancel`, {}, { withCredentials: true }
+    );
   }
 
   getSessionById(id: number): Observable<ActivitySession> {

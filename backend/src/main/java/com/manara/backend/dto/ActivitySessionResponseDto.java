@@ -23,7 +23,14 @@ public class ActivitySessionResponseDto {
     private Integer minAge;
     private Integer maxAge;
 
+    // Nombre d'enfants CONFIRMÉS pour cette séance (calculé côté service)
+    private Integer confirmedCount;
+
     public static ActivitySessionResponseDto from(ActivitySession activitySession) {
+        return from(activitySession, null);
+    }
+
+    public static ActivitySessionResponseDto from(ActivitySession activitySession, Integer confirmedCount) {
         ActivitySessionResponseDto dto = new ActivitySessionResponseDto();
         dto.setId(activitySession.getId());
         dto.setDateTimeStart(activitySession.getDateTimeStart());
@@ -31,6 +38,7 @@ public class ActivitySessionResponseDto {
         dto.setCapacity(activitySession.getCapacity());
         dto.setMinAge(activitySession.getMinAge());
         dto.setMaxAge(activitySession.getMaxAge());
+        dto.setConfirmedCount(confirmedCount != null ? confirmedCount : 0);
 
         if (activitySession.getActivity() != null) {
             dto.setActivityId(activitySession.getActivity().getId());

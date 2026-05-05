@@ -22,4 +22,7 @@ public interface ActivityRegistrationRepository extends JpaRepository<ActivityRe
 
     // Inscriptions liees a une seance (utile pour annulation seance)
     List<ActivityRegistration> findByActivitySessionId(Integer sessionId);
+
+    // Nombre d'inscriptions avec un statut donne pour une seance (compteur capacite)
+    long countByActivitySessionIdAndStatus(Integer sessionId, String status);
 }

@@ -1,22 +1,8 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { MessageService, MessageDto } from '../../../apiServices/message-service';
+import { MessageDto, MessageService } from '../../../apiServices/message-service';
 
-interface Sender {
-  fullName: string;
-}
+const POLLING_DELAY_MS = 15_000;
 
-interface Message {
-  id: number;
-  subject: string;
-  content: string;
-  isRead: boolean;
-  type: 'ANNULATION' | 'RAPPEL' | 'ANNONCE' | string;
-  senderInitials: string;
-  sender: Sender;
-  createdAt: string;
-}
-
-// Composant Angular dynamique - Consommation API REST via HttpClient
 @Component({
   selector: 'app-messages-parent',
   standalone: false,
@@ -24,7 +10,8 @@ interface Message {
   styleUrl: './messages-parent.css',
 })
 export class MessagesParent implements OnInit, OnDestroy {
-  messages: Message[] = [];
+
+  messages: MessageDto[] = [];
   messagesOuverts = new Set<number>();
   private intervalId: any;
 
@@ -35,22 +22,11 @@ export class MessagesParent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.charger();
-    // Rafraichit toutes les 15s pour voir les nouveaux messages
-    this.intervalId = setInterval(() => this.charger(), 15000);
+    this.intervalId = setInterval(() => this.charger(), POLLING_DELAY_MS);
   }
 
   ngOnDestroy(): void {
     if (this.intervalId) clearInterval(this.intervalId);
-  }
-
-  private charger(): void {
-    this.messageService.getMesMessages().subscribe({
-      next: (data: MessageDto[]) => {
-        this.messages = data;
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Erreur chargement messages', err),
-    });
   }
 
   get unreadCount(): number {
@@ -62,46 +38,42 @@ export class MessagesParent implements OnInit, OnDestroy {
     document.querySelector('.sidebar-overlay')?.classList.toggle('open');
   }
 
-  toggleMessage(msg: Message): void {
+  toggleMessage(msg: MessageDto): void {
     if (this.messagesOuverts.has(msg.id)) {
       this.messagesOuverts.delete(msg.id);
     } else {
       this.messagesOuverts.add(msg.id);
-      // Marquer comme lu à l'ouverture
-      if (!msg.isRead) {
-        this.markAsRead(msg);
-      }
+      if (!msg.isRead) this.markAsRead(msg);
     }
   }
 
-  isOpen(msg: Message): boolean {
+  isOpen(msg: MessageDto): boolean {
     return this.messagesOuverts.has(msg.id);
   }
 
-  markAsRead(msg: Message): void {
+  markAsRead(msg: MessageDto): void {
     this.messageService.marquerLu(msg.id).subscribe({
-      next: () => {
-        msg.isRead = true;
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Erreur markAsRead', err),
+      next: () => { msg.isRead = true; this.cdr.detectChanges(); },
+      error: () => {},
     });
   }
 
-  // Supprimer un message après confirmation
-  supprimer(msg: Message): void {
-    if (!confirm('Supprimer ce message ?')) {
-      return;
-    }
+  supprimer(msg: MessageDto): void {
+    if (!confirm('Supprimer ce message ?')) return;
     this.messageService.supprimer(msg.id).subscribe({
       next: () => {
         this.messages = this.messages.filter(m => m.id !== msg.id);
         this.messagesOuverts.delete(msg.id);
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        alert(err?.error?.error || 'Impossible de supprimer ce message');
-      },
+      error: (err) => alert(err?.error?.error || 'Impossible de supprimer ce message'),
+    });
+  }
+
+  private charger(): void {
+    this.messageService.getMesMessages().subscribe({
+      next: (data) => { this.messages = data; this.cdr.detectChanges(); },
+      error: () => {},
     });
   }
 }

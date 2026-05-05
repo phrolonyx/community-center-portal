@@ -1,24 +1,23 @@
-import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
-import {ActivitySession, ActivitySessionService} from '../../../apiServices/activity-session-service';
+import { Component, OnInit, signal } from '@angular/core';
+import { ActivitySession, ActivitySessionService } from '../../../apiServices/activity-session-service';
 
 @Component({
   selector: 'app-sceances-admin',
   standalone: false,
   templateUrl: './sceances-admin.html',
   styleUrl: './sceances-admin.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SceancesAdmin {
+export class SceancesAdmin implements OnInit {
+
+  sessions = signal<ActivitySession[]>([]);
+
   constructor(private sessionService: ActivitySessionService) {}
 
   ngOnInit() {
     this.loadSessions();
   }
 
-  // Liste brute venant de l’API
-  sessions = signal<ActivitySession[]>([]);
-
-  // Charger toutes les séances
+  // Charger toutes les séances depuis l'API
   loadSessions() {
     this.sessionService.getAllSessions().subscribe({
       next: data => this.sessions.set(data),
@@ -26,34 +25,17 @@ export class SceancesAdmin {
     });
   }
 
-  // Supprimer séance
+  // Annuler une séance : notifie tous les parents inscrits par courriel
   deleteSession(id: number) {
-    this.sessionService.deleteSession(id).subscribe({
-      next: () => {
-        const updated = this.sessions().filter(s => s.id !== id);
-        this.sessions.set(updated);
+    if (!confirm('Annuler cette séance ? Tous les parents inscrits seront notifiés par courriel.')) {
+      return;
+    }
+    this.sessionService.cancelSession(id).subscribe({
+      next: (res) => {
+        alert(`Séance annulée. ${res.notifies} parent(s) notifié(s) par courriel.`);
+        this.sessions.set(this.sessions().filter(s => s.id !== id));
       },
-      error: err => console.error("Erreur suppression séance :", err)
+      error: () => alert("Erreur lors de l'annulation de la séance"),
     });
   }
-
-    //  Liste des séances (à remplacer par API)
-  // sessions = [
-    // Exemple :
-    // {
-    //   id: 1,
-    //   activityName: "Danse",
-    //   hostName: "Sophie Martin",
-    //   locationName: "Salle A",
-    //   capacity: 20,
-    //   dateTimeStart: new Date(),
-    //   dateTimeEnd: new Date()
-    // }
-  // ];
-
-  // Supprimer séance
-  // deleteSession(id: number) {
-    // console.log("Supprimer séance ID:", id);
-    // //
-  // }
 }

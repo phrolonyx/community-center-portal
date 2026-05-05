@@ -75,7 +75,10 @@
       <!-- Pour chaque seance, afficher directement la liste des enfants avec bouton Inscrire -->
       <div *ngFor="let s of activiteChoisie.sessions" class="seance-bloc">
         <div class="seance-entete">
-          <strong>{{ s.dateTimeStart | date:'dd MMM yyyy' }} à {{ s.dateTimeStart | date:'HH\'h\'mm' }}</strong>
+          <strong>
+            {{ s.dateTimeStart | date:'dd MMM yyyy' }}
+            à {{ s.dateTimeStart | date:'HH\'h\'mm' }}<span *ngIf="s.dateTimeEnd"> – {{ s.dateTimeEnd | date:'HH\'h\'mm' }}</span>
+          </strong>
           <span *ngIf="s.locationName"> · {{ s.locationName }}</span>
           <span *ngIf="s.minAge != null || s.maxAge != null"> · Age : {{ s.minAge ?? '?' }} - {{ s.maxAge ?? '?' }} ans</span>
           <div *ngIf="s.hostFullName" class="seance-animateur"><strong>Animateur :</strong> {{ s.hostFullName }}</div>

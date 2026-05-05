@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../apiServices/auth.service';
 
@@ -7,7 +7,6 @@ import { AuthService } from '../../apiServices/auth.service';
   standalone: false,
   templateUrl: './header.html',
   styleUrl: './header.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Header {
   menuOuvert = false;
@@ -34,14 +33,17 @@ export class Header {
   }
 
   logout(): void {
+    // Vide immediatement le user local (le menu ferme grace au isAuthenticated)
+    this.authService.currentUser.set(null);
+    this.menuOuvert = false;
+
+    // Notifie le serveur en arriere-plan (best-effort, on attend pas)
     this.authService.logout().subscribe({
-      next: () => {
-        this.menuOuvert = false;
-        this.router.navigate(['/connexion'], { queryParams: { logout: '1' } });
-      },
-      error: () => {
-        this.router.navigate(['/connexion']);
-      }
+      next: () => {},
+      error: () => {},
     });
+
+    // Force une vraie redirection (hard reload) pour vider tous les composants/intervals/cache
+    window.location.href = '/connexion?logout=1';
   }
 }

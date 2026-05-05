@@ -1,6 +1,5 @@
 package com.manara.backend.service;
 
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,9 +7,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-/*
- * Service pour l'envoi de courriels via Gmail SMTP.
- * Utilise un template HTML avec les couleurs du Centre Manara.
+/**
+ * Service d'envoi de courriels (Gmail SMTP).
+ * Tous les emails utilisent un template HTML aux couleurs du Centre Manara
+ * (bleu #043C5C + barre jaune #E8BB08).
+ *
+ * Les methodes ne throw jamais : si SMTP plante, l'erreur est loguee mais
+ * l'operation metier (inscription, confirmation, etc.) continue.
  */
 @Service
 public class EmailService {
@@ -18,11 +21,10 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    // adresse courriel configuree dans application.properties
     @Value("${app.mail.from}")
     private String fromEmail;
 
-    // envoie un courriel en format HTML
+    // Envoi technique d'un courriel HTML
     public void envoyerEmail(String destinataire, String sujet, String contenuHtml) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -32,127 +34,151 @@ public class EmailService {
             helper.setSubject(sujet);
             helper.setText(contenuHtml, true);
             mailSender.send(message);
-        } catch (MessagingException e) {
-            System.out.println("Erreur envoi email a " + destinataire + " : " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Erreur envoi courriel à " + destinataire + " : " + e.getMessage());
         }
     }
 
-    // courriel de bienvenue quand un nouveau user s'inscrit
+    // Bienvenue : compte créé, en attente de validation par l'admin
     public void envoyerBienvenue(String email, String prenom) {
         String html = construireTemplate(
             "Bienvenue, " + prenom + " !",
-            "<p>Merci de vous etre inscrit au <strong>Centre Manara</strong>.</p>"
-            + "<p>Votre compte a ete cree avec succes. Vous pouvez maintenant :</p>"
-            + "<ul>"
-            + "  <li>Ajouter vos enfants a votre profil</li>"
-            + "  <li>Les inscrire aux activites disponibles</li>"
-            + "  <li>Suivre leurs inscriptions en temps reel</li>"
-            + "</ul>"
-            + "<p>Connectez-vous des maintenant pour commencer !</p>"
+            "<p>Merci de vous être inscrit au <strong>Centre Manara</strong>.</p>"
+            + "<p>Votre compte a bien été créé. Avant de pouvoir vous connecter, "
+            + "<strong>un administrateur doit valider votre profil</strong>.</p>"
+            + "<p>Vous recevrez un courriel de confirmation dès que votre compte sera approuvé.</p>"
+            + "<p>Merci de votre patience !</p>"
         );
-        envoyerEmail(email, "Bienvenue au Centre Manara !", html);
+        envoyerEmail(email, "Inscription reçue — Centre Manara", html);
     }
 
-    // courriel envoye au parent quand il inscrit son enfant a une activite
+    // Compte approuvé par l'admin
+    public void envoyerCompteApprouve(String email, String prenom) {
+        String html = construireTemplate(
+            "Votre compte est activé !",
+            "<p>Bonjour " + prenom + ",</p>"
+            + "<p>Bonne nouvelle : votre compte au <strong>Centre Manara</strong> "
+            + "vient d'être <strong>approuvé</strong> par notre équipe.</p>"
+            + "<p>Vous pouvez maintenant vous connecter et :</p>"
+            + "<ul>"
+            + "  <li>Ajouter vos enfants à votre profil</li>"
+            + "  <li>Les inscrire aux activités disponibles</li>"
+            + "  <li>Suivre leurs inscriptions en temps réel</li>"
+            + "</ul>"
+            + "<p>À bientôt au Centre Manara !</p>"
+        );
+        envoyerEmail(email, "Compte approuvé — Centre Manara", html);
+    }
+
+    // Confirmation lorsque le parent inscrit son enfant à une activité
     public void envoyerConfirmationInscription(String email, String prenomParent,
             String nomEnfant, String nomActivite, String dateSeance) {
         String html = construireTemplate(
-            "Inscription enregistree !",
+            "Inscription enregistrée !",
             "<p>Bonjour " + prenomParent + ",</p>"
-            + "<p>L'inscription de <strong>" + nomEnfant + "</strong> a l'activite "
-            + "<strong>" + nomActivite + "</strong> a bien ete enregistree.</p>"
-            + "<table style=\"width:100%; border-collapse:collapse; margin:16px 0;\">"
-            + "<tr><td style=\"padding:10px 14px; background:#F0F4F8; font-weight:700; color:#043C5C;\">Enfant</td>"
-            + "<td style=\"padding:10px 14px; background:#F0F4F8;\">" + nomEnfant + "</td></tr>"
-            + "<tr><td style=\"padding:10px 14px; font-weight:700; color:#043C5C;\">Activite</td>"
-            + "<td style=\"padding:10px 14px;\">" + nomActivite + "</td></tr>"
-            + "<tr><td style=\"padding:10px 14px; background:#F0F4F8; font-weight:700; color:#043C5C;\">Date</td>"
-            + "<td style=\"padding:10px 14px; background:#F0F4F8;\">" + dateSeance + "</td></tr>"
-            + "<tr><td style=\"padding:10px 14px; font-weight:700; color:#043C5C;\">Statut</td>"
-            + "<td style=\"padding:10px 14px;\">En attente</td></tr>"
-            + "</table>"
-            + "<p>Vous recevrez une notification lorsque l'inscription sera confirmee.</p>"
+            + "<p>L'inscription de <strong>" + nomEnfant + "</strong> à l'activité "
+            + "<strong>" + nomActivite + "</strong> a bien été enregistrée.</p>"
+            + ligneInfo("Enfant", nomEnfant, true)
+            + ligneInfo("Activité", nomActivite, false)
+            + ligneInfo("Date", dateSeance, true)
+            + ligneInfo("Statut", "En attente", false)
+            + "<p>Vous recevrez une notification lorsque l'inscription sera confirmée.</p>"
         );
-        envoyerEmail(email, "Inscription confirmee - " + nomActivite, html);
+        envoyerEmail(email, "Inscription enregistrée — " + nomActivite, html);
     }
 
-    // courriel quand une inscription est annulee
-    public void envoyerAnnulation(String email, String prenomParent,
-            String nomEnfant, String nomActivite) {
-        String html = construireTemplate(
-            "Inscription annulee",
-            "<p>Bonjour " + prenomParent + ",</p>"
-            + "<p>L'inscription de <strong>" + nomEnfant + "</strong> a l'activite "
-            + "<strong>" + nomActivite + "</strong> a ete annulee.</p>"
-            + "<p>Si cette annulation n'est pas de votre initiative, contactez l'administration.</p>"
-        );
-        envoyerEmail(email, "Annulation - " + nomActivite, html);
-    }
-
-    // courriel quand l'admin CONFIRME une inscription en attente
+    // Confirmation par l'admin (avec lieu + animateur)
     public void envoyerConfirmationAdmin(String email, String prenomParent,
-            String nomEnfant, String nomActivite, String dateSeance) {
+            String nomEnfant, String nomActivite, String dateSeance, String lieu, String nomAnimateur) {
         String html = construireTemplate(
-            "Inscription confirmee !",
+            "Inscription confirmée !",
             "<p>Bonjour " + prenomParent + ",</p>"
             + "<p>Bonne nouvelle ! L'inscription de <strong>" + nomEnfant + "</strong> "
-            + "a l'activite <strong>" + nomActivite + "</strong> a ete <strong>confirmee</strong> par l'administration.</p>"
-            + "<p><strong>Date :</strong> " + dateSeance + "</p>"
-            + "<p>A bientot au Centre Manara !</p>"
+            + "à l'activité <strong>" + nomActivite + "</strong> a été <strong>confirmée</strong> par l'administration.</p>"
+            + ligneInfo("Activité", nomActivite, true)
+            + ligneInfo("Date", dateSeance, false)
+            + ligneInfo("Lieu", lieu != null ? lieu : "À confirmer", true)
+            + ligneInfo("Animateur", nomAnimateur != null ? nomAnimateur : "À confirmer", false)
+            + "<p>À bientôt au Centre Manara !</p>"
         );
-        envoyerEmail(email, "Inscription confirmee - " + nomActivite, html);
+        envoyerEmail(email, "Inscription confirmée — " + nomActivite, html);
     }
 
-    // courriel quand l'admin ANNULE toute une seance (tous les inscrits sont notifies)
+    // Annulation d'une inscription par l'admin (motif optionnel affiché dans un encadré)
+    public void envoyerAnnulation(String email, String prenomParent,
+            String nomEnfant, String nomActivite, String motif) {
+        StringBuilder contenu = new StringBuilder();
+        contenu.append("<p>Bonjour ").append(prenomParent).append(",</p>");
+        contenu.append("<p>L'inscription de <strong>").append(nomEnfant).append("</strong> à l'activité ");
+        contenu.append("<strong>").append(nomActivite).append("</strong> a été annulée par l'administration.</p>");
+
+        if (motif != null && !motif.isBlank()) {
+            contenu.append("<p style=\"padding:12px 16px; background:#FFF3CD; border-left:4px solid #E8BB08; border-radius:4px;\">");
+            contenu.append("<strong>Motif d'annulation :</strong><br>").append(motif);
+            contenu.append("</p>");
+        }
+
+        contenu.append("<p>Pour toute question, n'hésitez pas à contacter l'administration du Centre Manara.</p>");
+
+        envoyerEmail(email, "Annulation — " + nomActivite,
+                construireTemplate("Inscription annulée", contenu.toString()));
+    }
+
+    // Annulation d'une séance entière (envoyé à chaque parent inscrit)
     public void envoyerAnnulationSeance(String email, String prenomParent,
             String nomEnfant, String nomActivite, String dateSeance) {
         String html = construireTemplate(
-            "Seance annulee",
+            "Séance annulée",
             "<p>Bonjour " + prenomParent + ",</p>"
-            + "<p>Nous sommes desoles de vous informer que la seance "
+            + "<p>Nous sommes désolés de vous informer que la séance "
             + "<strong>" + nomActivite + "</strong> du <strong>" + dateSeance + "</strong> "
-            + "a laquelle <strong>" + nomEnfant + "</strong> etait inscrit a ete annulee.</p>"
+            + "à laquelle <strong>" + nomEnfant + "</strong> était inscrit a été annulée.</p>"
             + "<p>Pour plus d'informations, contactez l'administration du Centre Manara.</p>"
         );
-        envoyerEmail(email, "Seance annulee - " + nomActivite, html);
+        envoyerEmail(email, "Séance annulée — " + nomActivite, html);
     }
 
-    // rappel 24h avant la seance
+    // Rappel 24h avant la séance
     public void envoyerRappel24h(String email, String prenomParent,
             String nomEnfant, String nomActivite, String dateSeance, String lieu) {
         String html = construireTemplate(
-            "Rappel : activite demain",
+            "Rappel : activité demain",
             "<p>Bonjour " + prenomParent + ",</p>"
-            + "<p>Petit rappel : <strong>" + nomEnfant + "</strong> participe demain a "
+            + "<p>Petit rappel : <strong>" + nomEnfant + "</strong> participe demain à "
             + "<strong>" + nomActivite + "</strong>.</p>"
-            + "<table style=\"width:100%; border-collapse:collapse; margin:16px 0;\">"
-            + "<tr><td style=\"padding:10px 14px; background:#F0F4F8; font-weight:700; color:#043C5C;\">Activite</td>"
-            + "<td style=\"padding:10px 14px; background:#F0F4F8;\">" + nomActivite + "</td></tr>"
-            + "<tr><td style=\"padding:10px 14px; font-weight:700; color:#043C5C;\">Date</td>"
-            + "<td style=\"padding:10px 14px;\">" + dateSeance + "</td></tr>"
-            + "<tr><td style=\"padding:10px 14px; background:#F0F4F8; font-weight:700; color:#043C5C;\">Lieu</td>"
-            + "<td style=\"padding:10px 14px; background:#F0F4F8;\">" + lieu + "</td></tr>"
-            + "</table>"
-            + "<p>A demain au Centre Manara !</p>"
+            + ligneInfo("Activité", nomActivite, true)
+            + ligneInfo("Date", dateSeance, false)
+            + ligneInfo("Lieu", lieu, true)
+            + "<p>À demain au Centre Manara !</p>"
         );
-        envoyerEmail(email, "Rappel demain - " + nomActivite, html);
+        envoyerEmail(email, "Rappel demain — " + nomActivite, html);
     }
 
-    // rappel 2h avant la seance
+    // Rappel 2h avant la séance
     public void envoyerRappel2h(String email, String prenomParent,
             String nomEnfant, String nomActivite, String dateSeance, String lieu) {
         String html = construireTemplate(
-            "Rappel : activite dans 2 heures !",
+            "Rappel : activité dans 2 heures !",
             "<p>Bonjour " + prenomParent + ",</p>"
-            + "<p>L'activite <strong>" + nomActivite + "</strong> commence dans <strong>2 heures</strong>.</p>"
-            + "<p><strong>" + nomEnfant + "</strong> est attendu a <strong>" + dateSeance + "</strong> "
+            + "<p>L'activité <strong>" + nomActivite + "</strong> commence dans <strong>2 heures</strong>.</p>"
+            + "<p><strong>" + nomEnfant + "</strong> est attendu à <strong>" + dateSeance + "</strong> "
             + "au lieu suivant : <strong>" + lieu + "</strong>.</p>"
-            + "<p>A tout de suite au Centre Manara !</p>"
+            + "<p>À tout de suite au Centre Manara !</p>"
         );
-        envoyerEmail(email, "Activite dans 2h - " + nomActivite, html);
+        envoyerEmail(email, "Activité dans 2h — " + nomActivite, html);
     }
 
-    // genere le HTML du courriel avec le header bleu + barre jaune Manara
+    // Helper : ligne d'information formatée pour les tableaux du courriel.
+    // alterne sert à alterner les fonds clair/blanc des lignes pour la lisibilité.
+    private String ligneInfo(String label, String valeur, boolean alterne) {
+        String bg = alterne ? "background:#F0F4F8;" : "";
+        return "<table style=\"width:100%; border-collapse:collapse;\"><tr>"
+                + "<td style=\"padding:10px 14px; " + bg + " font-weight:700; color:#043C5C; width:30%;\">" + label + "</td>"
+                + "<td style=\"padding:10px 14px; " + bg + "\">" + valeur + "</td>"
+                + "</tr></table>";
+    }
+
+    // Génère le template HTML commun (header bleu + barre jaune + footer)
     private String construireTemplate(String titre, String contenu) {
         return "<!DOCTYPE html>"
             + "<html><head><meta charset=\"UTF-8\"></head>"
@@ -162,7 +188,7 @@ public class EmailService {
             + "<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#FFF; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08);\">"
             + "<tr><td style=\"background:#043C5C; padding:28px 32px; text-align:center;\">"
             + "<h1 style=\"margin:0; font-size:26px; font-weight:900; color:#FFF; letter-spacing:1px;\">CENTRE MANARA</h1>"
-            + "<p style=\"margin:6px 0 0; font-size:13px; color:#E8BB08; font-weight:600;\">Activites pour enfants</p>"
+            + "<p style=\"margin:6px 0 0; font-size:13px; color:#E8BB08; font-weight:600;\">Activités pour enfants</p>"
             + "</td></tr>"
             + "<tr><td style=\"background:#E8BB08; height:4px;\"></td></tr>"
             + "<tr><td style=\"padding:32px;\">"
@@ -170,8 +196,8 @@ public class EmailService {
             + "<div style=\"font-size:15px; color:#374151; line-height:1.7;\">" + contenu + "</div>"
             + "</td></tr>"
             + "<tr><td style=\"background:#F9FAFB; padding:20px 32px; text-align:center; border-top:1px solid #E5E7EB;\">"
-            + "<p style=\"margin:0; font-size:13px; color:#9CA3AF;\">Centre Manara &mdash; Activites et loisirs pour enfants</p>"
-            + "<p style=\"margin:6px 0 0; font-size:12px; color:#D1D5DB;\">Message automatique, ne pas repondre.</p>"
+            + "<p style=\"margin:0; font-size:13px; color:#9CA3AF;\">Centre Manara &mdash; Activités et loisirs pour enfants</p>"
+            + "<p style=\"margin:6px 0 0; font-size:12px; color:#D1D5DB;\">Message automatique, ne pas répondre.</p>"
             + "</td></tr>"
             + "</table></td></tr></table></body></html>";
     }

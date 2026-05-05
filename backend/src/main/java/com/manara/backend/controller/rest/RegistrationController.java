@@ -122,6 +122,43 @@ public class RegistrationController {
         return ResponseEntity.ok(Map.of("message", "Inscription annulée"));
     }
 
+    // Admin récupère toutes les inscriptions en attente (statut EN_ATTENTE)
+    @GetMapping("/pending")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<ActivityRegistrationResponseDto>> getPending() {
+        List<ActivityRegistrationResponseDto> dtos = registrationRepository.findAll().stream()
+                .filter(r -> "EN_ATTENTE".equals(r.getStatus()))
+                .map(ActivityRegistrationResponseDto::from)
+                .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
+    // Admin annule une inscription (avec motif optionnel envoyé dans le body)
+    @PutMapping("/{id}/admin-cancel")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> annulerAdmin(
+            @PathVariable Integer id,
+            @RequestBody(required = false) Map<String, String> body) {
+
+        ActivityRegistration reg = registrationRepository.findById(id).orElseThrow();
+        reg.setStatus("ANNULÉ");
+        reg.setCancelledAt(LocalDateTime.now());
+        registrationRepository.save(reg);
+
+        String motif = (body != null) ? body.get("motif") : null;
+
+        // Email d'annulation au parent (avec motif si fourni)
+        emailService.envoyerAnnulation(
+                reg.getParentProfile().getUser().getEmail(),
+                reg.getParentProfile().getUser().getFirstName(),
+                reg.getChild().getFirstName() + " " + reg.getChild().getLastName(),
+                reg.getActivitySession().getActivity().getName(),
+                motif
+        );
+
+        return ResponseEntity.ok(Map.of("message", "Inscription annulée + email envoyé"));
+    }
+
     // Admin confirme une inscription en attente : statut -> CONFIRMÉ + email au parent
     @PutMapping("/{id}/admin-confirm")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -129,18 +166,35 @@ public class RegistrationController {
         ActivityRegistration reg = registrationRepository.findById(id)
                 .orElseThrow();
 
+        // Bloquer la confirmation si la séance est déjà pleine
+        Integer sessionId = reg.getActivitySession().getId();
+        Integer capacity = reg.getActivitySession().getCapacity();
+        long confirmes = registrationRepository.countByActivitySessionIdAndStatus(sessionId, "CONFIRMÉ");
+        if (capacity != null && confirmes >= capacity) {
+            return ResponseEntity.status(409).body(Map.of(
+                    "error", "Capacité maximale atteinte (" + capacity + " enfants)"
+            ));
+        }
+
         reg.setStatus("CONFIRMÉ");
         reg.setConfirmedAt(LocalDateTime.now());
         registrationRepository.save(reg);
 
-        // Email de confirmation au parent
+        // Email de confirmation au parent (avec lieu + nom de l'animateur)
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy 'à' HH:mm");
+        ActivitySession seance = reg.getActivitySession();
+        String lieu = (seance.getLocation() != null) ? seance.getLocation().getName() : null;
+        String nomAnimateur = (seance.getHost() != null)
+                ? seance.getHost().getFirstName() + " " + seance.getHost().getLastName() : null;
+
         emailService.envoyerConfirmationAdmin(
                 reg.getParentProfile().getUser().getEmail(),
                 reg.getParentProfile().getUser().getFirstName(),
                 reg.getChild().getFirstName() + " " + reg.getChild().getLastName(),
-                reg.getActivitySession().getActivity().getName(),
-                reg.getActivitySession().getDateTimeStart().format(fmt)
+                seance.getActivity().getName(),
+                seance.getDateTimeStart().format(fmt),
+                lieu,
+                nomAnimateur
         );
 
         return ResponseEntity.ok(Map.of("message", "Inscription confirmée + email envoyé"));

@@ -103,3 +103,24 @@
 .btn-delete:hover {
   background-color: #dc3545;
 }
+
+/* ============================================================
+   BADGE CAPACITE (compteur enfants confirmés / capacité)
+============================================================ */
+.capacity-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: #E8F4FF;
+  color: #043C5C;
+  font-weight: 700;
+  font-size: 13px;
+  border: 1px solid #BFDBFE;
+}
+
+/* Quand la séance est pleine */
+.capacity-badge.full {
+  background: #FECACA;
+  color: #991B1B;
+  border-color: #F87171;
+}

@@ -43,7 +43,11 @@
             <h3 class="inscription-nom">{{ i.activitySession.activity.name }}</h3>
 
             <p class="inscription-details">
-              <span>{{ i.activitySession.dateTimeStart | date:'dd MMM yyyy' }}</span>
+              <span>
+                {{ i.activitySession.dateTimeStart | date:'dd MMM yyyy' }}
+                · {{ i.activitySession.dateTimeStart | date:'HH\'h\'mm' }}
+                <span *ngIf="i.activitySession.dateTimeEnd"> – {{ i.activitySession.dateTimeEnd | date:'HH\'h\'mm' }}</span>
+              </span>
               <br>
               <span *ngIf="i.activitySession.location">📍 {{ i.activitySession.location.name }}</span>
               <br *ngIf="i.activitySession.hostFullName">

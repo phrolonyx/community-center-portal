@@ -14,9 +14,9 @@ import java.util.List;
 
 /*
  * Service automatique de rappels par email.
- * Tourne toutes les 15 minutes et envoie :
- *  - un rappel 24h avant chaque seance (envoye une seule fois grace au flag reminder24Sent)
- *  - un rappel 2h avant chaque seance (flag reminder2Sent)
+ * Tourne CHAQUE MINUTE pour que les emails partent precis a l'heure :
+ *  - rappel 24h avant la seance (fenetre 23h59 - 24h01)
+ *  - rappel 2h avant la seance (fenetre 1h59 - 2h01)
  */
 @Service
 public class ReminderService {
@@ -30,14 +30,13 @@ public class ReminderService {
     private static final DateTimeFormatter FORMAT_DATE =
             DateTimeFormatter.ofPattern("dd/MM/yyyy 'à' HH:mm");
 
-    // Tourne toutes les 15 minutes (900_000 ms)
-    @Scheduled(fixedRate = 900_000)
+    // Tourne CHAQUE MINUTE (60_000 ms) — precision a la minute pres
+    @Scheduled(fixedRate = 60_000)
     public void verifierRappels() {
         LocalDateTime maintenant = LocalDateTime.now();
         List<ActivityRegistration> inscriptions = registrationRepository.findAll();
 
         for (ActivityRegistration r : inscriptions) {
-            // On ne relance pas pour les inscriptions annulees
             if (r.getCancelledAt() != null) continue;
 
             ActivitySession seance = r.getActivitySession();
@@ -46,15 +45,15 @@ public class ReminderService {
             LocalDateTime debut = seance.getDateTimeStart();
             long minutesAvantDebut = Duration.between(maintenant, debut).toMinutes();
 
-            // Rappel 24h : entre 23h45 et 24h15 avant la seance
-            if (!r.getReminder24Sent() && minutesAvantDebut >= 1425 && minutesAvantDebut <= 1455) {
+            // Rappel 24h : fenetre etroite 23h59 - 24h01 (1439 - 1441 min)
+            if (!r.getReminder24Sent() && minutesAvantDebut >= 1439 && minutesAvantDebut <= 1441) {
                 envoyerRappel24h(r);
                 r.setReminder24Sent(true);
                 registrationRepository.save(r);
             }
 
-            // Rappel 2h : entre 1h45 et 2h15 avant la seance
-            if (!r.getReminder2Sent() && minutesAvantDebut >= 105 && minutesAvantDebut <= 135) {
+            // Rappel 2h : fenetre etroite 1h59 - 2h01 (119 - 121 min)
+            if (!r.getReminder2Sent() && minutesAvantDebut >= 119 && minutesAvantDebut <= 121) {
                 envoyerRappel2h(r);
                 r.setReminder2Sent(true);
                 registrationRepository.save(r);

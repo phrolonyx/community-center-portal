@@ -44,7 +44,13 @@
                   <td>{{ session.activityName }}</td>
                   <td>{{ session.hostFullName }}</td>
                   <td>{{ session.locationName }}</td>
-                  <td>{{ session.capacity }}</td>
+                  <!-- Compteur enfants confirmés / capacité -->
+                  <td>
+                    <span class="capacity-badge"
+                          [class.full]="session.confirmedCount >= session.capacity">
+                      {{ session.confirmedCount || 0 }} / {{ session.capacity }}
+                    </span>
+                  </td>
 
                   <td>{{ session.dateTimeStart | date:'dd/MM/yyyy HH:mm' }}</td>
                   <td>{{ session.dateTimeEnd | date:'dd/MM/yyyy HH:mm' }}</td>
@@ -61,7 +67,7 @@
                       <button
                         class="btn-delete"
                         (click)="deleteSession(session.id)">
-                        Supprimer
+                        Annuler
                       </button>
 
                     </div>

@@ -2,16 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { User } from '../models/user.model';
 
+// Body envoyé à POST /admin/messages et /animateur/messages
 export interface MessageRequest {
   sujet: string;
   contenu: string;
   recipientId?: number | null;
-  recipientIds?: number[]; // pour envoi à plusieurs parents
+  recipientIds?: number[];
   type?: string;
-  cible: 'tous-parents' | 'tous-animateurs' | 'tous-admins' | 'parent' | 'animateur' | 'admin' | 'plusieurs-parents';
+  cible:
+    | 'tous-parents'
+    | 'tous-animateurs'
+    | 'tous-admins'
+    | 'parent'
+    | 'animateur'
+    | 'admin'
+    | 'plusieurs-parents';
 }
 
+// Message reçu (boîte de réception parent / admin / animateur)
 export interface MessageDto {
   id: number;
   subject: string;
@@ -23,6 +33,7 @@ export interface MessageDto {
   createdAt: string;
 }
 
+// Message dans l'historique des envois (regroupé si multi-destinataires)
 export interface SentMessageDto {
   id: number;
   subject: string;
@@ -34,132 +45,147 @@ export interface SentMessageDto {
   recipientCount: number; // 0 = broadcast global, 1 = ciblé, N = envoi groupé
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class MessageService {
 
-  private adminUrl = `${environment.apiUrl}/admin/messages`;
-  private adminInboxUrl = `${environment.apiUrl}/admin/inbox`;
-  private parentUrl = `${environment.apiUrl}/parent/messages`;
-  private animateurUrl = `${environment.apiUrl}/animateur/messages`;
-  private animateurInboxUrl = `${environment.apiUrl}/animateur/inbox`;
+  private readonly adminUrl = `${environment.apiUrl}/admin/messages`;
+  private readonly adminInboxUrl = `${environment.apiUrl}/admin/inbox`;
+  private readonly parentUrl = `${environment.apiUrl}/parent/messages`;
+  private readonly animateurUrl = `${environment.apiUrl}/animateur/messages`;
+  private readonly animateurInboxUrl = `${environment.apiUrl}/animateur/inbox`;
 
   constructor(private http: HttpClient) {}
 
-  // === ENVOI ADMIN ===
+  // ========================================================================
+  // ADMIN — Envoi
+  // ========================================================================
 
-  // Envoi groupé à tous les parents
-  envoyerATousParents(sujet: string, contenu: string, type = 'ANNONCE'): Observable<{ message: string }> {
-    const body: MessageRequest = { sujet, contenu, type, cible: 'tous-parents' };
-    return this.http.post<{ message: string }>(this.adminUrl, body, { withCredentials: true });
+  envoyerATousParents(sujet: string, contenu: string, type = 'ANNONCE') {
+    return this.postMessage(this.adminUrl, { sujet, contenu, type, cible: 'tous-parents' });
   }
 
-  // Envoi groupé à tous les animateurs
-  envoyerATousAnimateurs(sujet: string, contenu: string, type = 'ANNONCE'): Observable<{ message: string }> {
-    const body: MessageRequest = { sujet, contenu, type, cible: 'tous-animateurs' };
-    return this.http.post<{ message: string }>(this.adminUrl, body, { withCredentials: true });
+  envoyerATousAnimateurs(sujet: string, contenu: string, type = 'ANNONCE') {
+    return this.postMessage(this.adminUrl, { sujet, contenu, type, cible: 'tous-animateurs' });
   }
 
-  // Envoi ciblé à un parent par ID
-  envoyerAUnParent(parentId: number, sujet: string, contenu: string, type = 'ANNONCE'): Observable<{ message: string }> {
-    const body: MessageRequest = { sujet, contenu, recipientId: parentId, type, cible: 'parent' };
-    return this.http.post<{ message: string }>(this.adminUrl, body, { withCredentials: true });
+  envoyerAUnParent(parentId: number, sujet: string, contenu: string, type = 'ANNONCE') {
+    return this.postMessage(this.adminUrl, { sujet, contenu, recipientId: parentId, type, cible: 'parent' });
   }
 
-  // Envoi ciblé à un animateur par ID
-  envoyerAUnAnimateur(animateurId: number, sujet: string, contenu: string, type = 'ANNONCE'): Observable<{ message: string }> {
-    const body: MessageRequest = { sujet, contenu, recipientId: animateurId, type, cible: 'animateur' };
-    return this.http.post<{ message: string }>(this.adminUrl, body, { withCredentials: true });
+  envoyerAUnAnimateur(animateurId: number, sujet: string, contenu: string, type = 'ANNONCE') {
+    return this.postMessage(this.adminUrl, { sujet, contenu, recipientId: animateurId, type, cible: 'animateur' });
   }
 
-  // Envoi à plusieurs parents (cote admin)
-  envoyerAPlusieursParents(parentIds: number[], sujet: string, contenu: string, type = 'ANNONCE'): Observable<{ message: string }> {
-    const body: MessageRequest = { sujet, contenu, recipientIds: parentIds, type, cible: 'plusieurs-parents' };
-    return this.http.post<{ message: string }>(this.adminUrl, body, { withCredentials: true });
+  envoyerAPlusieursParents(parentIds: number[], sujet: string, contenu: string, type = 'ANNONCE') {
+    return this.postMessage(this.adminUrl, { sujet, contenu, recipientIds: parentIds, type, cible: 'plusieurs-parents' });
   }
 
-  // Historique des messages envoyés (cote admin)
   getMessagesEnvoyesAdmin(): Observable<SentMessageDto[]> {
     return this.http.get<SentMessageDto[]>(`${this.adminUrl}/sent`, { withCredentials: true });
   }
 
-  // === BOITE PARENT ===
-  getMesMessages(): Observable<MessageDto[]> {
-    return this.http.get<MessageDto[]>(this.parentUrl, { withCredentials: true });
-  }
-  countUnread(): Observable<{ count: number }> {
-    return this.http.get<{ count: number }>(`${this.parentUrl}/unread-count`, { withCredentials: true });
-  }
-  marquerLu(messageId: number): Observable<{ message: string }> {
-    return this.http.put<{ message: string }>(`${this.parentUrl}/${messageId}/read`, {}, { withCredentials: true });
-  }
-  supprimer(messageId: number): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.parentUrl}/${messageId}`, { withCredentials: true });
-  }
+  // ========================================================================
+  // ADMIN — Boîte de réception
+  // ========================================================================
 
-  // === BOITE ADMIN ===
   getMesMessagesAdmin(): Observable<MessageDto[]> {
     return this.http.get<MessageDto[]>(this.adminInboxUrl, { withCredentials: true });
   }
+
   countUnreadAdmin(): Observable<{ count: number }> {
     return this.http.get<{ count: number }>(`${this.adminInboxUrl}/unread-count`, { withCredentials: true });
   }
+
   marquerLuAdmin(messageId: number): Observable<{ message: string }> {
     return this.http.put<{ message: string }>(`${this.adminInboxUrl}/${messageId}/read`, {}, { withCredentials: true });
   }
+
   supprimerAdmin(messageId: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.adminInboxUrl}/${messageId}`, { withCredentials: true });
   }
 
-  // === ENVOI ANIMATEUR ===
-  envoyerATousParentsAnim(sujet: string, contenu: string, type = 'ANNONCE'): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(this.animateurUrl,
-      { sujet, contenu, type, cible: 'tous-parents' }, { withCredentials: true });
-  }
-  envoyerATousAdminsAnim(sujet: string, contenu: string, type = 'ANNONCE'): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(this.animateurUrl,
-      { sujet, contenu, type, cible: 'tous-admins' }, { withCredentials: true });
-  }
-  envoyerAUnParentAnim(parentId: number, sujet: string, contenu: string, type = 'ANNONCE'): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(this.animateurUrl,
-      { sujet, contenu, recipientId: parentId, type, cible: 'parent' }, { withCredentials: true });
-  }
-  envoyerAUnAdminAnim(adminId: number, sujet: string, contenu: string, type = 'ANNONCE'): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(this.animateurUrl,
-      { sujet, contenu, recipientId: adminId, type, cible: 'admin' }, { withCredentials: true });
+  // ========================================================================
+  // ANIMATEUR — Envoi
+  // ========================================================================
+
+  envoyerATousParentsAnim(sujet: string, contenu: string, type = 'ANNONCE') {
+    return this.postMessage(this.animateurUrl, { sujet, contenu, type, cible: 'tous-parents' });
   }
 
-  // Envoi à plusieurs parents (cote animateur)
-  envoyerAPlusieursParentsAnim(parentIds: number[], sujet: string, contenu: string, type = 'ANNONCE'): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(this.animateurUrl,
-      { sujet, contenu, recipientIds: parentIds, type, cible: 'plusieurs-parents' }, { withCredentials: true });
+  envoyerATousAdminsAnim(sujet: string, contenu: string, type = 'ANNONCE') {
+    return this.postMessage(this.animateurUrl, { sujet, contenu, type, cible: 'tous-admins' });
   }
 
-  // Historique des messages envoyés (cote animateur)
+  envoyerAUnParentAnim(parentId: number, sujet: string, contenu: string, type = 'ANNONCE') {
+    return this.postMessage(this.animateurUrl, { sujet, contenu, recipientId: parentId, type, cible: 'parent' });
+  }
+
+  envoyerAUnAdminAnim(adminId: number, sujet: string, contenu: string, type = 'ANNONCE') {
+    return this.postMessage(this.animateurUrl, { sujet, contenu, recipientId: adminId, type, cible: 'admin' });
+  }
+
+  envoyerAPlusieursParentsAnim(parentIds: number[], sujet: string, contenu: string, type = 'ANNONCE') {
+    return this.postMessage(this.animateurUrl, { sujet, contenu, recipientIds: parentIds, type, cible: 'plusieurs-parents' });
+  }
+
   getMessagesEnvoyesAnim(): Observable<SentMessageDto[]> {
     return this.http.get<SentMessageDto[]>(`${this.animateurUrl}/sent`, { withCredentials: true });
   }
 
-  // Listes de destinataires (endpoints dediés animateur)
-  getParentsForAnim(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.animateurUrl}/parents`, { withCredentials: true });
-  }
-  getAdminsForAnim(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.animateurUrl}/admins`, { withCredentials: true });
+  // Listes de destinataires pour les selects côté animateur
+  getParentsForAnim(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.animateurUrl}/parents`, { withCredentials: true });
   }
 
-  // === BOITE ANIMATEUR ===
+  getAdminsForAnim(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.animateurUrl}/admins`, { withCredentials: true });
+  }
+
+  // ========================================================================
+  // ANIMATEUR — Boîte de réception
+  // ========================================================================
+
   getMesMessagesAnim(): Observable<MessageDto[]> {
     return this.http.get<MessageDto[]>(this.animateurInboxUrl, { withCredentials: true });
   }
+
   countUnreadAnim(): Observable<{ count: number }> {
     return this.http.get<{ count: number }>(`${this.animateurInboxUrl}/unread-count`, { withCredentials: true });
   }
+
   marquerLuAnim(messageId: number): Observable<{ message: string }> {
     return this.http.put<{ message: string }>(`${this.animateurInboxUrl}/${messageId}/read`, {}, { withCredentials: true });
   }
+
   supprimerAnim(messageId: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.animateurInboxUrl}/${messageId}`, { withCredentials: true });
+  }
+
+  // ========================================================================
+  // PARENT — Boîte de réception
+  // ========================================================================
+
+  getMesMessages(): Observable<MessageDto[]> {
+    return this.http.get<MessageDto[]>(this.parentUrl, { withCredentials: true });
+  }
+
+  countUnread(): Observable<{ count: number }> {
+    return this.http.get<{ count: number }>(`${this.parentUrl}/unread-count`, { withCredentials: true });
+  }
+
+  marquerLu(messageId: number): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(`${this.parentUrl}/${messageId}/read`, {}, { withCredentials: true });
+  }
+
+  supprimer(messageId: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.parentUrl}/${messageId}`, { withCredentials: true });
+  }
+
+  // ========================================================================
+  // Helper privé : POST avec body MessageRequest
+  // ========================================================================
+
+  private postMessage(url: string, body: MessageRequest): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(url, body, { withCredentials: true });
   }
 }

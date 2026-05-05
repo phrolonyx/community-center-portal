@@ -3,6 +3,7 @@ package com.manara.backend.controller.rest;
 import com.manara.backend.dto.AdminCreateUserRequest;
 import com.manara.backend.dto.UserResponseDto;
 import com.manara.backend.model.User;
+import com.manara.backend.service.EmailService;
 import com.manara.backend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getUsers(
@@ -79,7 +83,11 @@ public class UserController {
         user.setPending(false);
         user.setEnabled(true);
         userService.save(user);
-        return ResponseEntity.ok(Map.of("message", "Compte approuvé"));
+
+        // Envoi email de confirmation d'approbation
+        emailService.envoyerCompteApprouve(user.getEmail(), user.getFirstName());
+
+        return ResponseEntity.ok(Map.of("message", "Compte approuvé + email envoyé"));
     }
 
     @PutMapping("/{id}/reject")

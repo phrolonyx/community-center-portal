@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-// Controller d'envoi de messages cote animateur (vers parents OU admins)
+/**
+ * Endpoints d'envoi de messages depuis l'interface animateur.
+ * Cibles supportees : tous-parents | tous-admins | parent | admin | plusieurs-parents.
+ * Egalement les listes de destinataires (parents, admins) pour alimenter les selects.
+ */
 @RestController
 @RequestMapping("/animateur/messages")
 @PreAuthorize("hasAuthority('ANIMATEUR')")
@@ -44,12 +48,10 @@ public class AnimateurMessageController {
 
         switch (cible) {
             case "tous-parents" -> {
-                // Bouton pour envoi à tous les parents
                 messageService.sendToAll(sender, body.getSujet(), body.getContenu(), type);
                 return ResponseEntity.ok(Map.of("message", "Message envoyé à tous les parents"));
             }
             case "tous-admins" -> {
-                // Envoi à tous les admins (copie individuelle par admin)
                 List<User> admins = userService.findByRoleName("ADMIN");
                 messageService.sendToMultipleUsers(sender, admins, body.getSujet(), body.getContenu(), type);
                 return ResponseEntity.ok(Map.of("message", "Message envoyé à tous les admins"));
@@ -63,7 +65,6 @@ public class AnimateurMessageController {
                 return ResponseEntity.ok(Map.of("message", "Message envoyé à " + recipient.getFirstName()));
             }
             case "plusieurs-parents" -> {
-                // Envoi ciblé à plusieurs parents
                 if (body.getRecipientIds() == null || body.getRecipientIds().isEmpty()) {
                     return ResponseEntity.badRequest().body(Map.of("error", "Au moins un parent doit être sélectionné"));
                 }
@@ -79,7 +80,7 @@ public class AnimateurMessageController {
         }
     }
 
-    // Liste des parents (pour le select dans le formulaire animateur)
+    // Liste des parents (pour le select)
     @GetMapping("/parents")
     public ResponseEntity<List<UserResponseDto>> listParents() {
         List<UserResponseDto> dtos = userService.findByRoleName("PARENT").stream()
@@ -88,7 +89,7 @@ public class AnimateurMessageController {
         return ResponseEntity.ok(dtos);
     }
 
-    // Liste des admins (pour le select dans le formulaire animateur)
+    // Liste des admins (pour le select)
     @GetMapping("/admins")
     public ResponseEntity<List<UserResponseDto>> listAdmins() {
         List<UserResponseDto> dtos = userService.findByRoleName("ADMIN").stream()
@@ -97,12 +98,11 @@ public class AnimateurMessageController {
         return ResponseEntity.ok(dtos);
     }
 
-    // Historique des messages envoyes par cet animateur (regroupes par envoi)
+    // Historique des envois (regroupes par envoi quand multi-destinataires)
     @GetMapping("/sent")
     public ResponseEntity<List<SentMessageResponseDto>> getEnvoyes(
             @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Integer userId = userDetails.getUser().getId();
-        return ResponseEntity.ok(messageService.getSentByUserGrouped(userId));
+        return ResponseEntity.ok(messageService.getSentByUserGrouped(userDetails.getUser().getId()));
     }
 
     @Data
@@ -110,8 +110,8 @@ public class AnimateurMessageController {
         private String sujet;
         private String contenu;
         private Integer recipientId;
-        private List<Integer> recipientIds; // pour "plusieurs-parents"
+        private List<Integer> recipientIds;
         private String type;
-        private String cible; // tous-parents | tous-admins | parent | admin | plusieurs-parents
+        private String cible;
     }
 }

@@ -130,8 +130,11 @@ public class UserService {
                 false  // compte desactive par defaut (un admin doit l'approuver)
         );
         user.setPending(true);
+
+        // Sauvegarder le user AVANT d'envoyer le mail (sinon une erreur SMTP casse l'inscription)
+        User saved = userRepository.save(user);
         emailService.envoyerBienvenue(dto.getEmail(), dto.getPrenom());
-        return userRepository.save(user);
+        return saved;
     }
     @Transactional
     public User createUserByAdmin(AdminCreateUserRequest dto) {

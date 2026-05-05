@@ -120,7 +120,11 @@
           <strong>{{ i.activityName }}</strong>
           <div class="modal-seance-meta">
             <span>{{ i.childFullName }}</span>
-            <span>{{ i.sessionStart | date:'HH\'h\'mm' }}</span>
+            <!-- Heure de début et de fin -->
+            <span>
+              {{ i.sessionStart | date:'HH\'h\'mm' }}
+              <span *ngIf="i.sessionEnd"> – {{ i.sessionEnd | date:'HH\'h\'mm' }}</span>
+            </span>
             <span *ngIf="i.locationName">📍 {{ i.locationName }}</span>
             <span *ngIf="i.hostFullName">👤 {{ i.hostFullName }}</span>
           </div>

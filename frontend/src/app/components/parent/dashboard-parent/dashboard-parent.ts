@@ -11,6 +11,7 @@ interface InscJour {
   childFullName: string;
   status: string;
   sessionStart: string;
+  sessionEnd: string;
   locationName: string;
   hostFullName: string | null;
 }
@@ -107,6 +108,7 @@ export class DashboardParent implements OnInit, OnDestroy {
             childFullName: r.childFullName,
             status: r.status,
             sessionStart: r.sessionStart,
+            sessionEnd: r.sessionEnd,
             locationName: r.locationName,
             hostFullName: r.hostFullName
           });

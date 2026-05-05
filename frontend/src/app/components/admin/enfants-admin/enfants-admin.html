@@ -40,6 +40,7 @@
               <th>Date de naissance</th>
               <th>Âge</th>
               <th>Conditions médicales</th>
+              <th>Inscriptions en attente</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -72,6 +73,30 @@
                     }
                   </td>
 
+                  <!-- Inscriptions en attente de cet enfant -->
+                  <td class="cell-inscriptions">
+                    @if (inscriptionsDe(child.id).length === 0) {
+                      <span class="aucune">Aucune</span>
+                    }
+                    @for (reg of inscriptionsDe(child.id); track reg.id) {
+                      <div class="inscription-item">
+                        <div class="inscription-info">
+                          <strong>{{ reg.activityName }}</strong>
+                          <span class="inscription-date">
+                            {{ reg.sessionStart | date:'dd/MM/yyyy HH:mm' }}
+                            <span *ngIf="reg.sessionEnd"> – {{ reg.sessionEnd | date:'HH:mm' }}</span>
+                          </span>
+                        </div>
+                        <div class="inscription-actions">
+                          <!-- Confirmer + email au parent -->
+                          <button class="btn-confirm" (click)="confirmer(reg)" title="Confirmer">✓</button>
+                          <!-- Annuler + email au parent -->
+                          <button class="btn-cancel" (click)="annuler(reg)" title="Annuler">✗</button>
+                        </div>
+                      </div>
+                    }
+                  </td>
+
                   <td>
                     <button class="btn-delete" (click)="deleteChild(child.id)">
                       Supprimer
@@ -86,5 +111,48 @@
 
     </div>
   </main>
+
+  <!-- MODAL motif d'annulation -->
+  @if (motifModalOuvert()) {
+    <div class="motif-overlay" (click)="fermerMotifModal()">
+      <div class="motif-modal" (click)="$event.stopPropagation()">
+        <div class="motif-header">
+          <h3>Annulation d'inscription</h3>
+          <button class="btn-close" (click)="fermerMotifModal()" type="button">×</button>
+        </div>
+
+        <div class="motif-body">
+          <p class="motif-info">
+            Tu vas annuler l'inscription de
+            <strong>{{ inscriptionAAnnuler()?.childFullName }}</strong>
+            à <strong>{{ inscriptionAAnnuler()?.activityName }}</strong>.
+          </p>
+          <p class="motif-sub">
+            Le parent recevra un courriel avec le motif ci-dessous.
+          </p>
+
+          <label for="motif-input">Motif d'annulation :</label>
+          <textarea
+            id="motif-input"
+            class="motif-textarea"
+            rows="4"
+            placeholder="Ex : Activité reportée, manque d'animateur, condition médicale, etc."
+            [ngModel]="motifTexte()"
+            (ngModelChange)="motifTexte.set($event)"
+            name="motif">
+          </textarea>
+        </div>
+
+        <div class="motif-footer">
+          <button class="btn-cancel-modal" (click)="fermerMotifModal()" type="button">
+            Annuler
+          </button>
+          <button class="btn-confirm-modal" (click)="confirmerAnnulation()" type="button">
+            Envoyer l'annulation
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 </div>
 

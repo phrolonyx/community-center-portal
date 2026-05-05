@@ -36,23 +36,19 @@ export class MessagesAnimateur implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Charger la liste des parents pour le select "Un parent"
+    // Charger les parents pour le select "Un parent" / "Plusieurs parents"
     this.messageService.getParentsForAnim().subscribe({
-      next: (data) => {
-        console.log('Parents chargés :', data);
-        this.parents = data;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Erreur chargement parents :', err);
-        this.erreur = 'Impossible de charger la liste des parents (status ' + err.status + ')';
+      next: (data) => { this.parents = data; this.cdr.detectChanges(); },
+      error: () => {
+        this.erreur = 'Impossible de charger la liste des parents';
         this.cdr.detectChanges();
       },
     });
-    // Charger la liste des admins
+
+    // Charger les admins pour le select "Un admin" / "Tous les admins"
     this.messageService.getAdminsForAnim().subscribe({
       next: (data) => { this.admins = data; this.cdr.detectChanges(); },
-      error: (err) => console.error('Erreur chargement admins :', err),
+      error: () => {},
     });
   }
 

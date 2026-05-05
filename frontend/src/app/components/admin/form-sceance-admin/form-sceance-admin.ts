@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ActivitySessionService} from '../../../apiServices/activity-session-service';
 import {ActivityService} from '../../../apiServices/activity-service';
@@ -10,7 +10,6 @@ import {LocationService} from '../../../apiServices/location-service';
   standalone: false,
   templateUrl: './form-sceance-admin.html',
   styleUrl: './form-sceance-admin.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormSceanceAdmin implements OnInit {
 

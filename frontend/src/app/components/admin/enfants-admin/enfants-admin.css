@@ -114,3 +114,218 @@
 .btn-delete:hover {
   background-color: #dc3545;
 }
+
+/* ============================================================
+   INSCRIPTIONS EN ATTENTE PAR ENFANT
+============================================================ */
+.cell-inscriptions {
+  min-width: 280px;
+}
+
+.aucune {
+  color: #888;
+  font-style: italic;
+  font-size: 13px;
+}
+
+.inscription-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  background: #FFF8E1;
+  border: 1px solid #E8BB08;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.inscription-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.inscription-info strong {
+  color: #043C5C;
+  font-size: 13px;
+}
+
+.inscription-date {
+  font-size: 11px;
+  color: #555;
+}
+
+.inscription-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-confirm,
+.btn-cancel {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-confirm { background: #148530; color: #fff; }
+.btn-confirm:hover { background: #0f6b27; }
+
+.btn-cancel { background: #D9534F; color: #fff; }
+.btn-cancel:hover { background: #c64541; }
+
+/* ============================================================
+   MODAL MOTIF D'ANNULATION
+============================================================ */
+.motif-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.motif-modal {
+  background: #fff;
+  border-radius: 12px;
+  width: 95%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  font-family: "Jost", sans-serif;
+  animation: slideUp 0.25s ease-out;
+  overflow: hidden;
+}
+
+.motif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: #043C5C;
+  color: #fff;
+}
+
+.motif-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.btn-close:hover { background: rgba(255, 255, 255, 0.15); }
+
+.motif-body {
+  padding: 24px;
+}
+
+.motif-info {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: #043C5C;
+}
+
+.motif-sub {
+  margin: 0 0 18px;
+  font-size: 13px;
+  color: #6B7280;
+  font-style: italic;
+}
+
+.motif-body label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #043C5C;
+}
+
+.motif-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-family: "Jost", sans-serif;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 90px;
+  box-sizing: border-box;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.motif-textarea:focus {
+  outline: none;
+  border-color: #043C5C;
+  box-shadow: 0 0 0 3px rgba(4, 60, 92, 0.15);
+}
+
+.motif-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  background: #F9FAFB;
+  border-top: 1px solid #E5E7EB;
+}
+
+.btn-cancel-modal,
+.btn-confirm-modal {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Jost", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn-cancel-modal {
+  background: #E5E7EB;
+  color: #374151;
+}
+
+.btn-cancel-modal:hover { background: #D1D5DB; }
+
+.btn-confirm-modal {
+  background: #D9534F;
+  color: #fff;
+}
+
+.btn-confirm-modal:hover { background: #c64541; }
+
+.btn-confirm-modal:active,
+.btn-cancel-modal:active { transform: scale(0.97); }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

@@ -20,7 +20,7 @@ export class MessagesEnvoyesAdmin implements OnInit {
   ngOnInit(): void {
     this.messageService.getMessagesEnvoyesAdmin().subscribe({
       next: (data) => { this.messages = data; this.cdr.detectChanges(); },
-      error: (err) => console.error('Erreur chargement historique', err),
+      error: () => {},
     });
   }
 
