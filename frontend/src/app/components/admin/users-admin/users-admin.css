@@ -86,13 +86,14 @@
 ============================================================ */
 .btn-primary {
   background-color: #043c5c;
+  font-family: "Jost", sans-serif;
   color: white;
   padding: 10px 18px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 700;
+  /*font-weight: 700;*/
   white-space: nowrap;
 }
 
@@ -202,7 +203,7 @@
 }
 
 .modal {
-  background: #FFF3D6;
+  background: white;
   border-radius: 14px;
   padding: 32px;
   width: 100%;
@@ -265,8 +266,8 @@
 .btn-annuler {
   padding: 14px 24px;
   background: none;
-  border: 2px solid #E65C00;
-  color: #E65C00;
+  border: 2px solid #c82333;
+  color: #c82333;
   font-size: 14px;
   font-weight: 700;
   border-radius: 6px;

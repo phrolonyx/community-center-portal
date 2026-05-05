@@ -62,7 +62,7 @@ export class UsersAdmin implements OnInit {
     });
   }
 
-  // 🔍 Recherche locale (nom, prénom, email)
+  // Recherche locale (nom, prénom, email)
   searchUsers = computed(() => {
     const search = this.searchValue().toLowerCase().trim();
     if (!search) return this.users();

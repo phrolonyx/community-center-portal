@@ -18,9 +18,6 @@ export class ActivitesAdmin {
   // Liste brute venant de l’API
   activities = signal<Activity[]>([]);
 
-  // Valeur de recherche
-  searchValue = signal('');
-
   // Charger toutes les activités
   loadActivities() {
     this.activityService.getActivities().subscribe({
@@ -28,17 +25,6 @@ export class ActivitesAdmin {
       error: () => this.activities.set([])
     });
   }
-
-  // 🔍 Recherche locale (nom + description)
-  // filteredActivities = computed(() => {
-  //   const search = this.searchValue().toLowerCase().trim();
-  //   if (!search) return this.activities();
-  //
-  //   return this.activities().filter(activity =>
-  //     activity.name.toLowerCase().includes(search) ||
-  //     activity.description.toLowerCase().includes(search)
-  //   );
-  // });
 
   // Supprimer activité
   deleteActivity(id: number) {
@@ -50,19 +36,6 @@ export class ActivitesAdmin {
       error: err => console.error("Erreur suppression activité :", err)
     });
   }
-      // Liste des activités (à remplacer par API)
-  // activities = [
-    // Exemple :
-    // {
-    //   id: 1,
-    //   name: "Danse",
-    //   description: "Cours de danse pour enfants"
-    // }
-  // ];
 
-  // Supprimer activité
-  // deleteActivity(id: number) {
-  //   console.log("Supprimer activité ID:", id);
-  //
   }
 

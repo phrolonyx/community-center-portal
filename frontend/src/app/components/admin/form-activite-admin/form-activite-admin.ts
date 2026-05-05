@@ -43,12 +43,22 @@ export class FormActiviteAdmin implements OnInit {
   selectedFileName = signal("");
 
   ngOnInit() {
+    // On récupère le paramètre "id" présent dans l'URL.
+    // Exemple : /admin/activite/12  → id = "12"
+    // Exemple : /admin/activite→ id = null
     const id = this.route.snapshot.paramMap.get("id");
 
+    // Si un id existe, cela signifie que l'utilisateur veut MODIFIER une activité existante
     if (id) {
       this.formTitle.set("Modifier une activité");
+
+      // On charge les données de l'activité depuis l'API
+      // Le "+" convertit la string "12" en nombre 12
       this.loadActivity(+id);
+
     } else {
+      // Sinon, aucun id → on est en mode CRÉATION
+      // Donc on désactive le loader immédiatement
       this.loading.set(false);
     }
   }

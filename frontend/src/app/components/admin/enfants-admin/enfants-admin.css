@@ -135,8 +135,8 @@
   gap: 8px;
   padding: 6px 8px;
   margin-bottom: 4px;
-  background: #F3F3F3;
-  border: 1px solid #00000063;
+  background: white;
+  border: 1px solid #cfcfcf;
   border-radius: 4px;
   font-size: 13px;
 }
@@ -164,23 +164,35 @@
 
 .btn-confirm,
 .btn-cancel {
-  width: 28px;
+  font-family: "Jost", sans-serif;
+  /*width: 28px;*/
+  /*height: 28px;*/
+  width: 67px;
   height: 28px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-weight: 700;
+  /*font-weight: 700;*/
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.btn-confirm { background: #148530; color: #fff; }
-.btn-confirm:hover { background: #0f6b27; }
+.btn-confirm {
+  background: #148530;
+  color: #fff;
+}
+.btn-confirm:hover {
+  background: #0f6b27;
+}
 
-.btn-cancel { background: #D9534F; color: #fff; }
-.btn-cancel:hover { background: #c64541; }
+.btn-cancel { background: #E68C37;
+  color: #fff;
+}
+.btn-cancel:hover {
+  background: #E09753;
+}
 
 /* ============================================================
    MODAL MOTIF D'ANNULATION
@@ -197,7 +209,7 @@
 }
 
 .motif-modal {
-  background: #fff;
+  background: white;
   border-radius: 12px;
   width: 95%;
   max-width: 520px;
@@ -212,7 +224,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  background: #043C5C;
+  background: #043c5c;
   color: #fff;
 }
 
@@ -245,7 +257,7 @@
 .motif-info {
   margin: 0 0 8px;
   font-size: 15px;
-  color: #043C5C;
+  color: black;
 }
 
 .motif-sub {
@@ -311,7 +323,7 @@
 .btn-cancel-modal:hover { background: #D1D5DB; }
 
 .btn-confirm-modal {
-  background: #D9534F;
+  background: #c82333;
   color: #fff;
 }
 

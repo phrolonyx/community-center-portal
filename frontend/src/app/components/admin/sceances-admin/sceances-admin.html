@@ -46,7 +46,7 @@
                   <td>{{ session.locationName }}</td>
                   <!-- Compteur enfants confirmés / capacité -->
                   <td>
-                    <span class="capacity-badge"
+                    <span
                           [class.full]="session.confirmedCount >= session.capacity">
                       {{ session.confirmedCount || 0 }} / {{ session.capacity }}
                     </span>
