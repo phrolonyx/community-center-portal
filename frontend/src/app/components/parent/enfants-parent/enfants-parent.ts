@@ -42,7 +42,7 @@ export class EnfantsParent implements OnInit {
 
   modalOuvert = false;
   modeAjout: 'add' | 'edit' = 'add';
-  dateMax = new Date().toISOString().split('T')[0];
+  dateMax = new Date().toLocaleDateString('en-CA');
   formulaire: Formulaire = { childId: '', firstName: '', lastName: '', dateOfBirth: '', relationship: '', medical: '' };
 
   constructor(
@@ -50,7 +50,7 @@ export class EnfantsParent implements OnInit {
     private childService: ChildService,
     private registrationService: RegistrationService,
     private cd: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(p => {
@@ -161,7 +161,10 @@ export class EnfantsParent implements OnInit {
           this.ajoutParam = true;
           this.chargerEnfants();
         },
-        error: (err) => alert('Erreur lors de l\'ajout : ' + (err.error?.message || err.message))
+        error: (err) => {
+          const msg = err.error?.error || err.error?.message || 'Une erreur est survenue.';
+          alert(msg);
+        }
       });
     } else {
       this.childService.updateChild(Number(this.formulaire.childId), data).subscribe({
