@@ -1,4 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
+import {AuthService} from '../../apiServices/auth.service';
 
 @Component({
   selector: 'app-accueil',
@@ -7,6 +8,7 @@ import { Component, AfterViewInit } from '@angular/core';
   styleUrl: './accueil.css',
 })
 export class Accueil implements AfterViewInit {
+  constructor(public authService: AuthService) {}
   // ngAfterViewInit() = méthode Angular appelée quand le DOM du composant est entièrement chargé
   ngAfterViewInit() {
 
@@ -30,13 +32,13 @@ export class Accueil implements AfterViewInit {
         }
       });
 
-    }, { threshold: 0.2 }); 
+    }, { threshold: 0.2 });
     // threshold: 0.2 = l’animation se déclenche quand 20% de l’élément est visible
 
     // On sélectionne tous les éléments qui doivent être animés
     // → ceux qui ont les classes fade, slide-up, zoom ou pop
     document.querySelectorAll(".fade, .slide-up, .zoom, .pop")
-      .forEach(el => observer.observe(el)); 
+      .forEach(el => observer.observe(el));
       // On demande à l’observer de surveiller chaque élément
   }
 }

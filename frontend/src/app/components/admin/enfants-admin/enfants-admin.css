@@ -135,8 +135,8 @@
   gap: 8px;
   padding: 6px 8px;
   margin-bottom: 4px;
-  background: #FFF8E1;
-  border: 1px solid #E8BB08;
+  background: #F3F3F3;
+  border: 1px solid #00000063;
   border-radius: 4px;
   font-size: 13px;
 }
@@ -148,7 +148,7 @@
 }
 
 .inscription-info strong {
-  color: #043C5C;
+  color: #000000;
   font-size: 13px;
 }
 

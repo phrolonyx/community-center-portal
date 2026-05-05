@@ -36,12 +36,14 @@
           </div>
           <p class="card-desc">{{ a.description || 'Aucune description disponible.' }}</p>
           <div class="card-footer">
-            <a routerLink="/inscription" class="btn-inscrire-guest">
-              Créer un compte
-            </a>
-            <a routerLink="/connexion" class="btn-connexion-guest">
-              Me connecter
-            </a>
+            @if (!this.authService.isAuthenticated()) {
+              <a routerLink="/inscription" class="btn-inscrire-guest">
+                Créer un compte
+              </a>
+              <a routerLink="/connexion" class="btn-connexion-guest">
+                Me connecter
+              </a>
+            }
           </div>
         </div>
       </div>

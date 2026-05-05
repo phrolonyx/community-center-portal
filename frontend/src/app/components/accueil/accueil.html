@@ -12,11 +12,12 @@
       <h2>Votre centre, vos enfants,<br>un seul portail.</h2>
       <h6>Inscriptions, présences, communications tout au même endroit pour les familles et les centres.</h6>
 
-      <div class="hero-buttons">
-        <a routerLink="/inscription" class="btn btn-primary">Inscrire mon enfant</a>
-        <a routerLink="/connexion" class="btn btn-secondary">Me connecter</a>
-      </div>
-
+      @if (!this.authService.isAuthenticated()) {
+        <div class="hero-buttons">
+          <a routerLink="/inscription" class="btn btn-primary">Inscrire mon enfant</a>
+          <a routerLink="/connexion" class="btn btn-secondary">Me connecter</a>
+        </div>
+      }
       <h6 class="hero-note">Pensé pour les parents, conçu pour les centres communautaires.</h6>
     </div>
   </div>
@@ -94,11 +95,15 @@
 <section class="cta section fade">
   <div class="cta-inner">
     <h2>Prêt à simplifier votre organisation ?</h2>
-    <p>Créez votre compte</p>
 
-    <div class="cta-buttons">
-      <a routerLink="/inscription" class="btn btn-primary">Commencer maintenant</a>
-    </div>
+    @if (!this.authService.isAuthenticated()) {
+      <p>Créez votre compte</p>
+
+      <div class="cta-buttons">
+        <a routerLink="/inscription" class="btn btn-primary">Commencer maintenant</a>
+      </div>
+    }
+
   </div>
 </section>
 

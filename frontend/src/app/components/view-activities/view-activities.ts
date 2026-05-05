@@ -2,6 +2,7 @@ import { Component, OnInit, signal, computed, ChangeDetectionStrategy } from '@a
 import { Activity } from '../../models/activity.model';
 import { ActivityService } from '../../apiServices/activity-service';
 import { environment } from '../../../environments/environment';
+import {AuthService} from '../../apiServices/auth.service';
 
 @Component({
   selector: 'app-view-activities',
@@ -24,7 +25,7 @@ export class ViewActivities implements OnInit {
     this.recherche().trim().length > 0 && this.activitesFiltrees().length === 0
   );
 
-  constructor(private activityService: ActivityService) {}
+  constructor(private activityService: ActivityService, public authService: AuthService) {}
 
   ngOnInit(): void {
     this.activityService.getActivities().subscribe({

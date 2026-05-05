@@ -12,6 +12,21 @@ a {
   height: 100vh;
   background: #043c5c;
 }
+.btn-outline {
+  width: 130px;
+  border: none;
+  color: #043c5c;
+  padding: 8px 0;
+  background-color: white !important;
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 5px;
+}
+.btn-outline:hover{
+  background-color: #d8cece !important;
+}
 
 .text-wrapper {
   position: absolute;

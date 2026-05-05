@@ -49,10 +49,16 @@ header {
   border: 2px solid white;
   color: white;
 }
+.btn-outline:hover {
+  background-color: #064a6e;
+}
 
 .btn-filled {
   background: white;
   color: #004f9e;
+}
+.btn-filled:hover {
+  background-color: #d8cece;
 }
 
 .navbar {

@@ -5,7 +5,7 @@ import { RegistrationService, ActivityRegistration } from '../../../apiServices/
 
 interface MedCondition { condition: string; }
 interface Activity { name: string; }
-interface Seance { dateTimeStart: string; activity: Activity; }
+interface Seance { dateTimeStart: string; dateTimeEnd?: string; activity: Activity; }
 interface Inscription { activitySession: Seance; status: string; }
 
 interface Enfant {

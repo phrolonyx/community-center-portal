@@ -81,7 +81,7 @@
                     @for (reg of inscriptionsDe(child.id); track reg.id) {
                       <div class="inscription-item">
                         <div class="inscription-info">
-                          <strong>{{ reg.activityName }}</strong>
+                          {{ reg.activityName }}
                           <span class="inscription-date">
                             {{ reg.sessionStart | date:'dd/MM/yyyy HH:mm' }}
                             <span *ngIf="reg.sessionEnd"> – {{ reg.sessionEnd | date:'HH:mm' }}</span>

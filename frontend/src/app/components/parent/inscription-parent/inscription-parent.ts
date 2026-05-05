@@ -16,6 +16,7 @@ interface Inscription {
   child: Enfant;
   activitySession: {
     dateTimeStart: string;
+    dateTimeEnd: string;
     location?: { name: string };
     activity: { name: string };
     hostFullName?: string | null;
@@ -82,6 +83,7 @@ export class InscriptionParent implements OnInit {
         },
         activitySession: {
           dateTimeStart: r.sessionStart,
+          dateTimeEnd: r.sessionEnd,
           location: { name: r.locationName },
           activity: { name: r.activityName },
           hostFullName: r.hostFullName
