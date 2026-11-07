@@ -15,6 +15,10 @@ RUN npx ng build --configuration production \
 
 # ---- Étape 2 : nginx sert les fichiers statiques et relaie /api ----
 FROM nginx:1.27-alpine
+
+# Relie l'image au dépôt GitHub (page du paquet sur GHCR)
+LABEL org.opencontainers.image.source="https://github.com/phrolonyx/community-center-portal"
+
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /out /usr/share/nginx/html
 EXPOSE 80

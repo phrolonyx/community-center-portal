@@ -45,6 +45,7 @@ services:
 
   backend:
     build: ./backend
+    image: ghcr.io/phrolonyx/community-center-portal-backend:latest
     restart: unless-stopped
     mem_limit: 350m
     environment:
@@ -67,6 +68,7 @@ services:
         -XX:MaxMetaspaceSize=128m
       SERVER_TOMCAT_THREADS_MAX: "20"
       SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: "5"
+      SERVER_FORWARD_HEADERS_STRATEGY: native
     volumes:
       - uploads:/app/uploads
     depends_on:
@@ -77,6 +79,7 @@ services:
 
   frontend:
     build: ./frontend
+    image: ghcr.io/phrolonyx/community-center-portal-frontend:latest
     restart: unless-stopped
     mem_limit: 48m
     ports:
