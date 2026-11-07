@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Service d'envoi de courriels (Gmail SMTP).
- * Tous les emails utilisent un template HTML aux couleurs du Centre Manara
+ * Tous les emails utilisent un template HTML aux couleurs du Centre Communautaire
  * (bleu #043C5C + barre jaune #E8BB08).
  *
  * Les methodes ne throw jamais : si SMTP plante, l'erreur est loguee mais
@@ -43,13 +43,13 @@ public class EmailService {
     public void envoyerBienvenue(String email, String prenom) {
         String html = construireTemplate(
             "Bienvenue, " + prenom + " !",
-            "<p>Merci de vous être inscrit au <strong>Centre Manara</strong>.</p>"
+            "<p>Merci de vous être inscrit au <strong>Centre Communautaire</strong>.</p>"
             + "<p>Votre compte a bien été créé. Avant de pouvoir vous connecter, "
             + "<strong>un administrateur doit valider votre profil</strong>.</p>"
             + "<p>Vous recevrez un courriel de confirmation dès que votre compte sera approuvé.</p>"
             + "<p>Merci de votre patience !</p>"
         );
-        envoyerEmail(email, "Inscription reçue — Centre Manara", html);
+        envoyerEmail(email, "Inscription reçue — Centre Communautaire", html);
     }
 
     // Compte approuvé par l'admin
@@ -57,7 +57,7 @@ public class EmailService {
         String html = construireTemplate(
             "Votre compte est activé !",
             "<p>Bonjour " + prenom + ",</p>"
-            + "<p>Bonne nouvelle : votre compte au <strong>Centre Manara</strong> "
+            + "<p>Bonne nouvelle : votre compte au <strong>Centre Communautaire</strong> "
             + "vient d'être <strong>approuvé</strong> par notre équipe.</p>"
             + "<p>Vous pouvez maintenant vous connecter et :</p>"
             + "<ul>"
@@ -65,9 +65,9 @@ public class EmailService {
             + "  <li>Les inscrire aux activités disponibles</li>"
             + "  <li>Suivre leurs inscriptions en temps réel</li>"
             + "</ul>"
-            + "<p>À bientôt au Centre Manara !</p>"
+            + "<p>À bientôt au Centre Communautaire !</p>"
         );
-        envoyerEmail(email, "Compte approuvé — Centre Manara", html);
+        envoyerEmail(email, "Compte approuvé — Centre Communautaire", html);
     }
 
     // Confirmation lorsque le parent inscrit son enfant à une activité
@@ -99,7 +99,7 @@ public class EmailService {
             + ligneInfo("Date", dateSeance, false)
             + ligneInfo("Lieu", lieu != null ? lieu : "À confirmer", true)
             + ligneInfo("Animateur", nomAnimateur != null ? nomAnimateur : "À confirmer", false)
-            + "<p>À bientôt au Centre Manara !</p>"
+            + "<p>À bientôt au Centre Communautaire !</p>"
         );
         envoyerEmail(email, "Inscription confirmée — " + nomActivite, html);
     }
@@ -118,7 +118,7 @@ public class EmailService {
             contenu.append("</p>");
         }
 
-        contenu.append("<p>Pour toute question, n'hésitez pas à contacter l'administration du Centre Manara.</p>");
+        contenu.append("<p>Pour toute question, n'hésitez pas à contacter l'administration du Centre Communautaire.</p>");
 
         envoyerEmail(email, "Annulation — " + nomActivite,
                 construireTemplate("Inscription annulée", contenu.toString()));
@@ -133,7 +133,7 @@ public class EmailService {
             + "<p>Nous sommes désolés de vous informer que la séance "
             + "<strong>" + nomActivite + "</strong> du <strong>" + dateSeance + "</strong> "
             + "à laquelle <strong>" + nomEnfant + "</strong> était inscrit a été annulée.</p>"
-            + "<p>Pour plus d'informations, contactez l'administration du Centre Manara.</p>"
+            + "<p>Pour plus d'informations, contactez l'administration du Centre Communautaire.</p>"
         );
         envoyerEmail(email, "Séance annulée — " + nomActivite, html);
     }
@@ -149,7 +149,7 @@ public class EmailService {
             + ligneInfo("Activité", nomActivite, true)
             + ligneInfo("Date", dateSeance, false)
             + ligneInfo("Lieu", lieu, true)
-            + "<p>À demain au Centre Manara !</p>"
+            + "<p>À demain au Centre Communautaire !</p>"
         );
         envoyerEmail(email, "Rappel demain — " + nomActivite, html);
     }
@@ -163,7 +163,7 @@ public class EmailService {
             + "<p>L'activité <strong>" + nomActivite + "</strong> commence dans <strong>2 heures</strong>.</p>"
             + "<p><strong>" + nomEnfant + "</strong> est attendu à <strong>" + dateSeance + "</strong> "
             + "au lieu suivant : <strong>" + lieu + "</strong>.</p>"
-            + "<p>À tout de suite au Centre Manara !</p>"
+            + "<p>À tout de suite au Centre Communautaire !</p>"
         );
         envoyerEmail(email, "Activité dans 2h — " + nomActivite, html);
     }
@@ -187,7 +187,7 @@ public class EmailService {
             + "<tr><td align=\"center\">"
             + "<table width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#FFF; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08);\">"
             + "<tr><td style=\"background:#043C5C; padding:28px 32px; text-align:center;\">"
-            + "<h1 style=\"margin:0; font-size:26px; font-weight:900; color:#FFF; letter-spacing:1px;\">CENTRE MANARA</h1>"
+            + "<h1 style=\"margin:0; font-size:26px; font-weight:900; color:#FFF; letter-spacing:1px;\">CENTRE COMMUNAUTAIRE</h1>"
             + "<p style=\"margin:6px 0 0; font-size:13px; color:#E8BB08; font-weight:600;\">Activités pour enfants</p>"
             + "</td></tr>"
             + "<tr><td style=\"background:#E8BB08; height:4px;\"></td></tr>"
@@ -196,7 +196,7 @@ public class EmailService {
             + "<div style=\"font-size:15px; color:#374151; line-height:1.7;\">" + contenu + "</div>"
             + "</td></tr>"
             + "<tr><td style=\"background:#F9FAFB; padding:20px 32px; text-align:center; border-top:1px solid #E5E7EB;\">"
-            + "<p style=\"margin:0; font-size:13px; color:#9CA3AF;\">Centre Manara &mdash; Activités et loisirs pour enfants</p>"
+            + "<p style=\"margin:0; font-size:13px; color:#9CA3AF;\">Centre Communautaire &mdash; Activités et loisirs pour enfants</p>"
             + "<p style=\"margin:6px 0 0; font-size:12px; color:#D1D5DB;\">Message automatique, ne pas répondre.</p>"
             + "</td></tr>"
             + "</table></td></tr></table></body></html>";

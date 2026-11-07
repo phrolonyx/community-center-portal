@@ -55,7 +55,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setEmail("admin@admin.com");
             admin.setPasswordHash(passwordEncoder.encode("admin123"));
             admin.setFirstName("Admin");
-            admin.setLastName("Manara");
+            admin.setLastName("Principal");
             admin.setCreatedAt(LocalDateTime.now());
             admin.setRole(adminRole);
             admin.setEnabled(true);
@@ -63,17 +63,17 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(admin);
 
             // SQL users
-            userRepository.save(makeUser(parentRole,   "sophie.tremblay@mail.ca", hashed, "Sophie",  "Tremblay",   "sophie.png", true,  "2024-11-12T09:15:00", "2026-02-18T14:22:00"));
-            userRepository.save(makeUser(parentRole,   "marc.gagnon@mail.ca",     hashed, "Marc",    "Gagnon",     "marc.jpg",   true,  "2025-01-05T16:40:00", "2026-01-22T10:05:00"));
-            userRepository.save(makeUser(parentRole,   "julie.roy@mail.ca",       hashed, "Julie",   "Roy",        "julie.png",  true,  "2024-09-28T08:10:00", "2026-03-01T09:55:00"));
-            userRepository.save(makeUser(parentRole,   "karim.benali@mail.ca",    hashed, "Karim",   "Benali",     null,         true,  "2025-03-14T11:30:00", "2026-02-27T17:20:00"));
-            userRepository.save(makeUser(animateurRole,"nadia.hassan@manara.ca",  hashed, "Nadia",   "Hassan",     "nadia.png",  true,  "2024-12-02T14:05:00", "2026-03-05T13:45:00"));
-            userRepository.save(makeUser(animateurRole,"youssef.ali@manara.ca",   hashed, "Youssef", "Ali",        null,         true,  "2025-02-18T10:50:00", "2026-02-28T15:30:00"));
-            userRepository.save(makeUser(parentRole,   "fatima.saadi@mail.ca",    hashed, "Fatima",  "Saadi",      "fatima.png", true,  "2024-10-21T09:00:00", "2026-01-30T08:40:00"));
-            userRepository.save(makeUser(parentRole,   "hassan.elamrani@mail.ca", hashed, "Hassan",  "El Amrani",  "hassan.png", false, "2025-04-07T13:25:00", "2026-03-03T12:10:00"));
-            userRepository.save(makeUser(parentRole,   "mona.khalil@mail.ca",     hashed, "Mona",    "Khalil",     "mona.png",   true,  "2024-08-19T15:45:00", "2026-02-14T09:55:00"));
-            userRepository.save(makeUser(parentRole,   "patrick.lefebvre@mail.ca",hashed, "Patrick", "Lefebvre",   null,         true,  "2025-05-11T10:10:00", "2026-03-06T11:50:00"));
-            userRepository.save(makeUser(parentRole,   "amelie.gauthier@mail.ca", hashed, "Amélie",  "Gauthier",   "amelie.png", false, "2024-07-30T08:35:00", "2026-02-20T16:05:00"));
+            userRepository.save(makeUser(parentRole,   "sophie.tremblay@example.com", hashed, "Sophie",  "Tremblay",   "sophie.png", true,  "2024-11-12T09:15:00", "2026-02-18T14:22:00"));
+            userRepository.save(makeUser(parentRole,   "marc.gagnon@example.com",     hashed, "Marc",    "Gagnon",     "marc.jpg",   true,  "2025-01-05T16:40:00", "2026-01-22T10:05:00"));
+            userRepository.save(makeUser(parentRole,   "julie.roy@example.com",       hashed, "Julie",   "Roy",        "julie.png",  true,  "2024-09-28T08:10:00", "2026-03-01T09:55:00"));
+            userRepository.save(makeUser(parentRole,   "karim.benali@example.com",    hashed, "Karim",   "Benali",     null,         true,  "2025-03-14T11:30:00", "2026-02-27T17:20:00"));
+            userRepository.save(makeUser(animateurRole,"nadia.hassan@example.com",  hashed, "Nadia",   "Hassan",     "nadia.png",  true,  "2024-12-02T14:05:00", "2026-03-05T13:45:00"));
+            userRepository.save(makeUser(animateurRole,"youssef.ali@example.com",   hashed, "Youssef", "Ali",        null,         true,  "2025-02-18T10:50:00", "2026-02-28T15:30:00"));
+            userRepository.save(makeUser(parentRole,   "fatima.saadi@example.com",    hashed, "Fatima",  "Saadi",      "fatima.png", true,  "2024-10-21T09:00:00", "2026-01-30T08:40:00"));
+            userRepository.save(makeUser(parentRole,   "hassan.elamrani@example.com", hashed, "Hassan",  "El Amrani",  "hassan.png", false, "2025-04-07T13:25:00", "2026-03-03T12:10:00"));
+            userRepository.save(makeUser(parentRole,   "mona.khalil@example.com",     hashed, "Mona",    "Khalil",     "mona.png",   true,  "2024-08-19T15:45:00", "2026-02-14T09:55:00"));
+            userRepository.save(makeUser(parentRole,   "patrick.lefebvre@example.com",hashed, "Patrick", "Lefebvre",   null,         true,  "2025-05-11T10:10:00", "2026-03-06T11:50:00"));
+            userRepository.save(makeUser(parentRole,   "amelie.gauthier@example.com", hashed, "Amélie",  "Gauthier",   "amelie.png", false, "2024-07-30T08:35:00", "2026-02-20T16:05:00"));
         }
 
         // =====================================================
@@ -114,7 +114,7 @@ public class DataInitializer implements CommandLineRunner {
             User admin = userRepository.findByEmail("admin@admin.com").orElseThrow();
             TermsVersion terms = new TermsVersion();
             terms.setVersionLabel("v1.0");
-            terms.setContent("Conditions générales de la plateforme Manara");
+            terms.setContent("Conditions générales de la plateforme");
             terms.setPublishedAt(LocalDateTime.now());
             terms.setAddedBy(admin);
             termsVersionRepository.save(terms);
@@ -127,15 +127,15 @@ public class DataInitializer implements CommandLineRunner {
             TermsVersion terms = termsVersionRepository.findAll().get(0);
 
             // SQL user_id 2 → sophie.tremblay (index 1 in SQL, but admin is first so offset by 1)
-            User sophie  = userRepository.findByEmail("sophie.tremblay@mail.ca").orElseThrow();
-            User marc    = userRepository.findByEmail("marc.gagnon@mail.ca").orElseThrow();
-            User julie   = userRepository.findByEmail("julie.roy@mail.ca").orElseThrow();
-            User karim   = userRepository.findByEmail("karim.benali@mail.ca").orElseThrow();
-            User hassan  = userRepository.findByEmail("hassan.elamrani@mail.ca").orElseThrow();
-            User mona    = userRepository.findByEmail("mona.khalil@mail.ca").orElseThrow();
-            User patrick = userRepository.findByEmail("patrick.lefebvre@mail.ca").orElseThrow();
-            User amelie  = userRepository.findByEmail("amelie.gauthier@mail.ca").orElseThrow();
-            User fatima  = userRepository.findByEmail("fatima.saadi@mail.ca").orElseThrow();
+            User sophie  = userRepository.findByEmail("sophie.tremblay@example.com").orElseThrow();
+            User marc    = userRepository.findByEmail("marc.gagnon@example.com").orElseThrow();
+            User julie   = userRepository.findByEmail("julie.roy@example.com").orElseThrow();
+            User karim   = userRepository.findByEmail("karim.benali@example.com").orElseThrow();
+            User hassan  = userRepository.findByEmail("hassan.elamrani@example.com").orElseThrow();
+            User mona    = userRepository.findByEmail("mona.khalil@example.com").orElseThrow();
+            User patrick = userRepository.findByEmail("patrick.lefebvre@example.com").orElseThrow();
+            User amelie  = userRepository.findByEmail("amelie.gauthier@example.com").orElseThrow();
+            User fatima  = userRepository.findByEmail("fatima.saadi@example.com").orElseThrow();
 
             // pp1 → sophie (user_id=2 in SQL)
             parentProfileRepository.save(makeParentProfile(sophie,  terms, "2024-11-15T09:40:00", "2025-02-10T14:20:00", "5145551111", "H7N2K3", "Laval",    "Québec", "Canada", "45 rue des Érables",  "Jean Tremblay",   "Père",      "5145559001"));
@@ -205,8 +205,8 @@ public class DataInitializer implements CommandLineRunner {
         if (activitySessionRepository.count() == 0) {
             List<Activity> acts  = activityRepository.findAll();
             List<Location> locs  = locationRepository.findAll();
-            User nadia   = userRepository.findByEmail("nadia.hassan@manara.ca").orElseThrow();
-            User youssef = userRepository.findByEmail("youssef.ali@manara.ca").orElseThrow();
+            User nadia   = userRepository.findByEmail("nadia.hassan@example.com").orElseThrow();
+            User youssef = userRepository.findByEmail("youssef.ali@example.com").orElseThrow();
 
             // host_name_user_id 6 = nadia, 7 = youssef (SQL user order)
             activitySessionRepository.saveAll(List.of(
@@ -269,8 +269,8 @@ public class DataInitializer implements CommandLineRunner {
         // =====================================================
         if (activityAttendanceRepository.count() == 0) {
             List<ActivityRegistration> regs = activityRegistrationRepository.findAll();
-            User nadia   = userRepository.findByEmail("nadia.hassan@manara.ca").orElseThrow();
-            User youssef = userRepository.findByEmail("youssef.ali@manara.ca").orElseThrow();
+            User nadia   = userRepository.findByEmail("nadia.hassan@example.com").orElseThrow();
+            User youssef = userRepository.findByEmail("youssef.ali@example.com").orElseThrow();
 
             activityAttendanceRepository.saveAll(List.of(
                     makeAttendance(nadia,   regs.get(0), "PRÉSENT", "2026-04-01T12:05:00", "Arrivé à l'heure"),

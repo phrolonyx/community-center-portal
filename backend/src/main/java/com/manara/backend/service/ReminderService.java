@@ -68,7 +68,7 @@ public class ReminderService {
         String nomActivite = r.getActivitySession().getActivity().getName();
         String dateSeance = r.getActivitySession().getDateTimeStart().format(FORMAT_DATE);
         String lieu = r.getActivitySession().getLocation() != null
-                ? r.getActivitySession().getLocation().getName() : "Centre Manara";
+                ? r.getActivitySession().getLocation().getName() : "Centre Communautaire";
 
         emailService.envoyerRappel24h(email, prenomParent, nomEnfant, nomActivite, dateSeance, lieu);
     }
@@ -80,7 +80,7 @@ public class ReminderService {
         String nomActivite = r.getActivitySession().getActivity().getName();
         String dateSeance = r.getActivitySession().getDateTimeStart().format(FORMAT_DATE);
         String lieu = r.getActivitySession().getLocation() != null
-                ? r.getActivitySession().getLocation().getName() : "Centre Manara";
+                ? r.getActivitySession().getLocation().getName() : "Centre Communautaire";
 
         emailService.envoyerRappel2h(email, prenomParent, nomEnfant, nomActivite, dateSeance, lieu);
     }

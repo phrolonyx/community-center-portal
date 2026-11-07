@@ -1,5 +1,12 @@
 # CRM pour Manara
 
+## Instructions:
+
+Dans ./manara/frontend/
+ng serve --proxy-config proxy.conf.json
+
+Dans ./manara/backend/
+./mvnw spring-boot:run
 
 ## Description
 

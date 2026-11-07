@@ -10,7 +10,6 @@ uploads/
 **/*.ear
 **/*.jar
 !**/gradle-wrapper.jar
-!**/maven-wrapper.jar
 
 # --- Node / Angular (Future Proofing) ---
 **/node_modules/
@@ -38,7 +37,6 @@ desktop.ini
 **/db-data/
 **/mysql-data/
 .docker/
-docker-compose.yml
 
 # --- Build Tools ---
 .gradle/
@@ -55,4 +53,8 @@ CLAUDE.md
 .cursor/
 .aider*
 .copilot/
+
+# --- Secrets ---
+.env
+**/.env
 

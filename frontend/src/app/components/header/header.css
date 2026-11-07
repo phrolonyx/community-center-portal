@@ -19,10 +19,17 @@ header {
   padding: 15px 40px;
 }
 
-.logo img {
-  height: 60px;
-  width: auto;
-  object-fit: contain;
+.logo-text {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: rgb(255 180 0);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.logo a {
+  text-decoration: none;
 }
 
 .nav-links {
