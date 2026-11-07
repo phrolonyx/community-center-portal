@@ -6,14 +6,30 @@
 services:
   db:
     image: mysql:8.4
+    restart: unless-stopped
+    mem_limit: 256m
+    # Réglages pour un petit serveur : MySQL vise par défaut une machine dédiée
+    command: >-
+      --performance-schema=OFF
+      --innodb-buffer-pool-size=32M
+      --innodb-log-buffer-size=8M
+      --max-connections=20
+      --table-open-cache=200
+      --tmp-table-size=8M --max-heap-table-size=8M
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:?Définir DB_PASSWORD dans .env}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Définir DB_ROOT_PASSWORD dans .env}
       MYSQL_DATABASE: manara_db
+      # Utilisateur dédié à l'application, limité à manara_db
+      MYSQL_USER: manara
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Définir DB_PASSWORD dans .env}
     volumes:
       - db-data:/var/lib/mysql
     healthcheck:
-      # Le backend attend que MySQL réponde avant de démarrer
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      # Le backend attend que MySQL réponde avant de démarrer.
+      # 127.0.0.1 (TCP) plutôt que localhost (socket) : le serveur temporaire
+      # de la première initialisation n'ouvre pas le TCP, donc le test
+      # n'est vert qu'une fois le vrai serveur prêt.
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -22,15 +38,20 @@ services:
   # ils s'affichent tous dans l'interface web
   mailpit:
     image: axllent/mailpit
+    restart: unless-stopped
+    mem_limit: 48m
     ports:
       - "8025:8025"
 
   backend:
     build: ./backend
+    restart: unless-stopped
+    mem_limit: 350m
     environment:
       # Mêmes variables que application.properties : seule l'URL change,
       # car MySQL est joignable par le nom du service "db"
       DB_URL: jdbc:mysql://db:3306/manara_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: manara
       DB_PASSWORD: ${DB_PASSWORD:?Définir DB_PASSWORD dans .env}
       # Courriels envoyés à Mailpit (sans authentification ni chiffrement)
       MAIL_HOST: mailpit
@@ -39,6 +60,13 @@ services:
       MAIL_STARTTLS: "false"
       MAIL_USERNAME: noreply@centre-communautaire.local
       SPRING_JPA_SHOW_SQL: "false"
+      # JVM sobre : heap à 60 % de la limite, GC léger, moins de threads
+      JAVA_TOOL_OPTIONS: >-
+        -XX:MaxRAMPercentage=60 -XX:+UseSerialGC -Xss512k
+        -XX:TieredStopAtLevel=1 -XX:ReservedCodeCacheSize=48m
+        -XX:MaxMetaspaceSize=128m
+      SERVER_TOMCAT_THREADS_MAX: "20"
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: "5"
     volumes:
       - uploads:/app/uploads
     depends_on:
@@ -49,6 +77,8 @@ services:
 
   frontend:
     build: ./frontend
+    restart: unless-stopped
+    mem_limit: 48m
     ports:
       - "8080:80"
     depends_on:
