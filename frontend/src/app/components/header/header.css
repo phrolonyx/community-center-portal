@@ -30,6 +30,15 @@ header {
 
 .logo a {
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.logo-icon {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
 }
 
 .nav-links {
