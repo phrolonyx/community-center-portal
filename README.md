@@ -4,7 +4,30 @@ Application web de gestion pour un centre communautaire d'environ 300 membres. L
 
 > **Projet scolaire** réalisé en équipe dans le cadre du cours *420-G26-RO* au *Cegep de Rosemont*, session *4*. Le projet a d'abord été construit avec Thymeleaf, puis le frontend a été migré vers Angular et le backend transformé en API REST.
 
-![Capture d'écran de l'accueil](docs/screenshots/accueil.png)
+## 🔗 Démo en ligne
+
+| | |
+| :--- | :--- |
+| **Application** | **https://crm.phrolonyx.com** |
+| Courriels envoyés par la démo (Mailpit) | https://crm-mail.phrolonyx.com |
+
+Connectez-vous avec un des [comptes de démonstration](#comptes-de-démonstration), faites une action (inscription, approbation d'un compte…) et le courriel automatique apparaît dans Mailpit. Les données sont fictives et la démo est **remise à zéro chaque nuit** : n'hésitez pas à tout modifier.
+
+![Page d'accueil](docs/screenshots/accueil.png)
+
+<details>
+<summary><strong>Autres captures d'écran</strong></summary>
+
+**Administration — gestion des utilisateurs**
+![Gestion des utilisateurs](docs/screenshots/admin-utilisateurs.png)
+
+**Espace parent — enfants et inscriptions**
+![Espace parent](docs/screenshots/parent-enfants.png)
+
+**Courriels automatiques captés par Mailpit**
+![Mailpit](docs/screenshots/mailpit.png)
+
+</details>
 
 ---
 
@@ -13,7 +36,7 @@ Application web de gestion pour un centre communautaire d'environ 300 membres. L
 Seul [Docker](https://docs.docker.com/get-docker/) est nécessaire.
 
 ```bash
-git clone https://github.com/Phrolonyx/community-center-portal.git
+git clone https://github.com/phrolonyx/community-center-portal.git
 cd community-center-portal
 cp .env.example .env
 docker compose up --build
@@ -80,6 +103,7 @@ L'API valide les inscriptions côté serveur : l'enfant doit appartenir au paren
 | Backend | Java 21, Spring Boot 4, Spring Security (sessions, `@PreAuthorize`), Spring Data JPA / Hibernate, Bean Validation, Spring Mail, `@Scheduled` |
 | Base de données | MySQL 8.4 |
 | Infrastructure | Docker Compose, nginx (fichiers statiques + proxy `/api`), Mailpit |
+| Déploiement | VPS Linux, Caddy (reverse proxy, HTTPS automatique), images publiées sur GHCR |
 
 ```
 Navigateur ──► nginx :8080 ──┬── /        → application Angular (fichiers statiques)
@@ -89,17 +113,42 @@ Navigateur ──► nginx :8080 ──┬── /        → application Angula
 
 Comme nginx sert le frontend et relaie l'API sur la même origine, les cookies de session fonctionnent sans configuration CORS particulière.
 
+### Déploiement de la démo
+
+En ligne, Caddy s'ajoute devant nginx et gère les certificats HTTPS :
+
+```
+Internet ──► Caddy (HTTPS) ──┬── crm.phrolonyx.com      → nginx → Spring Boot → MySQL
+                             └── crm-mail.phrolonyx.com → Mailpit (interface web)
+```
+
+- Les images du backend et du frontend sont construites hors du serveur et publiées sur GitHub Container Registry ; le serveur ne fait que les télécharger.
+- Aucun service n'expose de port directement : seul Caddy publie 80/443. La base de données et l'API ne sont joignables que par le réseau interne Docker.
+- Le backend tourne avec un utilisateur sans privilèges, avec des limites de mémoire adaptées à un petit serveur (environ 425 Mo pour toute l'application).
+- Spring lit les en-têtes `X-Forwarded-*` (`server.forward-headers-strategy=native`) pour savoir que la requête d'origine est en HTTPS.
+- Un timer systemd remet la démo à zéro chaque nuit (base de données, téléversements et courriels).
+
 ---
 
 ## Développement local (sans Docker)
 
-Prérequis : Java 21, Node.js 22+, MySQL 8 en marche.
+Prérequis : Java 21, Maven, Node.js 22+, MySQL 8 en marche.
 
-1. Créer le fichier `.env` à partir de `.env.example` et y mettre le mot de passe MySQL local. Spring le lit automatiquement.
-2. Lancer les deux applications :
+1. Créer le fichier `.env` à partir de `.env.example` et y mettre le mot de passe MySQL local.
+2. Lancer le backend (premier terminal) :
 
 ```bash
-./start.sh
+set -a; source .env; set +a   # charge les variables de .env
+cd backend
+./mvnw spring-boot:run
+```
+
+3. Lancer le frontend (second terminal) :
+
+```bash
+cd frontend
+npm ci
+npm start
 ```
 
 Le frontend est servi sur http://localhost:4200 avec rechargement à chaud ; les appels `/api` sont relayés au backend par `proxy.conf.json`.
@@ -114,6 +163,7 @@ Pour envoyer de vrais courriels en local, remplir `MAIL_USERNAME` et `MAIL_PASSW
 backend/            API REST Spring Boot
 frontend/           Application Angular
 legacy-thymeleaf/   Ancienne version Thymeleaf, conservée comme trace de la migration
+docs/screenshots/   Captures d'écran
 docker-compose.yml  Orchestration : MySQL, Mailpit, backend, frontend
 ```
 
@@ -151,3 +201,10 @@ Le projet a été planifié avec un processus inspiré des pratiques professionn
 ## Crédits
 
 - Icônes : [Icons8](https://icons8.com)
+
+
+---
+
+## Licence
+
+MIT — voir [LICENSE](LICENSE).
