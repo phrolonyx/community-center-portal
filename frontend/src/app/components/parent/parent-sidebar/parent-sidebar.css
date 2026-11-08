@@ -18,3 +18,77 @@
 }
 .nav-item:hover { background: rgba(255,255,255,.08); color: #FFF; }
 .nav-item.active { color: #FFF; background: rgba(255,255,255,.12); border-left: 3px solid #E8BB08; padding-left: 17px; }
+
+/* ============================================================
+   MOBILE — la colonne devient une barre sous l'en-tête ; le bouton
+   affiche la page courante et déplie la liste des pages.
+   Sur ordinateur, le bouton est caché et la colonne reste identique.
+============================================================ */
+.nav-toggle { display: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+@media (--mobile) {
+  :host { display: block; }
+
+  .sidebar { width: auto; }
+
+  .sidebar-entete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 8px 0 16px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+
+  .sidebar-title {
+    padding: 0;
+    border-bottom: none;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 10px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: #FFF;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .nav-toggle:focus-visible { outline: 2px solid #E8BB08; }
+
+  .nav-toggle-chevron {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform .2s ease;
+  }
+  /* Rappel des messages non lus quand le menu est fermé */
+  .nav-toggle-pastille {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #D9534F;
+  }
+
+  .nav-toggle[aria-expanded="true"] .nav-toggle-chevron { transform: translateY(2px) rotate(-135deg); }
+
+  .sidebar-nav { display: none; padding: 4px 0 8px; }
+  .sidebar-nav.ouvert { display: flex; }
+
+  .nav-item { min-height: 48px; box-sizing: border-box; }
+}

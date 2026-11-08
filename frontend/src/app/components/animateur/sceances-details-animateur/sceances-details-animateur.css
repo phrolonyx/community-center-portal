@@ -51,7 +51,7 @@
 }
 
 /* Responsive : 1 colonne sur mobile */
-@media (max-width: 900px) {
+@media (--mobile) {
   .form-modern {
     grid-template-columns: 1fr;
   }
@@ -123,4 +123,18 @@
 
 .info-row {
   margin-bottom: 14px;
+}
+
+@media (--mobile) {
+  /* Coquille : la barre de navigation passe en haut, plus de colonne de 240 px */
+  .admin-gestion-des { min-width: 0; }
+  .main-content { margin-left: 0; }
+
+  .details-container {
+    padding: 16px 12px;
+    gap: 16px;
+    min-height: 0;
+  }
+  .details-card { padding: 14px 16px; }
+  .details-card label { font-size: 1.05rem; }
 }

@@ -33,10 +33,6 @@ export class MessagesParent implements OnInit, OnDestroy {
     return this.messages.filter(m => !m.isRead).length;
   }
 
-  toggleSidebar(): void {
-    document.querySelector('.sidebar')?.classList.toggle('open');
-    document.querySelector('.sidebar-overlay')?.classList.toggle('open');
-  }
 
   toggleMessage(msg: MessageDto): void {
     if (this.messagesOuverts.has(msg.id)) {

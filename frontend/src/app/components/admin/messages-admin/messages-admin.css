@@ -254,3 +254,26 @@
   border-radius: 4px;
   font-size: 14px;
 }
+
+@media (--mobile) {
+  /* Coquille : la barre de navigation passe en haut, plus de colonne de 240 px */
+  .admin-gestion-des { min-width: 0; }
+  .main-content { margin-left: 0; }
+
+  .message-card { margin: 16px 12px; padding: 20px 16px; }
+
+  /* Choix des destinataires : une option par ligne, cibles plus grandes */
+  .champ-radio { flex-direction: column; gap: 4px; padding: 8px 14px; }
+  .radio-label, .checkbox-item { min-height: 44px; }
+  .radio-label input[type="radio"],
+  .checkbox-item input[type="checkbox"] { width: 20px; height: 20px; }
+
+  .champ input[type="text"],
+  .champ textarea,
+  .champ select { font-size: 16px; min-height: 44px; }   /* 16 px : évite le zoom d'iOS */
+
+  .actions { justify-content: stretch; }
+  .btn-envoyer { flex: 1; min-height: 48px; font-size: 15px; }
+
+  .toast-success { top: auto; bottom: 16px; left: 12px; right: 12px; }
+}

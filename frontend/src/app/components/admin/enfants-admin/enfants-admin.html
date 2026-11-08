@@ -52,7 +52,7 @@
               @for (child of searchChildren(); track child.id) {
                 <tr>
 
-                  <td>{{ child.firstName }} {{ child.lastName }}</td>
+                  <td data-label="Nom complet">{{ child.firstName }} {{ child.lastName }}</td>
 
 <!--                  <td>-->
 <!--                    @for (link of child.parentLinks; track link.parentId) {-->
@@ -60,11 +60,11 @@
 <!--                    }-->
 <!--                  </td>-->
 
-                  <td>{{ child.dateOfBirth | date:'dd/MM/yyyy' }}</td>
+                  <td data-label="Date de naissance">{{ child.dateOfBirth | date:'dd/MM/yyyy' }}</td>
 
-                  <td>{{ child.age }}</td>
+                  <td data-label="Âge">{{ child.age }}</td>
 
-                  <td>
+                  <td data-label="Conditions médicales">
                     @if (child.medicalConditions === undefined) {
                       <span>Aucune</span>
                     }
@@ -74,7 +74,7 @@
                   </td>
 
                   <!-- Inscriptions en attente de cet enfant -->
-                  <td class="cell-inscriptions">
+                  <td data-label="Inscriptions en attente" class="cell-inscriptions">
                     @if (inscriptionsDe(child.id).length === 0) {
                       <span class="aucune">Aucune</span>
                     }
@@ -97,7 +97,7 @@
                     }
                   </td>
 
-                  <td>
+                  <td data-label="Actions">
                     <button class="btn-delete" (click)="deleteChild(child.id)">
                       Supprimer
                     </button>

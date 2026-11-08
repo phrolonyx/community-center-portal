@@ -74,12 +74,12 @@
 
               @for (user of pendingUsers(); track user.id) {
                 <tr>
-                  <td>{{ user.firstName }} {{ user.lastName }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.roleName }}</td>
-                  <td>{{ user.createdAt | date:'dd/MM/yyyy' }}</td>
+                  <td data-label="Nom">{{ user.firstName }} {{ user.lastName }}</td>
+                  <td data-label="Email">{{ user.email }}</td>
+                  <td data-label="Rôle">{{ user.roleName }}</td>
+                  <td data-label="Inscrit le">{{ user.createdAt | date:'dd/MM/yyyy' }}</td>
 
-                  <td>
+                  <td data-label="Actions">
                     <button class="approve-btn" (click)="approveUser(user.id)">
                       Accepter
                     </button>

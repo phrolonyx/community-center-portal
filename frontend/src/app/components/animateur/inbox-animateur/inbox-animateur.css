@@ -172,3 +172,15 @@
   color: #888;
   padding: 30px;
 }
+
+@media (--mobile) {
+  /* Coquille : la barre de navigation passe en haut, plus de colonne de 240 px */
+  .admin-gestion-des { min-width: 0; }
+  .main-content { margin-left: 0; }
+
+  .inbox-card { margin: 16px 12px; padding: 16px; }
+  .inbox-header { flex-wrap: wrap; gap: 6px; }
+  .message-item { padding: 14px 12px; }
+  .message-top { flex-wrap: wrap; }
+  .btn-delete { min-height: 44px; padding: 10px 18px; }
+}

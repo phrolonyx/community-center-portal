@@ -12,9 +12,9 @@
     <div class="content-main">
 
       <!-- BARRE DE RECHERCHE + BOUTON CRÉER -->
-      <div style="display:flex; align-items:center; gap:16px; margin:20px 40px 0;">
+      <div class="barre-outils">
 
-        <form class="content-searchbar" style="flex:1; margin:0;"
+        <form class="content-searchbar"
               (submit)="$event.preventDefault()">
           <img class="filter" src="assets/images/icons8-filter-96.png" alt="Filtrer" />
           <input
@@ -30,8 +30,7 @@
           </button>
         </form>
 
-        <button class="btn-primary" (click)="openModal()"
-                style="white-space:nowrap; padding:12px 22px;">
+        <button class="btn-primary btn-creer-utilisateur" (click)="openModal()">
           Créer un utilisateur
         </button>
 
@@ -39,7 +38,7 @@
 
       <!-- MESSAGE DE SUCCÈS -->
       @if (successMessage()) {
-        <div class="alert-succes" style="margin:16px 40px 0;">
+        <div class="alert-succes">
           {{ successMessage() }}
         </div>
       }
@@ -62,14 +61,14 @@
           <tbody>
             @for (user of searchUsers(); track user.id) {
               <tr>
-                <td>{{ user.firstName }}</td>
-                <td>{{ user.lastName }}</td>
-                <td>{{ user.roleName }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.enabled ? 'Oui' : 'Non' }}</td>
-                <td>{{ user.lastLogin ? (user.lastLogin | date:'dd/MM/yyyy') : '-' }}</td>
-                <td>{{ user.createdAt | date:'dd/MM/yyyy' }}</td>
-                <td>
+                <td data-label="Prénom">{{ user.firstName }}</td>
+                <td data-label="Nom">{{ user.lastName }}</td>
+                <td data-label="Rôle">{{ user.roleName }}</td>
+                <td data-label="Email">{{ user.email }}</td>
+                <td data-label="Actif">{{ user.enabled ? 'Oui' : 'Non' }}</td>
+                <td data-label="Dernière connexion">{{ user.lastLogin ? (user.lastLogin | date:'dd/MM/yyyy') : '-' }}</td>
+                <td data-label="Création">{{ user.createdAt | date:'dd/MM/yyyy' }}</td>
+                <td data-label="Actions">
                   @if (user.roleName === 'ADMIN') {
                     <button class="btn-deactivate disabled-btn-admin" disabled>
                       Désactiver

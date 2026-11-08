@@ -2,50 +2,67 @@
 
   <h1 class="text-wrapper">Compte Administrateur</h1>
 
-  <ul class="nav-menu">
-    <li class="sidebar-location">
-      <a routerLink="/admin/dashboard">Tableau de bord</a>
-    </li>
-    <li class="sidebar-users">
-      <a routerLink="/admin/users">Utilisateurs</a>
-    </li>
-    <li class="sidebar-children">
-      <a routerLink="/admin/enfants">Enfants</a>
-    </li>
-    <li class="sidebar-activities">
-      <a routerLink="/admin/activites">Activités</a>
-    </li>
-    <li class="sidebar-sessions">
-      <a routerLink="/admin/sceances">Séances</a>
-    </li>
-    <li class="sidebar-messages">
-      <a routerLink="/admin/messages">Envoyer message</a>
-    </li>
-    <li class="sidebar-messages">
-      <a routerLink="/admin/inbox">
-        Boîte de réception
-        <span *ngIf="nonLus > 0" class="badge-nonlus">{{ nonLus }}</span>
-      </a>
-    </li>
-    <li class="sidebar-messages">
-      <a routerLink="/admin/messages-envoyes">Messages envoyés</a>
-    </li>
-  </ul>
+  <!-- Bouton du menu, visible seulement sur mobile -->
+  <button class="nav-toggle" type="button"
+          [attr.aria-expanded]="menuOuvert"
+          aria-controls="admin-nav-panel"
+          (click)="menuOuvert = !menuOuvert">
+    <span class="sr-only">{{ menuOuvert ? 'Fermer le menu' : 'Ouvrir le menu' }}</span>
+    <span class="nav-toggle-barres" aria-hidden="true"></span>
+    @if (nonLus > 0 && !menuOuvert) {
+      <span class="nav-toggle-pastille" aria-hidden="true"></span>
+    }
+  </button>
 
-  <div class="settings-footer">
-    <img class="settings"
-         id="admin-icon"
-         src="assets/images/icons8-admin-settings-male-64.png"
-         alt="Admin"
-         (click)="toggleLogout()" />
-    <span class="text-wrapper-6">
-      {{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}
-    </span>
-  </div>
+  <!-- Menu : colonne fixe sur ordinateur, panneau repliable sur mobile -->
+  <div class="nav-panel" id="admin-nav-panel" [class.ouvert]="menuOuvert">
 
-  <div id="logout-popup" class="logout-popup" [style.display]="logoutOpen ? 'block' : 'none'">
-    <button class="logout-btn" (click)="logout()">Déconnexion</button>
-    <button class="btn-outline" routerLink="">Accueil</button>
+    <ul class="nav-menu">
+      <li class="sidebar-location">
+        <a routerLink="/admin/dashboard">Tableau de bord</a>
+      </li>
+      <li class="sidebar-users">
+        <a routerLink="/admin/users">Utilisateurs</a>
+      </li>
+      <li class="sidebar-children">
+        <a routerLink="/admin/enfants">Enfants</a>
+      </li>
+      <li class="sidebar-activities">
+        <a routerLink="/admin/activites">Activités</a>
+      </li>
+      <li class="sidebar-sessions">
+        <a routerLink="/admin/sceances">Séances</a>
+      </li>
+      <li class="sidebar-messages">
+        <a routerLink="/admin/messages">Envoyer message</a>
+      </li>
+      <li class="sidebar-messages">
+        <a routerLink="/admin/inbox">
+          Boîte de réception
+          <span *ngIf="nonLus > 0" class="badge-nonlus">{{ nonLus }}</span>
+        </a>
+      </li>
+      <li class="sidebar-messages">
+        <a routerLink="/admin/messages-envoyes">Messages envoyés</a>
+      </li>
+    </ul>
+
+    <div class="settings-footer">
+      <img class="settings"
+           id="admin-icon"
+           src="assets/images/icons8-admin-settings-male-64.png"
+           alt="Admin"
+           (click)="toggleLogout()" />
+      <span class="text-wrapper-6">
+        {{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}
+      </span>
+    </div>
+
+    <div id="logout-popup" class="logout-popup" [style.display]="logoutOpen ? 'block' : 'none'">
+      <button class="logout-btn" (click)="logout()">Déconnexion</button>
+      <button class="btn-outline" routerLink="">Accueil</button>
+    </div>
+
   </div>
 
 </nav>

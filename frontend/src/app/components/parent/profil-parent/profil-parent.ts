@@ -73,10 +73,6 @@ export class ProfilParent implements OnInit {
     });
   }
 
-  toggleSidebar(): void {
-    document.querySelector('.sidebar')?.classList.toggle('open');
-    document.querySelector('.sidebar-overlay')?.classList.toggle('open');
-  }
 
   afficher(v: string): string {
     return v && v.length > 0 ? v : 'Non renseigné';

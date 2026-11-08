@@ -79,10 +79,6 @@ export class ActivitesParent implements OnInit {
     });
   }
 
-  toggleSidebar(): void {
-    document.querySelector('.sidebar')?.classList.toggle('open');
-    document.querySelector('.sidebar-overlay')?.classList.toggle('open');
-  }
 
   matchRecherche(a: Activity): boolean {
     return a.name.toLowerCase().includes(this.recherche.toLowerCase());

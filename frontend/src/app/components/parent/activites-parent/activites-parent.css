@@ -4,8 +4,6 @@ body { margin: 0; font-family: Arial, sans-serif; }
 .dashboard-main { flex: 1; background: #FFF3D6; padding: 40px; display: flex; flex-direction: column; gap: 24px; }
 .alert-success { background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; border-radius: 8px; padding: 12px 18px; font-size: 14px; font-weight: 600; }
 .alert-error { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; border-radius: 8px; padding: 12px 18px; font-size: 14px; font-weight: 600; }
-.mobile-menu-btn { display: none; position: fixed; top: 100px; left: 12px; z-index: 200; background: #043C5C; color: #FFF; border: none; border-radius: 8px; padding: 10px; cursor: pointer; }
-.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 90; }
 
 /* AGE SUR LA CARD */
 .card-age { background: #043C5C; color: #FFF; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
@@ -108,11 +106,26 @@ body { margin: 0; font-family: Arial, sans-serif; }
 .no-enfants-msg a:hover { text-decoration: underline; }
 
 /* RESPONSIVE */
-@media (max-width: 1024px) { .activites-grid { grid-template-columns: 1fr; } }
-@media (max-width: 768px) {
+@media (--tablette) { .activites-grid { grid-template-columns: 1fr; } }
+@media (--mobile) {
+    .dashboard-layout { flex-direction: column; min-height: 0; }   /* menu au-dessus du contenu */
     .activites-title { font-size: 24px; }
     .card-top { flex-direction: column; gap: 8px; }
     .card-image { height: 150px; }
     .modal-inscrire { padding: 20px; }
     .enfant-choice { flex-wrap: wrap; gap: 10px; }
+}
+
+/* Mobile : boutons pleine largeur, fenêtre d'inscription plein écran */
+@media (--mobile) {
+    .modal-overlay { z-index: 1100; }   /* au-dessus de l'en-tête du site (z-index 1000) */
+    .btn-inscrire, .btn-inscrire-guest, .btn-connexion-guest {
+        display: flex; align-items: center; justify-content: center;
+        min-height: 44px; font-size: 14px; box-sizing: border-box;
+    }
+    /* Fenêtre d'inscription plein écran et défilable (la liste des séances peut être longue) */
+    .modal-overlay { padding: 0; align-items: flex-start; overflow-y: auto; }
+    .modal-inscrire { max-width: none; min-height: 100%; border-radius: 0; padding: 20px 16px 32px; box-sizing: border-box; }
+    .modal-close { width: 44px; height: 44px; flex-shrink: 0; }
+    .btn-choice-inscrire { min-height: 44px; flex-basis: 100%; }
 }

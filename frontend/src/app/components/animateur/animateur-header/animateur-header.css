@@ -18,3 +18,18 @@
   font-weight: 700;
   color: white;
 }
+@media (--mobile) {
+  .content-header {
+    height: auto;
+    min-height: 56px;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .text-wrapper-7 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.2;
+  }
+}

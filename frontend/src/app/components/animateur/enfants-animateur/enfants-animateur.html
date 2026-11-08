@@ -52,7 +52,7 @@
               <tr>
 
                 <!-- Nom complet -->
-                <td>{{ child.firstName }} {{ child.lastName }}</td>
+                <td data-label="Nom complet">{{ child.firstName }} {{ child.lastName }}</td>
 
                 <!-- Parents -->
 <!--                <td>-->
@@ -62,13 +62,13 @@
 <!--                </td>-->
 
                 <!-- Date de naissance -->
-                <td>{{ child.dateOfBirth | date:'dd/MM/yyyy' }}</td>
+                <td data-label="Date de naissance">{{ child.dateOfBirth | date:'dd/MM/yyyy' }}</td>
 
                 <!-- Âge -->
-                <td>{{ child.age }}</td>
+                <td data-label="Âge">{{ child.age }}</td>
 
                 <!-- Conditions médicales -->
-                <td>
+                <td data-label="Conditions médicales">
                   @if (child.medicalConditions === undefined) {
                     <span>Aucune</span>
                   } @else {

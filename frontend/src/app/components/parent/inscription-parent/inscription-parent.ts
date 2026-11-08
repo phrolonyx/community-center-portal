@@ -93,10 +93,6 @@ export class InscriptionParent implements OnInit {
     });
   }
 
-  toggleSidebar(): void {
-    document.querySelector('.sidebar')?.classList.toggle('open');
-    document.querySelector('.sidebar-overlay')?.classList.toggle('open');
-  }
 
   inscriptionsParEnfant(e: Enfant): Inscription[] {
     return this.inscriptions.filter(i => i.child && i.child.id === e.id && !this.estAnnule(i.status));

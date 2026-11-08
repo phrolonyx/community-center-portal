@@ -92,11 +92,15 @@
 .no-enfants-msg a:hover { text-decoration: underline; }
 
 /* RESPONSIVE */
-@media (max-width: 1024px) { .activites-grid { grid-template-columns: 1fr; } }
-@media (max-width: 768px) {
+@media (--tablette) { .activites-grid { grid-template-columns: 1fr; } }
+@media (--mobile) {
+    .modal-overlay { z-index: 1100; }   /* au-dessus de l'en-tête du site (z-index 1000) */
     .activites-title { font-size: 24px; }
     .card-top { flex-direction: column; gap: 8px; }
     .card-image { height: 150px; }
     .modal-inscrire { padding: 20px; }
+    .modal-overlay { padding: 12px; overflow-y: auto; }
+    .modal-close { width: 44px; height: 44px; flex-shrink: 0; }
+    .btn-inscrire-guest, .btn-connexion-guest { min-height: 44px; display: inline-flex; align-items: center; }
     .enfant-choice { flex-wrap: wrap; gap: 10px; }
 }

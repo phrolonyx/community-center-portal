@@ -1,0 +1,15 @@
+/*
+ * Points de rupture de l'application — SEUL endroit où ils sont définis.
+ *
+ * Utilisation dans n'importe quelle feuille CSS (globale ou de composant) :
+ *   @media (--mobile) { ... }
+ *
+ * Les requêtes sont toutes « max-width » : au-dessus de --tablette, aucune
+ * règle responsive ne s'applique et l'affichage bureau reste celui d'origine.
+ * PostCSS (postcss-custom-media) remplace ces noms par les vraies valeurs au
+ * build ; ce fichier est injecté partout par @csstools/postcss-global-data
+ * (voir postcss.config.json).
+ */
+@custom-media --tablette (max-width: 1024px);
+@custom-media --mobile (max-width: 768px);
+@custom-media --petit (max-width: 480px);

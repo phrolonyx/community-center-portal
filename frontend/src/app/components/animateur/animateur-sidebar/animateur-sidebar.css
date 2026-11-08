@@ -152,3 +152,112 @@ a {
   min-width: 20px;
   text-align: center;
 }
+
+/* ============================================================
+   MOBILE — la colonne devient une barre en haut avec un menu repliable.
+   Sur ordinateur, .nav-panel est « transparent » (display: contents) :
+   la colonne fixe reste identique.
+============================================================ */
+.nav-panel { display: contents; }
+
+.nav-toggle { display: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+@media (--mobile) {
+  .sidebar-container {
+    position: sticky;
+    width: 100%;
+    height: auto;
+    min-height: 56px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 0 16px;
+    box-sizing: border-box;
+  }
+
+  .text-wrapper {
+    position: static;
+    font-size: 18px;
+    line-height: 56px;
+  }
+
+  .nav-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+  }
+  .nav-toggle:focus-visible { outline: 2px solid #fff; }
+
+  /* Trois barres dessinées en CSS ; deviennent un X quand le menu est ouvert */
+  .nav-toggle-barres,
+  .nav-toggle-barres::before,
+  .nav-toggle-barres::after {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform .2s ease, background .2s ease;
+  }
+  .nav-toggle-barres { position: relative; }
+  .nav-toggle-barres::before,
+  .nav-toggle-barres::after { content: ""; position: absolute; left: 0; }
+  .nav-toggle-barres::before { top: -7px; }
+  .nav-toggle-barres::after { top: 7px; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-barres { background: transparent; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-barres::before { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-barres::after { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Rappel des messages non lus quand le menu est fermé */
+  .nav-toggle-pastille {
+    position: absolute;
+    top: 9px;
+    right: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #D9534F;
+    box-shadow: 0 0 0 2px #043c5c;
+  }
+
+  .nav-panel {
+    display: none;
+    flex-basis: auto;
+    width: calc(100% + 24px);   /* annule le retrait de la barre : liens bord à bord */
+    flex-direction: column;
+    margin: 0 -8px 0 -16px;
+    padding-bottom: 12px;
+  }
+  .nav-panel.ouvert { display: flex; }
+
+  .nav-menu { margin-top: 0; }
+  .nav-menu li { width: 100%; height: 48px; }
+  .nav-menu li a { line-height: 48px; }
+  .badge-nonlus { line-height: 1.4; }
+
+  /* Utilisateur et déconnexion : en bas du panneau, dans le flux */
+  .settings-footer {
+    position: static;
+    padding: 14px 16px 6px;
+  }
+  .settings { width: 28px; height: 28px; }
+  .logout-popup {
+    position: static;
+    padding: 6px 16px 0;
+  }
+  .logout-popup button { min-height: 40px; }
+}

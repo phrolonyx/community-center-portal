@@ -30,14 +30,14 @@
 
             @for (session of sessionsParAnimateur(); track session.id) {
               <tr>
-                <td>{{ session.activityName }}</td>
-                <td>{{ session.locationName }}</td>
-                <td>{{ session.capacity }}</td>
+                <td data-label="Activité">{{ session.activityName }}</td>
+                <td data-label="Lieu">{{ session.locationName }}</td>
+                <td data-label="Capacité">{{ session.capacity }}</td>
 
-                <td>{{ session.dateTimeStart | date:'dd/MM/yyyy HH:mm' }}</td>
-                <td>{{ session.dateTimeEnd | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td data-label="Date début">{{ session.dateTimeStart | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td data-label="Date fin">{{ session.dateTimeEnd | date:'dd/MM/yyyy HH:mm' }}</td>
 
-                <td>
+                <td data-label="Détails">
                   <button class="btn-delete"
                           [routerLink]="['/animateur/sceances/details', session.id]">
                     Détails

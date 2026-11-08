@@ -34,8 +34,8 @@ public class SecurityConfig {
                 // Desactiver CSRF (simplifie les formulaires POST)
                 .csrf(csrf -> csrf.disable())
 
-                // Appel de la configuration CORS
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // Appel de la configuration CORS / Nginx sert Angular et relaie /api sur la même origine
+                // .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 // Regles d'acces aux pages
                 .authorizeHttpRequests(auth -> auth
 
@@ -120,7 +120,8 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-    @Bean
+    // 
+    /*@Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:4200"));
@@ -130,7 +131,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
-    }
+    }*/
     // Exposer le AuthenticationManager pour l'utiliser dans le controller REST
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

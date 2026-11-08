@@ -1,6 +1,22 @@
 <aside class="sidebar">
-  <div class="sidebar-title">Mon espace</div>
-  <nav class="sidebar-nav">
+  <div class="sidebar-entete">
+    <div class="sidebar-title">Mon espace</div>
+
+    <!-- Bouton du menu, visible seulement sur mobile -->
+    <button class="nav-toggle" type="button"
+            [attr.aria-expanded]="menuOuvert"
+            aria-controls="parent-nav-panel"
+            (click)="menuOuvert = !menuOuvert">
+      <span class="nav-toggle-texte">{{ libelleActif() }}</span>
+      @if (nonLus > 0 && !menuOuvert) {
+        <span class="nav-toggle-pastille" aria-hidden="true"></span>
+      }
+      <span class="sr-only">{{ menuOuvert ? 'Fermer le menu' : 'Ouvrir le menu' }}</span>
+      <span class="nav-toggle-chevron" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav" id="parent-nav-panel" [class.ouvert]="menuOuvert" aria-label="Espace parent">
     <a routerLink="/dashboard-parent" class="nav-item" [class.active]="active === 'apercu'">Accueil</a>
     <a routerLink="/dashboard-parent/activites" class="nav-item" [class.active]="active === 'activites'">Activités</a>
     <a routerLink="/dashboard-parent/enfants" class="nav-item" [class.active]="active === 'enfants'">Mes enfants</a>

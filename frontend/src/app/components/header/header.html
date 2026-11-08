@@ -9,43 +9,58 @@
       </a>
     </div>
 
-    <!-- Navigation principale -->
-    <ul class="nav-links">
-      <li><a routerLink="/">Accueil</a></li>
-      <li><a [routerLink]="lienActivites()">Nos activités</a></li>
-    </ul>
+    <!-- Bouton du menu, visible seulement sur mobile -->
+    <button class="nav-toggle" type="button"
+            [attr.aria-expanded]="navOuverte"
+            aria-controls="nav-panel"
+            (click)="navOuverte = !navOuverte">
+      <span class="sr-only">{{ navOuverte ? 'Fermer le menu' : 'Ouvrir le menu' }}</span>
+      <span class="nav-toggle-barres" aria-hidden="true"></span>
+    </button>
 
-    <!-- Boutons selon l'état de connexion -->
-    <div class="nav-buttons">
+    <!-- Liens et boutons : alignés dans la barre sur ordinateur,
+         panneau repliable sous la barre sur mobile -->
+    <div class="nav-panel" id="nav-panel" [class.ouvert]="navOuverte">
 
-      <!-- Utilisateur NON connecté -->
-      @if (!authService.isAuthenticated()) {
-        <a routerLink="/connexion" class="btn-outline">Connexion</a>
-        <a routerLink="/inscription" class="btn-filled">Inscription</a>
-      }
+      <!-- Navigation principale -->
+      <ul class="nav-links">
+        <li><a routerLink="/">Accueil</a></li>
+        <li><a [routerLink]="lienActivites()">Nos activités</a></li>
+      </ul>
 
-      <!-- Utilisateur connecté — menu profil -->
-      @if (authService.isAuthenticated()) {
-        <div class="profile-container" [class.active]="menuOuvert">
+      <!-- Boutons selon l'état de connexion -->
+      <div class="nav-buttons">
 
-          <div class="profile-trigger" (click)="menuOuvert = !menuOuvert">
-            <span>{{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}</span>
-            <img src="assets/images/profileIcon.png" alt="Profil" class="profile-icon">
-          </div>
+        <!-- Utilisateur NON connecté -->
+        @if (!authService.isAuthenticated()) {
+          <a routerLink="/connexion" class="btn-outline">Connexion</a>
+          <a routerLink="/inscription" class="btn-filled">Inscription</a>
+        }
 
-          @if (menuOuvert) {
-            <div class="profile-menu">
-              <a (click)="allerAuDashboard(); menuOuvert = false" style="cursor:pointer">
-                Mon espace
-              </a>
-              <a (click)="logout()" style="cursor:pointer">
-                Déconnexion
-              </a>
+        <!-- Utilisateur connecté — menu profil -->
+        @if (authService.isAuthenticated()) {
+          <div class="profile-container" [class.active]="menuOuvert">
+
+            <div class="profile-trigger" (click)="menuOuvert = !menuOuvert">
+              <span>{{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}</span>
+              <img src="assets/images/profileIcon.png" alt="Profil" class="profile-icon">
             </div>
-          }
 
-        </div>
-      }
+            @if (menuOuvert) {
+              <div class="profile-menu">
+                <a (click)="allerAuDashboard(); menuOuvert = false" style="cursor:pointer">
+                  Mon espace
+                </a>
+                <a (click)="logout()" style="cursor:pointer">
+                  Déconnexion
+                </a>
+              </div>
+            }
+
+          </div>
+        }
+
+      </div>
 
     </div>
 

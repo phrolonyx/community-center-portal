@@ -249,20 +249,20 @@
 }
 
 /* ---- RESPONSIVE ---- */
-@media (max-width: 768px) {
+@media (--mobile) {
     .login-page { padding: 40px 16px 60px; }
     .login-container { max-width: 460px; }
     .login-title { font-size: 30px; }
     .login-subtitle { font-size: 15px; }
 }
 
-@media (max-width: 480px) {
+@media (--petit) {
     .login-page { padding: 24px 14px 40px; }
     .login-container { max-width: 100%; }
     .login-title { font-size: 26px; }
     .login-subtitle { font-size: 14px; }
     .login-header { margin-bottom: 28px; }
-    .form-input { padding: 14px; font-size: 15px; }
+    .form-input { padding: 14px; font-size: 16px; }   /* 16 px : évite le zoom d'iOS */
     .btn-login { padding: 16px 20px; font-size: 16px; }
     .login-form { gap: 20px; }
 }

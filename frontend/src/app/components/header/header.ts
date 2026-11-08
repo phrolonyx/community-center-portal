@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../apiServices/auth.service';
 
@@ -10,11 +10,20 @@ import { AuthService } from '../../apiServices/auth.service';
 })
 export class Header {
   menuOuvert = false;
+  // Panneau de navigation sur mobile
+  navOuverte = false;
 
   constructor(
     public authService: AuthService,
     private router: Router
   ) {}
+
+  // Échap referme le panneau mobile et le menu profil
+  @HostListener('document:keydown.escape')
+  fermerMenus(): void {
+    this.navOuverte = false;
+    this.menuOuvert = false;
+  }
 
   // Lien Nos activites selon le role
   lienActivites(): string {

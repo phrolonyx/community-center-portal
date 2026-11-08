@@ -126,3 +126,30 @@
 .btn-edit:hover {
   background-color: #065a85;
 }
+
+@media (--mobile) {
+  /* Coquille : la barre de navigation passe en haut, plus de colonne de 240 px */
+  .admin-gestion-des { min-width: 0; }
+  .main-content { margin-left: 0; }
+
+  .users-table { margin: 16px 12px; padding: 0; }
+  .form-modern { padding: 16px; gap: 18px; }
+  .input-modern,
+  .form-group textarea,
+  .form-group select { font-size: 16px; min-height: 48px; }   /* 16 px : évite le zoom d'iOS */
+
+  /* Boutons pleine largeur, action principale en premier */
+  .form-actions { flex-direction: column-reverse; gap: 10px; }
+  .form-actions .btn-edit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    font-size: 15px;
+    box-sizing: border-box;
+  }
+
+  .file-upload-wrapper { flex-wrap: wrap; }
+  .file-btn { padding: 12px 16px; }
+  .file-name { min-width: 0; overflow-wrap: anywhere; }
+}

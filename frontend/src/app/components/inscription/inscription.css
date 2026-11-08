@@ -63,19 +63,19 @@
 .btn-register.disabled { opacity: .45; cursor: not-allowed; }
 
 /* RESPONSIVE */
-@media (max-width: 768px) {
+@media (--mobile) {
     .register-page { padding: 40px 16px 60px; }
     .register-container { max-width: 540px; }
     .register-title { font-size: 30px; }
     .form-row { gap: 16px; }
 }
-@media (max-width: 480px) {
+@media (--petit) {
     .register-page { padding: 24px 14px 40px; }
     .register-container { max-width: 100%; }
     .register-title { font-size: 26px; }
     .register-header { margin-bottom: 28px; }
     .form-row { flex-direction: column; gap: 20px; }
-    .form-input { padding: 14px; font-size: 15px; }
+    .form-input { padding: 14px; font-size: 16px; }   /* 16 px : évite le zoom d'iOS */
     .btn-register { padding: 16px 20px; font-size: 16px; }
     .section-legend { font-size: 15px; }
 }

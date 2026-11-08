@@ -2,40 +2,57 @@
 
   <h1 class="text-wrapper">Compte Animateur</h1>
 
-  <ul class="nav-menu">
-    <li class="sidebar-children">
-      <a routerLink="/animateur/enfants">Enfants</a>
-    </li>
-    <li class="sidebar-sessions">
-      <a routerLink="/animateur/sceances">Séances</a>
-    </li>
-    <li class="sidebar-sessions">
-      <a routerLink="/animateur/messages">Envoyer message</a>
-    </li>
-    <li class="sidebar-sessions">
-      <a routerLink="/animateur/inbox">
-        Boîte de réception
-        <span *ngIf="nonLus > 0" class="badge-nonlus">{{ nonLus }}</span>
-      </a>
-    </li>
-    <li class="sidebar-sessions">
-      <a routerLink="/animateur/messages-envoyes">Messages envoyés</a>
-    </li>
-  </ul>
+  <!-- Bouton du menu, visible seulement sur mobile -->
+  <button class="nav-toggle" type="button"
+          [attr.aria-expanded]="menuOuvert"
+          aria-controls="animateur-nav-panel"
+          (click)="menuOuvert = !menuOuvert">
+    <span class="sr-only">{{ menuOuvert ? 'Fermer le menu' : 'Ouvrir le menu' }}</span>
+    <span class="nav-toggle-barres" aria-hidden="true"></span>
+    @if (nonLus > 0 && !menuOuvert) {
+      <span class="nav-toggle-pastille" aria-hidden="true"></span>
+    }
+  </button>
 
-  <div class="settings-footer">
-    <img class="settings"
-         id="admin-icon"
-         src="assets/images/icons8-admin-settings-male-64.png"
-         alt="Admin"
-         (click)="toggleLogout()" />
+  <!-- Menu : colonne fixe sur ordinateur, panneau repliable sur mobile -->
+  <div class="nav-panel" id="animateur-nav-panel" [class.ouvert]="menuOuvert">
 
-    <span class="text-wrapper-6">{{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}</span>
-  </div>
+    <ul class="nav-menu">
+      <li class="sidebar-children">
+        <a routerLink="/animateur/enfants">Enfants</a>
+      </li>
+      <li class="sidebar-sessions">
+        <a routerLink="/animateur/sceances">Séances</a>
+      </li>
+      <li class="sidebar-sessions">
+        <a routerLink="/animateur/messages">Envoyer message</a>
+      </li>
+      <li class="sidebar-sessions">
+        <a routerLink="/animateur/inbox">
+          Boîte de réception
+          <span *ngIf="nonLus > 0" class="badge-nonlus">{{ nonLus }}</span>
+        </a>
+      </li>
+      <li class="sidebar-sessions">
+        <a routerLink="/animateur/messages-envoyes">Messages envoyés</a>
+      </li>
+    </ul>
 
-  <div id="logout-popup" class="logout-popup" [style.display]="logoutOpen ? 'block' : 'none'">
-    <button class="logout-btn" (click)="logout()">Déconnexion</button>
-    <button class="btn-outline" routerLink="">Accueil</button>
+    <div class="settings-footer">
+      <img class="settings"
+           id="admin-icon"
+           src="assets/images/icons8-admin-settings-male-64.png"
+           alt="Admin"
+           (click)="toggleLogout()" />
+
+      <span class="text-wrapper-6">{{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}</span>
+    </div>
+
+    <div id="logout-popup" class="logout-popup" [style.display]="logoutOpen ? 'block' : 'none'">
+      <button class="logout-btn" (click)="logout()">Déconnexion</button>
+      <button class="btn-outline" routerLink="">Accueil</button>
+    </div>
+
   </div>
 
 </nav>

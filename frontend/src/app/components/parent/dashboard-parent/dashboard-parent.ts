@@ -180,10 +180,6 @@ export class DashboardParent implements OnInit, OnDestroy {
     });
   }
 
-  toggleSidebar(): void {
-    document.querySelector('.sidebar')?.classList.toggle('open');
-    document.querySelector('.sidebar-overlay')?.classList.toggle('open');
-  }
 
   changeMonth(dir: number): void {
     this.moisCourant += dir;

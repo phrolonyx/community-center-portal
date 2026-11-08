@@ -103,3 +103,91 @@
 .btn-delete:hover {
   background-color: #03517e;
 }
+
+@media (--mobile) {
+  /* Coquille : la barre de navigation passe en haut, plus de colonne de 240 px */
+  .admin-gestion-des { min-width: 0; }
+  .main-content { margin-left: 0; }
+
+  .content-header-actions { margin: 16px 12px 0; }
+  .content-header-actions .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    box-sizing: border-box;
+    font-size: 15px;
+  }
+
+  .users-table {
+    margin: 16px 12px;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  /* Tableau → cartes : une carte par ligne, chaque valeur précédée de son
+     en-tête (attribut data-label). L'en-tête du tableau reste lisible
+     par les lecteurs d'écran. */
+  .users-table-grid thead {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
+  }
+  .users-table-grid, .users-table-grid tbody { display: block; width: 100%; }
+  .users-table-grid tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 6px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+    padding: 12px 16px;
+    margin-bottom: 12px;
+  }
+  .users-table-grid td {
+    display: block;
+    flex: 1 1 100%;
+    padding: 6px 0;
+    border: none;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+  .users-table-grid td::before {
+    content: attr(data-label);
+    float: left;
+    margin-right: 16px;
+    font-weight: 600;
+    color: #6b7280;
+    text-align: left;
+  }
+  .users-table-grid td:first-child {
+    flex: 0 0 auto;
+    padding-bottom: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    text-align: left;
+    color: #043c5c;
+  }
+  .users-table-grid td:nth-child(1)::before { content: none; }
+  .users-table-grid td[data-label="Détails"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+  }
+  .users-table-grid td[data-label="Détails"]::before { content: none; }
+  .users-table-grid td[data-label="Détails"] button, .users-table-grid td[data-label="Détails"] a {
+    flex: 1 1 0;
+    min-height: 44px;
+    margin: 0;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+}

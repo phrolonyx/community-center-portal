@@ -103,10 +103,6 @@ export class EnfantsParent implements OnInit {
     });
   }
 
-  toggleSidebar(): void {
-    document.querySelector('.sidebar')?.classList.toggle('open');
-    document.querySelector('.sidebar-overlay')?.classList.toggle('open');
-  }
 
   ouvrirAjout(): void {
     this.modeAjout = 'add';

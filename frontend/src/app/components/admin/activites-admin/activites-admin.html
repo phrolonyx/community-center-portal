@@ -37,11 +37,11 @@
               @for (activity of activities(); track activity.id) {
                 <tr>
 
-                  <td>{{ activity.name }}</td>
+                  <td data-label="Nom">{{ activity.name }}</td>
 
-                  <td>{{ activity.description }}</td>
+                  <td data-label="Description">{{ activity.description }}</td>
 
-                  <td>
+                  <td data-label="Actions">
                     <div class="action-buttons">
 
                       <a [routerLink]="['/admin/form-activite-admin', activity.id]"

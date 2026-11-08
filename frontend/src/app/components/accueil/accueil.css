@@ -295,7 +295,7 @@
 
 /* ---------------- RESPONSIVE ---------------- */
 
-@media (max-width: 900px) {
+@media (--mobile) {
     .hero-content,
   .mission {
     grid-template-columns: 1fr;
@@ -314,11 +314,6 @@
   }
 }
 
-@media (max-width: 600px) {
-  .program-grid {
-    grid-template-columns: 1fr;
-  }
-}
 
 /* BOUTONS */
 .btn {
@@ -382,7 +377,7 @@
 
 
 /* RESPONSIVE MOBILE */
-@media (max-width: 600px) {
+@media (--mobile) {
     .program-grid {
         grid-template-columns: 1fr;
     }
@@ -390,4 +385,22 @@
     .hero-text h1 {
         font-size: 2.1rem;
     }
+
+    /* Hero : hauteur libre (le texte ne doit plus être coupé) et
+       plus de marge latérale de 40 px qui faisait déborder la carte */
+    .hero {
+        height: auto;
+        min-height: 0;
+        padding: 40px 16px;
+    }
+    .hero-content { padding: 0; }
+    .hero-overlay {
+        width: auto;
+        padding: 1.5rem 1.25rem;
+        gap: 14px;
+        border-radius: var(--radius-md);
+    }
+    .hero-overlay h2 { font-size: 1.75rem; }
+    .hero-buttons { flex-wrap: wrap; }
+    .hero-buttons .btn { flex: 1 1 auto; min-height: 44px; }
 }
